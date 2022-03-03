@@ -103,7 +103,7 @@
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y/d "$(SolutionDir)lib\bin*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,7 +123,7 @@
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y/d "$(SolutionDir)lib\bin*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -139,7 +139,7 @@
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y/d "$(SolutionDir)lib\bin*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -159,7 +159,7 @@
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y/d "$(SolutionDir)lib\bin*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
