@@ -164,10 +164,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glapp.cpp" />
+    <ClCompile Include="glhelper.cpp" />
+    <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h" />
+    <ClInclude Include="glhelper.h" />
+    <ClInclude Include="glslshader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
