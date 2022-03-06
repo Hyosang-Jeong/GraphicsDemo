@@ -1,7 +1,5 @@
 #include"Triangle.h"
-#include<array>
-#include<vector>
-#include<string>
+
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec2 pos;\n"
