@@ -171,6 +171,16 @@
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+<<<<<<< HEAD
+=======
+  <ItemGroup>
+    <ClCompile Include="glapp.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glapp.h" />
+  </ItemGroup>
+>>>>>>> parent of 792e245 (Merge branch 'master' of https://github.com/Rudy-Castan-DigiPen-Teaching/cs250-class-project-synergy)
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

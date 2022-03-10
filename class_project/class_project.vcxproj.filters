@@ -18,6 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -30,6 +31,11 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
+=======
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glapp.h">
+>>>>>>> parent of 792e245 (Merge branch 'master' of https://github.com/Rudy-Castan-DigiPen-Teaching/cs250-class-project-synergy)
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
