@@ -16,6 +16,7 @@ to OpenGL implementations.
 #include "glhelper.h"
 #include<array> // for array
 #include<cstdlib> // for random number
+
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 static GLApp    g_glapp;
@@ -23,17 +24,19 @@ GLApp::GLModel GLApp::mdl;
 
 void GLApp::init()  // add opengl info code by hyosang jung
 {
-
+    
     // Part 1: clear colorbuffer with RGBA value in glClearColor ...
     glClearColor(1.f, 0.f, 0.f, 1.f);
     // Part 2: use the entire window as viewport ...
     GLint w = GLHelper::width, h = GLHelper::height;
     glViewport(0, 0, w, h);
+
+
     // Part 3: initialize VAO and create shader program
     mdl.setup_vao();
     mdl.setup_shdrpgm();
 
-
+    
     std::cout << "GPU Vendor: " << glGetString(GL_VENDOR) << '\n';
     std::cout << "GL Renderer:  " << glGetString(GL_RENDERER) << '\n';
     std::cout << "GL Version:  " << glGetString(GL_VERSION) << '\n';
@@ -118,8 +121,8 @@ void GLApp::GLModel::setup_vao()
     glm::vec2(0.f, 0.5f)
     };
     std::array<glm::vec3, 3> clr_vtx{
-    glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f),
-    glm::vec3(0.f, 0.f, 1.f)
+    glm::vec3(1.f, 0.f, 1.f), glm::vec3(1.f, 1.f, 0.f),
+    glm::vec3(0.f, 0.5f, 1.f)
     };
 
     GLuint vbo_hdl;
