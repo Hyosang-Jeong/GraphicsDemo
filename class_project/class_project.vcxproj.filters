@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="glapp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="Triangle.cpp">
+    <ClCompile Include="glhelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="glslshader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Triangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-=======
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h">
->>>>>>> parent of 792e245 (Merge branch 'master' of https://github.com/Rudy-Castan-DigiPen-Teaching/cs250-class-project-synergy)
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glslshader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

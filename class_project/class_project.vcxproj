@@ -18,15 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Triangle.h" />
-    <ClInclude Include="Window.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -171,16 +162,17 @@
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-<<<<<<< HEAD
-=======
   <ItemGroup>
     <ClCompile Include="glapp.cpp" />
+    <ClCompile Include="glhelper.cpp" />
+    <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h" />
+    <ClInclude Include="glhelper.h" />
+    <ClInclude Include="glslshader.h" />
   </ItemGroup>
->>>>>>> parent of 792e245 (Merge branch 'master' of https://github.com/Rudy-Castan-DigiPen-Teaching/cs250-class-project-synergy)
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
