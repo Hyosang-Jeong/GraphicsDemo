@@ -16,6 +16,10 @@ to OpenGL implementations.
 #include "glhelper.h"
 #include<array> // for array
 #include<cstdlib> // for random number
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
 static GLApp    g_glapp;
@@ -23,17 +27,19 @@ GLApp::GLModel GLApp::mdl;
 
 void GLApp::init()  // add opengl info code by hyosang jung
 {
-
+    
     // Part 1: clear colorbuffer with RGBA value in glClearColor ...
     glClearColor(1.f, 0.f, 0.f, 1.f);
     // Part 2: use the entire window as viewport ...
     GLint w = GLHelper::width, h = GLHelper::height;
     glViewport(0, 0, w, h);
+
+
     // Part 3: initialize VAO and create shader program
     mdl.setup_vao();
     mdl.setup_shdrpgm();
 
-
+    
     std::cout << "GPU Vendor: " << glGetString(GL_VENDOR) << '\n';
     std::cout << "GL Renderer:  " << glGetString(GL_RENDERER) << '\n';
     std::cout << "GL Version:  " << glGetString(GL_VERSION) << '\n';
@@ -92,8 +98,7 @@ void GLApp::GLModel::draw() {
     // there are many shader programs initialized - here we're saying
      // which specific shader program should be used to render geometry
     shdr_pgm.Use();
-<<<<<<< Updated upstream
-=======
+
     
 
     // feed inputs to dear imgui, start new frame
@@ -107,8 +112,8 @@ void GLApp::GLModel::draw() {
     ImGui::SliderFloat("rotation", &rotation, 0, 2 * 3.141592f);
     static float translation[] = { 0.0, 0.0 };
     ImGui::SliderFloat2("position", translation, -1.0, 1.0);
-    static float color[4] = { 1.0f,1.0f,1.0f,1.0f }; 
 
+    static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
 
     // pass the parameters to the shader
     
@@ -123,8 +128,7 @@ void GLApp::GLModel::draw() {
     //ImGui::Begin("Two");
     //ImGui::Text("Application average %0.3f ms/frame (%.01f FPS)");
     //ImGui::End();
-    // 
->>>>>>> Stashed changes
+
     // there are many models, each with their own initialized VAO object
     // here, we're saying which VAO's state should be used to set up pipe
     glBindVertexArray(vaoid);
@@ -151,8 +155,8 @@ void GLApp::GLModel::setup_vao()
     glm::vec2(0.f, 0.5f)
     };
     std::array<glm::vec3, 3> clr_vtx{
-    glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f),
-    glm::vec3(0.f, 0.f, 1.f)
+    glm::vec3(1.f, 0.f, 1.f), glm::vec3(1.f, 1.f, 0.f),
+    glm::vec3(0.f, 0.5f, 1.f)
     };
 
     GLuint vbo_hdl;

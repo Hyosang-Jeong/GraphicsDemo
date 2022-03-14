@@ -16,7 +16,10 @@ an OpenGL context and implement a game loop.
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+#include <glm/glm.hpp>
 /*                                                   type declarations
 ----------------------------------------------------------------------------- */
 
@@ -54,6 +57,9 @@ int main() {
 
     // Part 3
     cleanup();
+    
+
+    
 }
 
 /*  _________________________________________________________________________ */
@@ -79,6 +85,8 @@ static void update() {
 
     // Part 3
     GLApp::update(delta_time);
+
+
 }
 
 /*  _________________________________________________________________________ */
@@ -92,6 +100,10 @@ For now, there's nothing to draw - just paint color buffer with constant color
 static void draw() {
     // Part 1
     GLApp::draw();
+
+    // Render dear imgui into screen
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Part 2: swap buffers: front <-> back
     glfwSwapBuffers(GLHelper::ptr_window);
@@ -113,6 +125,17 @@ static void init() {
 
     // Part 2
     GLApp::init();
+
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(GLHelper::ptr_window, true);
+    const char* glsl_version = "#version 330";
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
 }
 
 /*  _________________________________________________________________________ */
@@ -129,4 +152,8 @@ void cleanup() {
     GLHelper::cleanup();
     // Part 2
     GLApp::cleanup();
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
