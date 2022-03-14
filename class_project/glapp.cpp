@@ -117,7 +117,7 @@ void GLApp::GLModel::draw() {
 
     // pass the parameters to the shader
     
-    shdr_pgm.SetUniform("rotation", rotation);
+    //shdr_pgm.SetUniform("rotation", rotation);
     shdr_pgm.SetUniform("translation", translation[0], translation[1]);
     // color picker
     ImGui::ColorEdit3("color", color);
