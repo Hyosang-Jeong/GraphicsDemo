@@ -113,12 +113,12 @@ void GLApp::GLModel::draw() {
     static float translation[] = { 0.0, 0.0 };
     ImGui::SliderFloat2("position", translation, -1.0, 1.0);
 
-    static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
 
     // pass the parameters to the shader
     
     shdr_pgm.SetUniform("rotation", rotation);
     shdr_pgm.SetUniform("translation", translation[0], translation[1]);
+    static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
     // color picker
     ImGui::ColorEdit3("color", color);
     // multiply triangle's color with this color
@@ -158,13 +158,20 @@ void GLApp::GLModel::setup_vao()
     glm::vec3(1.f, 0.f, 1.f), glm::vec3(1.f, 1.f, 0.f),
     glm::vec3(0.f, 0.5f, 1.f)
     };
-
+    std::array<glm::vec4, 4> rot_vtx{
+    glm::vec4(0.f,0.f,0.f,0.f),glm::vec4(0.f,0.f,0.f,0.f),
+    glm::vec4(0.f,0.f,0.f,0.f),glm::vec4(0.f,0.f,0.f,0.f),
+    };
     GLuint vbo_hdl;
     glCreateBuffers(1, &vbo_hdl);
-
+    
     glNamedBufferStorage(vbo_hdl,
         sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec3) * clr_vtx.size(),
         nullptr, GL_DYNAMIC_STORAGE_BIT);
+
+    //glNamedBufferStorage(vbo_hdl,
+    //    sizeof(glm::vec4) * rot_vtx.size() + sizeof(glm::vec4) * rot_vtx.size(),
+    //    nullptr, GL_DYNAMIC_STORAGE_BIT);
 
     glNamedBufferSubData(vbo_hdl, 0,
         sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
