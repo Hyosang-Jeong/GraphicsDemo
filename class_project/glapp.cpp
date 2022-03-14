@@ -98,6 +98,7 @@ void GLApp::GLModel::draw() {
     // there are many shader programs initialized - here we're saying
      // which specific shader program should be used to render geometry
     shdr_pgm.Use();
+
     
 
     // feed inputs to dear imgui, start new frame
@@ -111,7 +112,9 @@ void GLApp::GLModel::draw() {
     ImGui::SliderFloat("rotation", &rotation, 0, 2 * 3.141592f);
     static float translation[] = { 0.0, 0.0 };
     ImGui::SliderFloat2("position", translation, -1.0, 1.0);
+
     static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+
     // pass the parameters to the shader
     
     shdr_pgm.SetUniform("rotation", rotation);
@@ -125,7 +128,7 @@ void GLApp::GLModel::draw() {
     //ImGui::Begin("Two");
     //ImGui::Text("Application average %0.3f ms/frame (%.01f FPS)");
     //ImGui::End();
-    // 
+
     // there are many models, each with their own initialized VAO object
     // here, we're saying which VAO's state should be used to set up pipe
     glBindVertexArray(vaoid);
