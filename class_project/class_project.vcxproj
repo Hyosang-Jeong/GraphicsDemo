@@ -167,11 +167,14 @@
     <ClCompile Include="glhelper.cpp" />
     <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tests\TestTriangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h" />
     <ClInclude Include="glhelper.h" />
     <ClInclude Include="glslshader.h" />
+    <ClInclude Include="tests\Test.h" />
+    <ClInclude Include="tests\TestTriangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

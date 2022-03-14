@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{182140bf-67cc-46c5-aae5-c15a9379168a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glapp.cpp">
@@ -27,6 +30,9 @@
     <ClCompile Include="glslshader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\TestTriangle.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h">
@@ -37,6 +43,12 @@
     </ClInclude>
     <ClInclude Include="glslshader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Test.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\TestTriangle.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
