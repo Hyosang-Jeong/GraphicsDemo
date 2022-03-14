@@ -86,15 +86,7 @@ static void update() {
     // Part 3
     GLApp::update(delta_time);
 
-    // feed inputs to dear imgui, start new frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
 
-    // Display FPS in another viewport
-    ImGui::Begin("Scene");
-    ImGui::Text("Application average %0.3f ms/frame (%.01f FPS)", (1.f / GLHelper::fps) * 1000.f, GLHelper::fps);
-    ImGui::End();
 }
 
 /*  _________________________________________________________________________ */

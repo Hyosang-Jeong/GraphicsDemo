@@ -16,6 +16,9 @@ to OpenGL implementations.
 #include "glhelper.h"
 #include<array> // for array
 #include<cstdlib> // for random number
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
@@ -95,6 +98,34 @@ void GLApp::GLModel::draw() {
     // there are many shader programs initialized - here we're saying
      // which specific shader program should be used to render geometry
     shdr_pgm.Use();
+    
+
+    // feed inputs to dear imgui, start new frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    // Display FPS in another viewport
+    ImGui::Begin("Triangle Position/Color");
+    static float rotation = 0.0;
+    ImGui::SliderFloat("rotation", &rotation, 0, 2 * 3.141592f);
+    static float translation[] = { 0.0, 0.0 };
+    ImGui::SliderFloat2("position", translation, -1.0, 1.0);
+    static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+    // pass the parameters to the shader
+    
+    shdr_pgm.SetUniform("rotation", rotation);
+    shdr_pgm.SetUniform("translation", translation[0], translation[1]);
+    // color picker
+    ImGui::ColorEdit3("color", color);
+    // multiply triangle's color with this color
+    shdr_pgm.SetUniform("color", color[0], color[1], color[2]);
+    ImGui::End();
+
+    //ImGui::Begin("Two");
+    //ImGui::Text("Application average %0.3f ms/frame (%.01f FPS)");
+    //ImGui::End();
+    // 
     // there are many models, each with their own initialized VAO object
     // here, we're saying which VAO's state should be used to set up pipe
     glBindVertexArray(vaoid);
