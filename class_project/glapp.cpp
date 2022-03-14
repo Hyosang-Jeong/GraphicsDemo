@@ -109,6 +109,7 @@ void GLApp::GLModel::draw() {
     ImGui::SliderFloat2("position", translation, -1.0, 1.0);
     static float color[4] = { 1.0f,1.0f,1.0f,1.0f }; 
 
+
     // pass the parameters to the shader
     
     shdr_pgm.SetUniform("rotation", rotation);
