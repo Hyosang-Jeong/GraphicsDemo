@@ -14,7 +14,7 @@ public:
 	 void Draw() override;
 	 void OnImGuiRender() override;
 
-	Mesh triangle;
+	Mesh cube;
 	Mesh sphere;
 	Mesh torus;
 	Mesh cylinder;

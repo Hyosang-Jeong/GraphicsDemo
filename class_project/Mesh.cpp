@@ -18,22 +18,6 @@ void BuildIndexBuffer(int stacks, int slices, Mesh& mesh);
 void addVertex(Mesh& mesh, const Vertex& v);
 void addIndex(Mesh& mesh, int index);
 
-
-/******************************************************************************/
-/*!
-\fn     Mesh CreatePlane(int stacks, int slices)
-\brief
-        Create a plane of dimension 1*1.
-        The plane x/y-coordinates range from -0.5 to 0.5.
-        The plane z-coordinate is 0.
-\param  stacks
-        Number of stacks on the plane
-\param  slices
-        Number of slices on the plane
-\return
-        The generated plane
-*/
-/******************************************************************************/
 Mesh CreatePlane(int stacks, int slices)
 {
     Mesh mesh;
@@ -61,21 +45,6 @@ Mesh CreatePlane(int stacks, int slices)
     return mesh;
 }
 
-
-/******************************************************************************/
-/*!
-\fn     Mesh CreateCube(int stacks, int slices)
-\brief
-        Create a cube of dimension 1*1*1.
-        The x/y/z-coordinates range from -0.5 to 0.5.
-\param  stacks
-        Number of stacks on each side of the cube
-\param  slices
-        Number of slices on each side of the cube
-\return
-        The generated cube
-*/
-/******************************************************************************/
 Mesh CreateCube(int stacks, int slices)
 {
     Mesh planeMesh = CreatePlane(stacks, slices);
@@ -101,13 +70,10 @@ Mesh CreateCube(int stacks, int slices)
         glm::vec2((float)+HALF_PI, +0.0f)    // Y-
     };
 
-
     /*  Transform the plane to 6 positions to form the faces of the cube */
     for (int i = 0; i < 6; ++i)
     {
-        Mat4 transformMat = Translate(translateArray[i]) *
-            Rotate(rotateArray[i][YINDEX], { 0,1,0 }) *
-            Rotate(rotateArray[i][XINDEX], { 1,0,0 });
+        Mat4 transformMat = Translate(translateArray[i]) * Rotate(rotateArray[i][YINDEX], { 0,1,0 }) * Rotate(rotateArray[i][XINDEX], { 1,0,0 });
 
         for (int j = 0; j < planeMesh.numVertices; ++j)
         {
@@ -131,21 +97,6 @@ Mesh CreateCube(int stacks, int slices)
     return mesh;
 }
 
-
-/******************************************************************************/
-/*!
-\fn     Mesh CreateSphere(int stacks, int slices)
-\brief
-        Create a sphere of radius 0.5.
-        The center of the sphere is (0, 0, 0).
-\param  stacks
-        Number of stacks on the sphere
-\param  slices
-        Number of slices on the sphere
-\return
-        The generated sphere
-*/
-/******************************************************************************/
 Mesh CreateSphere(int stacks, int slices)
 {
     Mesh mesh;
@@ -181,23 +132,7 @@ Mesh CreateSphere(int stacks, int slices)
 
     return mesh;
 }
-//
-//
-///******************************************************************************/
-///*!
-//\fn     Mesh CreateCylinder(int stacks, int slices)
-//\brief
-//        Create a cylinder with radius 0.5 and height 1.
-//        The center of the cylinder is (0, 0, 0).
-//        The cylinder mesh should also contain two caps.
-//\param  stacks
-//        Number of stacks on the cylinder
-//\param  slices
-//        Number of slices on the cylinder
-//\return
-//        The generated cylinder
-//*/
-///******************************************************************************/
+
 Mesh CreateCylinder(int stacks, int slices)
 {
     Mesh mesh;
@@ -306,27 +241,6 @@ Mesh CreateCylinder(int stacks, int slices)
     return mesh;
 }
 
-//
-//
-///******************************************************************************/
-///*!
-//\fn     Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
-//\brief
-//        Create a torus that starts from startAngle and ends at endAngle.
-//        The major and minor radii are 0.35 and 0.15, respectively.
-//        The center of the torus is (0, 0, 0).
-//\param  stacks
-//        Number of stacks on the torus
-//\param  slices
-//        Number of slices on the torus
-//\param  startAngle
-//        The starting angle of the torus
-//\param  endAngle
-//        The ending angle of the torus
-//\return
-//        The generated torus
-//*/
-///******************************************************************************/
 Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
 {
     Mesh mesh;
@@ -367,22 +281,7 @@ Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
     BuildIndexBuffer(stacks, slices, mesh);
     return mesh;
 }
-//
-///******************************************************************************/
-///*!
-//\fn     Mesh CreateCone(int stacks, int slices)
-//\brief
-//        Create a cone with base radius 0.5 and height 1.
-//        The center along the axis of the cone is (0, 0, 0).
-//        The cone mesh should also contain its base.
-//\param  stacks
-//        Number of stacks on the cone
-//\param  slices
-//        Number of slices on the cone
-//\return
-//        The generated cone
-//*/
-///******************************************************************************/
+
 Mesh CreateCone(int stacks, int slices)
 {
     Mesh mesh;
@@ -421,20 +320,6 @@ Mesh CreateCone(int stacks, int slices)
     return  mesh;
 }
 
-
-/******************************************************************************/
-/*!
-\fn     void BuildIndexBuffer(int stacks, int slices, Mesh &mesh)
-\brief
-        Generate the index buffer for the mesh.
-\param  stacks
-        Number of stacks on the mesh
-\param  slices
-        Number of slices on the mesh
-\param  mesh
-        The mesh whose index buffer will be generated.
-*/
-/******************************************************************************/
 void BuildIndexBuffer(int stacks, int slices, Mesh& mesh)
 {
     //@todo: IMPLEMENT ME
@@ -484,36 +369,12 @@ void BuildIndexBuffer(int stacks, int slices, Mesh& mesh)
     }
 }
 
-
-/******************************************************************************/
-/*!
-\fn     void addVertex(Mesh &mesh, const Vertex &v)
-\brief
-        Add a vertex to a mesh
-\param  mesh
-        The mesh to be updated.
-\param  v
-        The vertex to be added.
-*/
-/******************************************************************************/
 void addVertex(Mesh& mesh, const Vertex& v)
 {
     mesh.vertexBuffer.push_back(v);
     ++mesh.numVertices;
 }
 
-
-/******************************************************************************/
-/*!
-\fn     void addIndex(Mesh &mesh, int index)
-\brief
-        Add an index to a mesh
-\param  mesh
-        The mesh to be updated.
-\param  index
-        The vertex index to be added.
-*/
-/******************************************************************************/
 void addIndex(Mesh& mesh, int index)
 {
     mesh.indexBuffer.push_back(index);
@@ -573,6 +434,7 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 
     glm::vec4 pos_tmp = World_to_NDC * glm::vec4(position, 1.0) ;
 
+
     glm::mat4 trans_mat =
     {
         1,0,0,0,
@@ -580,6 +442,8 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
         0,0,1,0,
         pos_tmp.x,pos_tmp.y,pos_tmp.z,1
     };
+
+
     glm::mat4 scale_mat =
     {
         scale.x,0,0,0,
@@ -591,16 +455,16 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
     glm::mat4  rotate_x_mat =
     {
         1,0,0,0,
-        0,cos(rotation.x),-sin(rotation.x),0,
-       0,sin(rotation.x),cos(rotation.x),0,
+        0,cos(rotation.x),sin(rotation.x),0,
+       0,-sin(rotation.x),cos(rotation.x),0,
         0,0,0,1
     };
 
     glm::mat4 rotate_y_mat =
     {
-        cos(rotation.y),0,sin(rotation.y),0,
+        cos(rotation.y),0,-sin(rotation.y),0,
         0,1,0,0,
-      -sin(rotation.y),0,cos(rotation.y),0,
+      sin(rotation.y),0,cos(rotation.y),0,
         0,0,0,1
     };
 
@@ -613,8 +477,7 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
     };
 
     glm::mat4 rotate_mat = rotate_x_mat * rotate_y_mat * rotate_z_mat;
-
-    SRT_mat = trans_mat  * rotate_mat * scale_mat;
+    SRT_mat = trans_mat* rotate_mat * scale_mat ;
 
 
 }
