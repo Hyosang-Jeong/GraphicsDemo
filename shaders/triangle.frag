@@ -19,5 +19,5 @@ void main(void)
             outColor = vec4(NRM, 1.0);              /*  Use normal for color */
     }
     else
-        outColor = vec4(vClrCoord.x,0.5,vClrCoord.y,0.5f);   /* Use obj's color as usual */
+        outColor = vec4(vClrCoord.x,vClrCoord.y ,vClrCoord.z,0.5f);   /* Use obj's color as usual */
 }

@@ -9,30 +9,23 @@ public:
 	virtual void Update(float deltaTime) {}
 	virtual void Draw() {}
 	virtual void OnImGuiRender() {};
-
-	void ComputeViewProjMats()
+	virtual void camera_init()
 	{
-
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	}
-
+	virtual glm::mat4 Get_camera()
+	{
+		return view;
+	}
 private:
-    Mat4 viewMat, projMat, vpMat;
-    Mat4 baseMVPMat, partMVPMat;
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.5f);
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+	glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 
-    int eyeAlpha = 1;
-    int eyeBeta = NUM_STEPS_PI / 2;
-    int eyeRadius = 40;
-    float nearPlane = 1.0f;
-    float farPlane = 80.0f;
-    float topPlane = 0.6f * nearPlane;
-    float bottomPlane = -topPlane;
+	glm::mat4 view;
 
-    /// ////// todo 1800 = width,  900 = height
-    float aspect = 1.0f * 1800 /900;
-
-
-    float rightPlane = topPlane * aspect;
-    float leftPlane = -rightPlane;
-    bool eyeMoved = true;     /*  to trigger view matrix update */
-    bool resized = true;     /*  to trigger projection matrix update */
 };

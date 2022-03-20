@@ -5,6 +5,7 @@
 #include <imgui_impl_glfw.h>
 TriangleTest::TriangleTest()
 {
+    camera_init();
 }
 
 TriangleTest::~TriangleTest()
@@ -52,6 +53,7 @@ void TriangleTest::Update(float deltaTime)
     torus.compute_matrix(deltaTime);
     cylinder.compute_matrix(deltaTime);
     cone.compute_matrix(deltaTime);
+
 }
 
 void TriangleTest::Draw()
@@ -96,6 +98,24 @@ void TriangleTest::Draw()
     glUniform4fv(torus.colorLoc, 1, ValuePtr(useNormal));
     glUniform4fv(cylinder.colorLoc, 1, ValuePtr(useNormal));
     glUniform4fv(cone.colorLoc, 1, ValuePtr(useNormal));
+
+    //float radius = 1.f; 
+    //float camX = radius; 
+    //float camZ = radius;
+    //float cameraSpeed = 0.01f; // adjust accordingly
+
+    //if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_A) == GLFW_PRESS)
+    //    cameraPos.x -= 0.001;
+    //if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_D) == GLFW_PRESS)
+    //    cameraPos.x += 0.001;
+    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    //glm::mat4 view = glm::lookAt(cameraPos, cameraDirection, glm::vec3(0.0, 1.0, 0.0));
+    //cube.SRT_mat = view * cube.SRT_mat;
+    //sphere.SRT_mat = view * sphere.SRT_mat;
+    //torus.SRT_mat = view * torus.SRT_mat;
+    //cylinder.SRT_mat = view * cylinder.SRT_mat;
+    //cone.SRT_mat = view * cone.SRT_mat;
 
 
     glUniformMatrix4fv(plane.mvpMatLoc, 1, GL_FALSE, &plane.SRT_mat[0].x);
