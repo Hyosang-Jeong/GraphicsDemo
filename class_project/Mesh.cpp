@@ -146,41 +146,41 @@ Mesh CreateCube(int stacks, int slices)
         The generated sphere
 */
 /******************************************************************************/
-//Mesh CreateSphere(int stacks, int slices)
-//{
-//    Mesh mesh;
-//
-//    for (int stack = 0; stack <= stacks; ++stack)
-//    {
-//        float row = (float)stack / stacks;
-//        float beta = PI * (row - 0.5);
-//
-//        for (int slice = 0; slice <= slices; ++slice)
-//        {
-//            float col = (float)slice / slices;
-//            float alpha = col * PI * 2.0;
-//            Vertex v;
-//            v.uv.x = col;
-//            v.uv.y = row * (-1.0);
-//
-//            v.pos.x = 0.5f * sin(alpha) * cos(beta);
-//            v.pos.y = 0.5f * sin(beta);
-//            v.pos.z = 0.5f * cos(alpha) * cos(beta);
-//
-//            v.nrm.x = v.pos.x;
-//            v.nrm.y = v.pos.y;
-//            v.nrm.z = v.pos.z;
-//
-//            v.nrm /= 0.5;
-//
-//            addVertex(mesh, v);
-//        }
-//    }
-//
-//    BuildIndexBuffer(stacks, slices, mesh);
-//
-//    return mesh;
-//}
+Mesh CreateSphere(int stacks, int slices)
+{
+    Mesh mesh;
+
+    for (int stack = 0; stack <= stacks; ++stack)
+    {
+        float row = (float)stack / stacks;
+        float beta = PI * (row - 0.5);
+
+        for (int slice = 0; slice <= slices; ++slice)
+        {
+            float col = (float)slice / slices;
+            float alpha = col * PI * 2.0;
+            Vertex v;
+            v.uv.x = col;
+            v.uv.y = row * (-1.0);
+
+            v.pos.x = 0.5f * sin(alpha) * cos(beta);
+            v.pos.y = 0.5f * sin(beta);
+            v.pos.z = 0.5f * cos(alpha) * cos(beta);
+
+            v.nrm.x = v.pos.x;
+            v.nrm.y = v.pos.y;
+            v.nrm.z = v.pos.z;
+
+            v.nrm /= 0.5;
+
+            addVertex(mesh, v);
+        }
+    }
+
+    BuildIndexBuffer(stacks, slices, mesh);
+
+    return mesh;
+}
 //
 //
 ///******************************************************************************/
