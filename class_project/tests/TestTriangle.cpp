@@ -67,18 +67,16 @@ void TriangleTest::Draw()
     // Display FPS in another viewport
     ImGui::Begin("Triangle Position/Color");
     static float rotation[3] = { 0.f,0.f,0.f };
+    ImGui::SliderFloat3("rotation", rotation, 0.0, 2.f * PI);
+    cube.rotation.x = rotation[0];
+    cube.rotation.y = rotation[1];
+    cube.rotation.z = rotation[2];
 
-    static float rotationX = 0.f;
-    ImGui::SliderFloat("rotationX", &rotationX, 0, 2 * PI);
-    cube.rotation.x = rotationX;
-
-    static float rotationY = 0.f;
-    ImGui::SliderFloat("rotationY", &rotationY, 0, 2 * PI);
-    cube.rotation.y = rotationY;
-
-    static float rotationZ = 0.f;
-    ImGui::SliderFloat("rotationZ", &rotationZ, 0, 2 * PI);
-    cube.rotation.z = rotationZ;
+    //static float position[3] = { 0.f,0.f,0.f };
+    //ImGui::SliderFloat3("position", position, 0.0, 1.0);
+    //cube.position.x = rotation[0];
+    //cube.position.y = rotation[1];
+    //cube.position.z = rotation[2];
 
     //static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
     
