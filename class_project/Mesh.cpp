@@ -555,7 +555,7 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
@@ -606,8 +606,8 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 
     glm::mat4 rotate_z_mat =
     {
-      cos(rotation.z), sin(rotation.z), 0 ,0,
-    -sin(rotation.z), cos(rotation.z), 0, 0,
+      cos(rotation.z), -sin(rotation.z), 0 ,0,
+    sin(rotation.z), cos(rotation.z), 0, 0,
     0, 0 ,1, 0,
     0 ,0 ,0 ,1
     };
@@ -616,6 +616,8 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 
     SRT_mat = trans_mat  * rotate_mat * scale_mat;
 
+
+    //SRT_mat = scale_mat  * rotate_mat * trans_mat;
 
 }
 

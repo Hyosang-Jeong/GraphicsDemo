@@ -14,7 +14,8 @@ public:
 	 void Draw() override;
 	 void OnImGuiRender() override;
 
-	Mesh triangle;
+	Mesh plane;
+	Mesh cube;
 	Mesh sphere;
 	Mesh torus;
 	Mesh cylinder;
@@ -25,7 +26,7 @@ public:
 
 	const GLfloat bgColor[4] = { 0.0f, 0.6f, 0.0f, 1.0f };
 	const GLfloat one = 1.0f;
-	const Vec4 useNormal = Vec4(0.5f, 0.5f, 1.0f, 1.0f);
+	const Vec4 useNormal = Vec4(-0.5f, 0.5f, 1.0f, 1.0f);
 
 private:
 };
