@@ -22,20 +22,17 @@ void TriangleTest::init()
     cone = mesh[CONE];//There is no cap in bottom of the cone.
 
 
-    cube.init({ wid/6, hei * (3.f/4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,QUARTER_PI });
-
-
     cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { QUARTER_PI,0,QUARTER_PI });
 
-    sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    cylinder.init({ wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    cylinder.init({ wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    cone.init({ wid / 2.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    cone.init({ wid / 2.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    plane.init({ 5.f*wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    plane.init({ 5.f*wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 }
 
 void TriangleTest::Update(float deltaTime)
