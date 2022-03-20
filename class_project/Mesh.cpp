@@ -629,7 +629,7 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
