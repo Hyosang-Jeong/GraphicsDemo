@@ -13,12 +13,16 @@ void TriangleTest::init()
     GLint wid = GLHelper::width;
     GLint hei = GLHelper::height;
 
+
     plane = mesh[PLANE];
     cube = mesh[CUBE];
     sphere = mesh[SPHERE];
     torus = mesh[TORUS];
     cylinder = mesh[CYLINDER];
     cone = mesh[CONE];//There is no cap in bottom of the cone.
+
+
+    cube.init({ wid/6, hei * (3.f/4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,QUARTER_PI });
 
 
     cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { QUARTER_PI,0,QUARTER_PI });
@@ -36,6 +40,7 @@ void TriangleTest::init()
 
 void TriangleTest::Update(float deltaTime)
 {
+
     plane.rotation += deltaTime;
     cube.rotation += deltaTime;
     sphere.rotation += deltaTime;
@@ -44,6 +49,7 @@ void TriangleTest::Update(float deltaTime)
     cone.rotation += deltaTime;
 
     plane.compute_matrix(deltaTime);
+
     cube.compute_matrix(deltaTime);
     sphere.compute_matrix(deltaTime);
     torus.compute_matrix(deltaTime);
@@ -64,6 +70,7 @@ void TriangleTest::Draw()
     glUniform4fv(cylinder.colorLoc, 1, ValuePtr(useNormal));
     glUniform4fv(cone.colorLoc, 1, ValuePtr(useNormal));
 
+
     glUniformMatrix4fv(plane.mvpMatLoc, 1, GL_FALSE, &plane.SRT_mat[0].x);
     glBindVertexArray(plane.VAO);
     glDrawElements(GL_TRIANGLES, plane.numIndices, GL_UNSIGNED_INT, nullptr);
@@ -71,6 +78,7 @@ void TriangleTest::Draw()
     glUniformMatrix4fv(cube.mvpMatLoc, 1, GL_FALSE, &cube.SRT_mat[0].x);
     glBindVertexArray(cube.VAO);
     glDrawElements(GL_TRIANGLES, cube.numIndices, GL_UNSIGNED_INT, nullptr);
+  
 
     glUniformMatrix4fv(sphere.mvpMatLoc, 1, GL_FALSE, &sphere.SRT_mat[0].x);
     glBindVertexArray(sphere.VAO);

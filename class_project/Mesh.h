@@ -88,8 +88,13 @@ struct Mesh
     void setup_mesh();
     void compute_matrix(float delta_time);
     void draw();
-    void set_position(glm::vec3 pos) {
+    void set_position(glm::vec3 pos) 
+    {
         position = pos;
+    }
+    void set_rotation(glm::vec3 angle)
+    {
+        rotation = angle;
     }
 };
 

@@ -55,7 +55,9 @@ static void draw() {
 
 static void init() {
     // Part 1
+
     if (!GLHelper::init(1200, 1200, "Class Project")) {
+
         std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
     }
