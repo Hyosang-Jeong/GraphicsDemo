@@ -23,7 +23,6 @@ void TriangleTest::init()
 
     cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-
     sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
     torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
@@ -39,7 +38,7 @@ void TriangleTest::Update(float deltaTime)
 {
 
     plane.rotation += deltaTime;
-    cube.rotation += deltaTime*5.f;
+    cube.rotation += deltaTime;
     sphere.rotation += deltaTime;
     torus.rotation += deltaTime;
     cylinder.rotation += deltaTime;
