@@ -57,7 +57,7 @@ typedef std::vector<int> IndexBufferType;
 /*  Mesh format */
 struct Mesh
 {
-    Mesh() : numVertices(0), numTris(0), numIndices(0) { }
+    Mesh() : numVertices(0), numTris(0), numIndices(0), position{ 0 }, scale{ 1 }, rotation{ 0 } { }
 
     /*  Storing the actual vertex/index data */
     VertexBufferType vertexBuffer;
@@ -67,11 +67,6 @@ struct Mesh
     int numTris;
     int numIndices;
 
-    /*  Once the buffer data has been copied into the pipeline, these array object and
-        buffer objects will store  its "states".
-        Later on if we want to render a mesh, we just need to bind the VAO.
-        We don't need to copy the buffer data again.
-    */
     GLuint VAO;
     GLuint VBO;
     GLuint IBO;
@@ -81,10 +76,21 @@ struct Mesh
     GLint colorLoc;
     GLint   textureLoc;
 
+    glm::mat4 World_to_NDC;
+    glm::mat4 SRT_mat;
+    glm::vec3 position;
+    glm::vec3 scale;
+    glm::vec3 rotation;
+
+    void init(glm::vec3 Pos = {0,0,0}, glm::vec3 Scale = { 1,1,1 }, glm::vec3 Rotate = { 0,0,0 });
     void SendVertexData();
     void setup_shdrpgm();
     void setup_mesh();
+    void compute_matrix(float delta_time);
     void draw();
+    void set_position(glm::vec3 pos) {
+        position = pos;
+    }
 };
 
 

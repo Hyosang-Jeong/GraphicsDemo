@@ -621,7 +621,7 @@ void Mesh::setup_mesh()
     /*  Obtain the locations of the variables in the shaders with the given names */
      mvpMatLoc = glGetUniformLocation(renderProg.GetHandle(), "mvpMat");
      colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
-     textureLoc = glGetUniformLocation(renderProg.GetHandle(), "tex");
+     textureLoc =   glGetUniformLocation(renderProg.GetHandle(), "tex");
 
     SendVertexData();
 
@@ -629,13 +629,92 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
     glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
+}
+
+void Mesh::compute_matrix([[maybe_unused]]float delta_time)
+{
+    glm::vec4 pos_tmp = World_to_NDC * glm::vec4(position, 1.0) ;
+    position.x = pos_tmp.x;
+    position.y = pos_tmp.y;
+
+    glm::mat4 trans_mat =
+    {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        position.x,position.y,position.z,1
+    };
+    glm::mat4 scale_mat =
+    {
+        scale.x,0,0,0,
+        0,scale.y,0,0,
+        0,0,scale.z,0,
+        0,0,0,1
+    };
+
+    glm::mat4  rotate_x_mat =
+    {
+        1,0,0,0,
+        0,cos(rotation.x),-sin(rotation.x),0,
+       0,sin(rotation.x),cos(rotation.x),0,
+        0,0,0,1
+    };
+
+    glm::mat4 rotate_y_mat =
+    {
+        cos(rotation.y),0,sin(rotation.y),0,
+        0,1,0,0,
+      -sin(rotation.y),0,cos(rotation.y),0,
+        0,0,0,1
+    };
+
+    glm::mat4 rotate_z_mat =
+    {
+      cos(rotation.z), sin(rotation.z), 0 ,0,
+    -sin(rotation.z), cos(rotation.z), 0, 0,
+    0, 0 ,1, 0,
+    0 ,0 ,0 ,1
+    };
+
+    glm::mat4 rotate_mat = rotate_x_mat * rotate_y_mat * rotate_z_mat;
+
+    SRT_mat = trans_mat  * rotate_mat * scale_mat;
+
+
+}
+
+void Mesh::draw()
+{
+
+
+
+}
+
+void Mesh::init(glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
+{
+
+    scale = Scale;
+    rotation = Rotate;
+    setup_shdrpgm();
+    setup_mesh();
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    World_to_NDC = {
+        2.f / viewport[2],0,0,0,
+        0, 2.f / viewport[3],0,0,
+        0,0,1,0,
+       -1,-1,0,1
+    };
+
+
 }
 
 void Mesh::SendVertexData()

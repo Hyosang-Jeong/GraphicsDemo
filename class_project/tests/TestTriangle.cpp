@@ -10,22 +10,19 @@ TriangleTest::~TriangleTest()
 
 void TriangleTest::init()
 {
-	triangle = CreateCube(1, 1);
-	sphere = CreateSphere(16, 16);
+    triangle = CreateCube(1, 1);
+    sphere = CreateSphere(16, 16);
 
-	triangle.setup_shdrpgm();
-	sphere.setup_shdrpgm();
+    triangle.init();
+    triangle.set_position({ 900, 450, 0});
 
-	ComputeViewProjMats();
-
-	triangle.setup_mesh();
-	sphere.setup_mesh();
-
+    sphere.init();
 }
 
 void TriangleTest::Update([[maybe_unused]]float deltaTime)
 {
-	//triangle.update(deltaTime);
+    triangle.compute_matrix(deltaTime);
+    sphere.compute_matrix(deltaTime);
 }
 
 void TriangleTest::Draw()
@@ -39,41 +36,18 @@ void TriangleTest::Draw()
     glUniform4fv(triangle.colorLoc, 1, ValuePtr(useNormal));
     glUniform4fv(sphere.colorLoc, 1, ValuePtr(useNormal));
 
-    glm::mat4  mat =
-    {
-        cos(PI/4.f),0,-sin(PI / 4.f),0,
-        0,1,0,0,
-       sin(PI / 4.f),0,cos(PI / 4.f),0,
-        0,0,0,1
-    };
 
-    glm::mat4  y_mat =
-    {
-        cos(PI / 4.f),0,sin(PI / 4.f),0,
-        0,1,0,0,
-      - sin(PI / 4.f),0,cos(PI / 4.f),0,
-        0,0,0,1
-    };
+    glUniformMatrix4fv(triangle.mvpMatLoc, 1, GL_FALSE, &triangle.SRT_mat[0].x);
 
-    glm::mat4 z_mat =
-    {
-         cos(PI / 6.f), -sin(PI / 6.f), 0 ,0,
-         sin(PI / 6.f), cos(PI / 6.f), 0, 0,
-         0, 0 ,1, 0,
-         0 ,0 ,0 ,1
-    };
-    mat *= z_mat;
-
-    glUniformMatrix4fv(triangle.mvpMatLoc, 1, GL_FALSE, &mat[0].x);
-    glUniformMatrix4fv(sphere.mvpMatLoc, 1, GL_FALSE, &mat[0].x);
+    glUniformMatrix4fv(sphere.mvpMatLoc, 1, GL_FALSE, &sphere.SRT_mat[0].x);
 
     /*  Tell shader to use obj's VAO for rendering */
 
     glBindVertexArray(triangle.VAO);
-    glBindVertexArray(sphere.VAO);
-
     glDrawElements(GL_TRIANGLES, triangle.numIndices, GL_UNSIGNED_INT, nullptr);
-    //glDrawElements(GL_TRIANGLES, sphere.numIndices, GL_UNSIGNED_INT, nullptr);
+
+    glBindVertexArray(sphere.VAO);
+    glDrawElements(GL_TRIANGLES, sphere.numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
 void TriangleTest::OnImGuiRender()
