@@ -46,8 +46,8 @@ static void draw() {
     glClearColor(1, 1, 1, 1);
     mesh_demo.Draw();
     // Render dear imgui into screen
-    //ImGui::Render();
-   // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Part 2: swap buffers: front <-> back
     glfwSwapBuffers(GLHelper::ptr_window);

@@ -1,5 +1,8 @@
 #include "TestTriangle.h"
 #include"../glhelper.h"
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
 TriangleTest::TriangleTest()
 {
     camera_init();
@@ -24,26 +27,25 @@ void TriangleTest::init()
 
     cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    cylinder.init({ wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    cylinder.init({ wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    cone.init({ wid / 2.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    cone.init({ wid / 2.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    plane.init({ 5.f*wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,1 }, { 0,0,0 });
+    plane.init({ 5.f*wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 }
 
 void TriangleTest::Update(float deltaTime)
 {
 
-    plane.rotation += deltaTime * 5.f;
-    cube.rotation += deltaTime*5.f;
-    sphere.rotation += deltaTime * 5.f;
-    torus.rotation += deltaTime * 5.f;
-    cylinder.rotation += deltaTime * 5.f;
-    cone.rotation += deltaTime * 5.f;
+    plane.rotation += deltaTime;
+    sphere.rotation += deltaTime;
+    torus.rotation += deltaTime;
+    cylinder.rotation += deltaTime;
+    cone.rotation += deltaTime;
 
     plane.compute_matrix(deltaTime);
     cube.compute_matrix(deltaTime);
@@ -56,8 +58,40 @@ void TriangleTest::Update(float deltaTime)
 
 void TriangleTest::Draw()
 {
-      glClearBufferfv(GL_DEPTH, 0, &one);
+    glClearBufferfv(GL_DEPTH, 0, &one);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // feed inputs to dear imgui, start new frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    // Display FPS in another viewport
+    ImGui::Begin("Triangle Position/Color");
+    static float rotation[3] = { 0.f,0.f,0.f };
+
+    static float rotationX = 0.f;
+    ImGui::SliderFloat("rotationX", &rotationX, 0, 2 * PI);
+    cube.rotation.x = rotationX;
+
+    static float rotationY = 0.f;
+    ImGui::SliderFloat("rotationY", &rotationY, 0, 2 * PI);
+    cube.rotation.y = rotationY;
+
+    static float rotationZ = 0.f;
+    ImGui::SliderFloat("rotationZ", &rotationZ, 0, 2 * PI);
+    cube.rotation.z = rotationZ;
+
+    //static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+    
+    // pass the parameters to the shader
+
+    //shdr_pgm.SetUniform("rotation", rotation);
+    //shdr_pgm.SetUniform("translation", translation[0], translation[1]);
+    // color picker
+    //ImGui::ColorEdit3("color", color);
+    // multiply triangle's color with this color
+    //shdr_pgm.SetUniform("color", color[0], color[1], color[2]);
 
     /*  Send each part's data to shaders for rendering */
     glUniform4fv(plane.colorLoc, 1, ValuePtr(useNormal));
@@ -116,6 +150,7 @@ void TriangleTest::Draw()
     glUniformMatrix4fv(cone.rotMatLoc, 1, GL_FALSE, &cone.rotate_mat[0].x);
     glBindVertexArray(cone.VAO);
     glDrawElements(GL_TRIANGLES, cone.numIndices, GL_UNSIGNED_INT, nullptr);
+    ImGui::End();
 }
 
 void TriangleTest::OnImGuiRender()
