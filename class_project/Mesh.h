@@ -91,7 +91,7 @@ struct Mesh
 /*  Mesh function(s) */
 Mesh CreatePlane(int stacks, int slices);
 Mesh CreateCube(int stacks, int slices);
-//Mesh CreateSphere(int stacks, int slices);
+Mesh CreateSphere(int stacks, int slices);
 //Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle);
 //Mesh CreateCylinder(int stacks, int slices);
 //Mesh CreateCone(int stacks, int slices);
@@ -101,7 +101,8 @@ Mesh CreateCube(int stacks, int slices);
 /******************************************************************************/
 /*  Pre-defined shapes                                                        */
 /******************************************************************************/
-enum MeshID { CUBE, NUM_MESHES };
+enum MeshID { CUBE,SPHERE, NUM_MESHES };
 
-static Mesh mesh[NUM_MESHES] = { CreateCube(1, 1),       /*  For torso, feet */                                                   
+static Mesh mesh[NUM_MESHES] = { CreateCube(1, 1),
+                                 CreateSphere(16, 16),
 };

@@ -15,6 +15,7 @@ public:
 	 void OnImGuiRender() override;
 
 	Mesh triangle;
+	Mesh sphere;
 
 
 
