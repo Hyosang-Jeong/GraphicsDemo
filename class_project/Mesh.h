@@ -107,9 +107,10 @@ Mesh CreateCone(int stacks, int slices);
 /******************************************************************************/
 /*  Pre-defined shapes                                                        */
 /******************************************************************************/
-enum MeshID { CUBE,SPHERE,TORUS,CYLINDER,CONE, NUM_MESHES };
+enum MeshID { PLANE, CUBE,SPHERE,TORUS,CYLINDER,CONE, NUM_MESHES };
 
-static Mesh mesh[NUM_MESHES] = { CreateCube(1, 1),
+static Mesh mesh[NUM_MESHES] = { CreatePlane(1, 1),
+                                 CreateCube(1, 1),
                                  CreateSphere(16, 16),
                                  CreateTorus(16, 32, 0,TWO_PI),
                                  CreateCylinder(1,8),

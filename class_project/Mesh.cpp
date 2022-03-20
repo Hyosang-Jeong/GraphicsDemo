@@ -567,15 +567,13 @@ void Mesh::setup_mesh()
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 {
     glm::vec4 pos_tmp = World_to_NDC * glm::vec4(position, 1.0) ;
-    position.x = pos_tmp.x;
-    position.y = pos_tmp.y;
 
     glm::mat4 trans_mat =
     {
         1,0,0,0,
         0,1,0,0,
         0,0,1,0,
-        position.x,position.y,position.z,1
+        pos_tmp.x,pos_tmp.y,pos_tmp.z,1
     };
     glm::mat4 scale_mat =
     {
@@ -625,7 +623,7 @@ void Mesh::draw()
 
 void Mesh::init(glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
 {
-
+    position = Pos;
     scale = Scale;
     rotation = Rotate;
     setup_shdrpgm();
