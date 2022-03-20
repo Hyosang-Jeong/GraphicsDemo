@@ -28,10 +28,11 @@ and transformations (in later labs).
 
 struct GLApp
 {
-	static void init();
-	static void update(double delta_time);
-	static void draw();
-	static void cleanup();
+public:
+	 void init();
+	 void update(double delta_time);
+	 void draw();
+	 void cleanup();
 	// encapsulates state required to render a geometrical model
 	struct GLModel
 	{
@@ -41,13 +42,14 @@ struct GLApp
 		GLuint idx_elem_cnt = 0; // how many elements of primitive of type
 		// primitive_type are to be rendered
 		// member functions defined in glapp.cpp
+
 		void setup_vao();
 		void setup_shdrpgm();
 		void draw();
 	};
 	// data member to represent geometric model to be rendered
 	// C++ requires this object to have a definition in glapp.cpp!!!
-	static GLModel mdl;
+	 GLModel mdl;
 };
 
 

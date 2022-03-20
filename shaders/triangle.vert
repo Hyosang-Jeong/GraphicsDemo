@@ -1,14 +1,22 @@
-#version 450 core
+#version 330 core
 
-layout (location=0) in vec2 vVertexPosition;
-layout (location=1) in vec3 vVertexClrCoord;
+/*  There's no single standard, but I prefer:
+    - Setting fixed locations for per-vertex attributes.
+    - Setting automatic locations for other attributes 
+*/
+layout (location = 0) in vec3 pos;
+layout (location = 1) in vec3 nrm;
+layout (location = 2) in vec2 uv;
 
-layout (location=0) out vec3 vClrCoord;
+uniform mat4 mvpMat;
 
-uniform float rotation;
-uniform vec2 translation;
+out vec2 UV;
+out vec3 NRM;
 
-void main() {
-  gl_Position = vec4(vVertexPosition.x + translation.x,vVertexPosition.y + translation.y, 0.0, 1.0);
-  vClrCoord = vVertexClrCoord;
+void main(void) 
+{
+    gl_Position = mvpMat * vec4(pos, 1.0);
+
+    UV = uv;
+    NRM = nrm;
 }

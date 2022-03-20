@@ -46,8 +46,8 @@ static void draw() {
 
     triangle_test.Draw();
     // Render dear imgui into screen
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //ImGui::Render();
+   // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Part 2: swap buffers: front <-> back
     glfwSwapBuffers(GLHelper::ptr_window);
@@ -78,7 +78,9 @@ void cleanup() {
     // Part 1
     GLHelper::cleanup();
     // Part 2
-    GLApp::cleanup();
+
+    //todo destructor에서 하는걸로 change
+    //triangle_test.triangle.cleanup();
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

@@ -22,8 +22,6 @@ to OpenGL implementations.
 
 /*                                                   objects with file scope
 ----------------------------------------------------------------------------- */
-static GLApp    g_glapp;
-GLApp::GLModel GLApp::mdl;
 
 void GLApp::init()  // add opengl info code by hyosang jung
 {

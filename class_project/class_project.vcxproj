@@ -167,12 +167,17 @@
     <ClCompile Include="glhelper.cpp" />
     <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="tests\Cube.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h" />
     <ClInclude Include="glhelper.h" />
     <ClInclude Include="glslshader.h" />
+    <ClInclude Include="math.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="tests\Cube.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />
   </ItemGroup>

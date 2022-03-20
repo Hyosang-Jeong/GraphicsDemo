@@ -33,6 +33,12 @@
     <ClCompile Include="tests\TestTriangle.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Cube.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h">
@@ -49,6 +55,15 @@
     </ClInclude>
     <ClInclude Include="tests\TestTriangle.h">
       <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Cube.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
