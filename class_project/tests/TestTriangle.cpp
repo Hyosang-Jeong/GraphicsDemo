@@ -70,10 +70,10 @@ void TriangleTest::Draw()
 
     glm::mat4 z_mat =
     {
-      cos(PI / 6.f), -sin(PI / 6.f), 0 ,0,
-    sin(PI / 6.f), cos(PI / 6.f), 0, 0,
-    0, 0 ,1, 0,
-    0 ,0 ,0 ,1
+         cos(PI / 6.f), -sin(PI / 6.f), 0 ,0,
+         sin(PI / 6.f), cos(PI / 6.f), 0, 0,
+         0, 0 ,1, 0,
+         0 ,0 ,0 ,1
     };
     mat *= z_mat;
 
