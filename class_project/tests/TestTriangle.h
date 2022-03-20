@@ -16,6 +16,9 @@ public:
 
 	Mesh triangle;
 	Mesh sphere;
+	Mesh torus;
+	Mesh cylinder;
+	Mesh cone;
 
 
 
