@@ -41,7 +41,7 @@ void TriangleTest::Update(float deltaTime)
 
 void TriangleTest::Draw()
 {
- //   glClearBufferfv(GL_DEPTH, 0, &one);
+    //   glClearBufferfv(GL_DEPTH, 0, &one);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /*  Send each part's data to shaders for rendering */
@@ -71,6 +71,7 @@ void TriangleTest::Draw()
     glUniformMatrix4fv(cone.mvpMatLoc, 1, GL_FALSE, &cone.SRT_mat[0].x);
     glBindVertexArray(cone.VAO);
     glDrawElements(GL_TRIANGLES, cone.numIndices, GL_UNSIGNED_INT, nullptr);
+
 }
 
 void TriangleTest::OnImGuiRender()
