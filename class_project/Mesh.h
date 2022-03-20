@@ -73,6 +73,7 @@ struct Mesh
     GLSLShader renderProg;
 
     GLint mvpMatLoc;
+    GLint rotMatLoc;
     GLint colorLoc;
     GLint   textureLoc;
 
@@ -81,6 +82,8 @@ struct Mesh
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;
+    glm::mat4 rotate_mat;
+
 
     void init(glm::vec3 Pos = {0,0,0}, glm::vec3 Scale = { 1,1,1 }, glm::vec3 Rotate = { 0,0,0 });
     void SendVertexData();

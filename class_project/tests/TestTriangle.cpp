@@ -21,8 +21,8 @@ void TriangleTest::init()
     cylinder = mesh[CYLINDER];
     cone = mesh[CONE];//There is no cap in bottom of the cone.
 
+    cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
-    cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { QUARTER_PI,0,QUARTER_PI });
 
     sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
@@ -39,7 +39,7 @@ void TriangleTest::Update(float deltaTime)
 {
 
     plane.rotation += deltaTime;
-    cube.rotation += deltaTime;
+    cube.rotation += deltaTime*5.f;
     sphere.rotation += deltaTime;
     torus.rotation += deltaTime;
     cylinder.rotation += deltaTime;
@@ -56,7 +56,7 @@ void TriangleTest::Update(float deltaTime)
 
 void TriangleTest::Draw()
 {
-    //   glClearBufferfv(GL_DEPTH, 0, &one);
+      glClearBufferfv(GL_DEPTH, 0, &one);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /*  Send each part's data to shaders for rendering */
@@ -69,27 +69,33 @@ void TriangleTest::Draw()
 
 
     glUniformMatrix4fv(plane.mvpMatLoc, 1, GL_FALSE, &plane.SRT_mat[0].x);
+    glUniformMatrix4fv(plane.rotMatLoc, 1, GL_FALSE, &plane.rotate_mat[0].x);
     glBindVertexArray(plane.VAO);
     glDrawElements(GL_TRIANGLES, plane.numIndices, GL_UNSIGNED_INT, nullptr);
 
     glUniformMatrix4fv(cube.mvpMatLoc, 1, GL_FALSE, &cube.SRT_mat[0].x);
+    glUniformMatrix4fv(cube.rotMatLoc, 1, GL_FALSE, &cube.rotate_mat[0].x);
     glBindVertexArray(cube.VAO);
     glDrawElements(GL_TRIANGLES, cube.numIndices, GL_UNSIGNED_INT, nullptr);
   
 
     glUniformMatrix4fv(sphere.mvpMatLoc, 1, GL_FALSE, &sphere.SRT_mat[0].x);
+    glUniformMatrix4fv(sphere.rotMatLoc, 1, GL_FALSE, &sphere.rotate_mat[0].x);
     glBindVertexArray(sphere.VAO);
     glDrawElements(GL_TRIANGLES, sphere.numIndices, GL_UNSIGNED_INT, nullptr);
 
     glUniformMatrix4fv(torus.mvpMatLoc, 1, GL_FALSE, &torus.SRT_mat[0].x);
+    glUniformMatrix4fv(torus.rotMatLoc, 1, GL_FALSE, &torus.rotate_mat[0].x);
     glBindVertexArray(torus.VAO);
     glDrawElements(GL_TRIANGLES, torus.numIndices, GL_UNSIGNED_INT, nullptr);
 
     glUniformMatrix4fv(cylinder.mvpMatLoc, 1, GL_FALSE, &cylinder.SRT_mat[0].x);
+    glUniformMatrix4fv(cylinder.rotMatLoc, 1, GL_FALSE, &cylinder.rotate_mat[0].x);
     glBindVertexArray(cylinder.VAO);
     glDrawElements(GL_TRIANGLES, cylinder.numIndices, GL_UNSIGNED_INT, nullptr);
 
     glUniformMatrix4fv(cone.mvpMatLoc, 1, GL_FALSE, &cone.SRT_mat[0].x);
+    glUniformMatrix4fv(cone.rotMatLoc, 1, GL_FALSE, &cone.rotate_mat[0].x);
     glBindVertexArray(cone.VAO);
     glDrawElements(GL_TRIANGLES, cone.numIndices, GL_UNSIGNED_INT, nullptr);
 }

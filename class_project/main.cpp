@@ -14,7 +14,7 @@ static void update();
 static void init();
 static void cleanup();
 
-TriangleTest triangle_test;
+TriangleTest mesh_demo;
 
 
 int main() {
@@ -39,12 +39,12 @@ static void update() {
     sstr << std::fixed << std::setprecision(2) << GLHelper::title << ": " << GLHelper::fps;
     glfwSetWindowTitle(GLHelper::ptr_window, sstr.str().c_str());
 
-    triangle_test.Update(GLHelper::update_time(1.0));
+    mesh_demo.Update(GLHelper::update_time(1.0));
 }
 
 static void draw() {
-
-    triangle_test.Draw();
+    glClearColor(1, 1, 1, 1);
+    mesh_demo.Draw();
     // Render dear imgui into screen
     //ImGui::Render();
    // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -63,7 +63,7 @@ static void init() {
     }
 
     // Part 2
-    triangle_test.init();
+    mesh_demo.init();
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

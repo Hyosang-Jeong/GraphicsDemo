@@ -407,6 +407,7 @@ void Mesh::setup_mesh()
 
     /*  Obtain the locations of the variables in the shaders with the given names */
      mvpMatLoc = glGetUniformLocation(renderProg.GetHandle(), "mvpMat");
+     rotMatLoc = glGetUniformLocation(renderProg.GetHandle(), "rotMat");
      colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
      textureLoc =   glGetUniformLocation(renderProg.GetHandle(), "tex");
 
@@ -416,7 +417,7 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
@@ -476,7 +477,9 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
     0 ,0 ,0 ,1
     };
 
-    glm::mat4 rotate_mat = rotate_x_mat * rotate_y_mat * rotate_z_mat;
+
+   rotate_mat = rotate_x_mat * rotate_y_mat * rotate_z_mat;
+    
     SRT_mat = trans_mat* rotate_mat * scale_mat ;
 
 
