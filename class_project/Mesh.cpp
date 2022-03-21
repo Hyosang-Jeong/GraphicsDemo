@@ -52,8 +52,8 @@ Mesh CreateCube(int stacks, int slices)
 
     glm::vec3 const translateArray[] =
     {
-        glm::vec3(+0.0f, +0.0f, +0.5f), // Z+
-        glm::vec3(+0.0f, +0.0f, -0.5f), // Z-
+        glm::vec3(+0.0f, +0.0f, -0.5f), // Z+
+        glm::vec3(+0.0f, +0.0f, 0.5f), // Z-
         glm::vec3(+0.5f, +0.0f, +0.0f), // X+
         glm::vec3(-0.5f, +0.0f, +0.0f), // X-
         glm::vec3(+0.0f, +0.5f, +0.0f), // Y+
@@ -417,13 +417,13 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    //glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
+   // glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
 }
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)

@@ -25,9 +25,11 @@ public:
 	Mesh cone;
 
 
+	float camera_angle = 0;
+
 	const GLfloat bgColor[4] = { 0.0f, 0.6f, 0.0f, 1.0f };
 	const GLfloat one = 1.0f;
-	const Vec4 useNormal = Vec4(0.5f, 0.5f, 1.0f, 1.0f);
+	const Vec4 useNormal = Vec4(-0.5f, 0.5f, 1.0f, 1.0f);
 
 private:
     glm::vec3 rotation[NUM_MESHES] = {  };

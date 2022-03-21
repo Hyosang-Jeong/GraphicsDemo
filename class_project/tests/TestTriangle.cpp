@@ -40,6 +40,7 @@ void TriangleTest::init()
     plane.init({ 5.f * wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
 
     position = cube.position;
+
 }
 
 void TriangleTest::Update(float deltaTime)
@@ -97,8 +98,39 @@ void TriangleTest::Draw()
     glUniform4fv(cylinder.colorLoc, 1, ValuePtr(useNormal));
     glUniform4fv(cone.colorLoc, 1, ValuePtr(useNormal));
 
+
     onOffSwitch();
 
+    //float radius = 1.f; 
+    //float camX = radius; 
+    //float camZ = radius;
+    //float cameraSpeed = 0.01f; // adjust accordingly
+
+
+    glMatrixMode(GL_PROJECTION);
+    if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_A) == GLFW_PRESS)
+        camera_angle -=PI/180.f;
+    if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_D) == GLFW_PRESS)
+        camera_angle += PI / 180.f;
+
+    cameraPos.x = sin(camera_angle)/16.0;
+    cameraPos.z = cos(camera_angle)/16.0;
+
+      glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+
+      glm::vec3 cameraTarget = glm::vec3{ 0,0,0 };
+      glm::vec3 cameraDirection = cameraTarget - cameraPos;
+
+      glm::mat4 view = glm::lookAt(cameraPos, cameraDirection, up);
+      std::cout << "X = " << cameraDirection.x << "    y = " << cameraDirection.y << "     z= " << cameraDirection.z << std::endl;
+
+      plane.SRT_mat = view * plane.SRT_mat;
+      cube.SRT_mat = view * cube.SRT_mat;
+      sphere.SRT_mat = view * sphere.SRT_mat;
+      torus.SRT_mat = view * torus.SRT_mat;
+      cylinder.SRT_mat = view * cylinder.SRT_mat;
+      cone.SRT_mat = view * cone.SRT_mat;
 
 
 
