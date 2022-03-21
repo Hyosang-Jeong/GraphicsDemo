@@ -7,7 +7,18 @@
 #include <iostream>
 TriangleTest::TriangleTest()
 {
-    camera_init();
+    view = {
+1,0,0,0,
+0,1,0,0,
+0,0,1,0,
+0,0,0,1
+    };
+    projection = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+    };
 }
 
 TriangleTest::~TriangleTest()
@@ -18,46 +29,36 @@ void TriangleTest::init()
 {
     GLint wid = GLHelper::width;
     GLint hei = GLHelper::height;
+    for (int i = 0; i < NUM_MESHES; i++)
+    {
+        meshes.push_back(mesh[i]);
+    }
 
+    meshes[PLANE].init({ -0.6,0.5,-1 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CUBE].init({ 0,0.5,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[SPHERE].init({ 0.6,0.5,-3 }, { 1,1,1 }, { 0,0,0 });
+    meshes[TORUS].init({ -0.6,-0.5,-4 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CYLINDER].init({ 0,-0.5,-5 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CONE].init({ 0.6,-0.5,-6 }, { 1,1,1 }, { 0,0,0 });
 
-    plane = mesh[PLANE];
-    cube = mesh[CUBE];
-    sphere = mesh[SPHERE];
-    torus = mesh[TORUS];
-    cylinder = mesh[CYLINDER];
-    cone = mesh[CONE];//There is no cap in bottom of the cone.
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-    cube.init({ wid / 6.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    sphere.init({ wid / 2.f, hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    torus.init({ wid * (5.f / 6.f), hei * (3.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    cylinder.init({ wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    cone.init({ wid / 2.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    plane.init({ 5.f * wid / 6.f, hei * (1.f / 4.f) , 0 }, { 0.5,0.5,0.5 }, { 0,0,0 });
-
-    position = cube.position;
+    projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 
 }
 
 void TriangleTest::Update(float deltaTime)
 {
-
-    plane.compute_matrix(deltaTime);
-    cube.compute_matrix(deltaTime);
-    sphere.compute_matrix(deltaTime);
-    torus.compute_matrix(deltaTime);
-    cylinder.compute_matrix(deltaTime);
-    cone.compute_matrix(deltaTime);
+    for (int i = 0; i < NUM_MESHES; i++)
+    {
+        meshes[i].compute_matrix(deltaTime);
+    }
 
 }
 
 void TriangleTest::Draw()
 {
-    glClearBufferfv(GL_DEPTH, 0, &one);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // feed inputs to dear imgui, start new frame
@@ -67,110 +68,16 @@ void TriangleTest::Draw()
 
     // Display FPS in another viewport
     ImGui::Begin("Triangle Position/Color");
-
-
-
-
-
-
-    //static float position[3] = { 0.f,0.f,0.f };
-    //ImGui::SliderFloat3("position", position, 0.0, 1.0);
-    //cube.position.x = rotation[0];
-    //cube.position.y = rotation[1];
-    //cube.position.z = rotation[2];
-
-    //static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
-
-    // pass the parameters to the shader
-
-    //shdr_pgm.SetUniform("rotation", rotation);
-    //shdr_pgm.SetUniform("translation", translation[0], translation[1]);
-    // color picker
-    //ImGui::ColorEdit3("color", color);
-    // multiply triangle's color with this color
-    //shdr_pgm.SetUniform("color", color[0], color[1], color[2]);
-
-    /*  Send each part's data to shaders for rendering */
-    glUniform4fv(plane.colorLoc, 1, ValuePtr(useNormal));
-    glUniform4fv(cube.colorLoc, 1, ValuePtr(useNormal));
-    glUniform4fv(sphere.colorLoc, 1, ValuePtr(useNormal));
-    glUniform4fv(torus.colorLoc, 1, ValuePtr(useNormal));
-    glUniform4fv(cylinder.colorLoc, 1, ValuePtr(useNormal));
-    glUniform4fv(cone.colorLoc, 1, ValuePtr(useNormal));
-
-
     onOffSwitch();
+    
+    for (int i = 0; i < NUM_MESHES; i++)
+    {
+        if (meshSwitch[i] == true)
+        {
+            meshes[i].draw(useNormal, view, projection);
+        }
+    }
 
-    //float radius = 1.f; 
-    //float camX = radius; 
-    //float camZ = radius;
-    //float cameraSpeed = 0.01f; // adjust accordingly
-
-
-    glMatrixMode(GL_PROJECTION);
-    if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_A) == GLFW_PRESS)
-        camera_angle -=PI/180.f;
-    if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_D) == GLFW_PRESS)
-        camera_angle += PI / 180.f;
-
-    cameraPos.x = sin(camera_angle)/16.0;
-    cameraPos.z = cos(camera_angle)/16.0;
-
-      glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-
-
-      glm::vec3 cameraTarget = glm::vec3{ 0,0,0 };
-      glm::vec3 cameraDirection = cameraTarget - cameraPos;
-
-      glm::mat4 view = glm::lookAt(cameraPos, cameraDirection, up);
-      std::cout << "X = " << cameraDirection.x << "    y = " << cameraDirection.y << "     z= " << cameraDirection.z << std::endl;
-
-      plane.SRT_mat = view * plane.SRT_mat;
-      cube.SRT_mat = view * cube.SRT_mat;
-      sphere.SRT_mat = view * sphere.SRT_mat;
-      torus.SRT_mat = view * torus.SRT_mat;
-      cylinder.SRT_mat = view * cylinder.SRT_mat;
-      cone.SRT_mat = view * cone.SRT_mat;
-
-
-
-    glUniformMatrix4fv(plane.mvpMatLoc, 1, GL_FALSE, &plane.SRT_mat[0].x);
-    glUniformMatrix4fv(plane.rotMatLoc, 1, GL_FALSE, &plane.rotate_mat[0].x);
-    glBindVertexArray(plane.VAO);
-    if (meshSwitch[PLANE])
-        glDrawElements(GL_TRIANGLES, plane.numIndices, GL_UNSIGNED_INT, nullptr);
-
-    glUniformMatrix4fv(cube.mvpMatLoc, 1, GL_FALSE, &cube.SRT_mat[0].x);
-    glUniformMatrix4fv(cube.rotMatLoc, 1, GL_FALSE, &cube.rotate_mat[0].x);
-    glBindVertexArray(cube.VAO);
-    if (meshSwitch[CUBE])
-        glDrawElements(GL_TRIANGLES, cube.numIndices, GL_UNSIGNED_INT, nullptr);
-
-
-    glUniformMatrix4fv(sphere.mvpMatLoc, 1, GL_FALSE, &sphere.SRT_mat[0].x);
-    glUniformMatrix4fv(sphere.rotMatLoc, 1, GL_FALSE, &sphere.rotate_mat[0].x);
-    glBindVertexArray(sphere.VAO);
-    if (meshSwitch[SPHERE])
-        glDrawElements(GL_TRIANGLES, sphere.numIndices, GL_UNSIGNED_INT, nullptr);
-
-    glUniformMatrix4fv(torus.mvpMatLoc, 1, GL_FALSE, &torus.SRT_mat[0].x);
-    glUniformMatrix4fv(torus.rotMatLoc, 1, GL_FALSE, &torus.rotate_mat[0].x);
-    glBindVertexArray(torus.VAO);
-    if (meshSwitch[TORUS])
-        glDrawElements(GL_TRIANGLES, torus.numIndices, GL_UNSIGNED_INT, nullptr);
-
-    glUniformMatrix4fv(cylinder.mvpMatLoc, 1, GL_FALSE, &cylinder.SRT_mat[0].x);
-    glUniformMatrix4fv(cylinder.rotMatLoc, 1, GL_FALSE, &cylinder.rotate_mat[0].x);
-    glBindVertexArray(cylinder.VAO);
-    if (meshSwitch[CYLINDER])
-        glDrawElements(GL_TRIANGLES, cylinder.numIndices, GL_UNSIGNED_INT, nullptr);
-
-    glUniformMatrix4fv(cone.mvpMatLoc, 1, GL_FALSE, &cone.SRT_mat[0].x);
-    glUniformMatrix4fv(cone.rotMatLoc, 1, GL_FALSE, &cone.rotate_mat[0].x);
-    glBindVertexArray(cone.VAO);
-    if (meshSwitch[CONE])
-        glDrawElements(GL_TRIANGLES, cone.numIndices, GL_UNSIGNED_INT, nullptr);
-    ImGui::End();
 }
 
 void TriangleTest::OnImGuiRender()
@@ -179,13 +86,9 @@ void TriangleTest::OnImGuiRender()
 
 bool TriangleTest::is_switch_pressed(const char* buttonName, bool& buttonType)
 {
-    
     if (ImGui::Button(buttonName))
     {
-        if (buttonType)
-            buttonType = false;
-        else
-            buttonType = true;
+        buttonType = !buttonType;
     }
     return buttonType;
 }
@@ -194,50 +97,83 @@ void TriangleTest::onOffSwitch()
 {
     if (is_switch_pressed("Plane", meshSwitch[PLANE]))
     {
-        ImGui::SliderFloat3("rotation_plane", &rotation[PLANE].x, 0.0, 2.f * PI);
-        plane.set_rotation(rotation[PLANE]);
+        ImGui::SliderAngle("x_dgree", &meshes[PLANE].Get_Rotation().x);
+        meshes[PLANE].set_rotation(meshes[PLANE].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("y_dgree", &meshes[PLANE].Get_Rotation().y);
+        meshes[PLANE].set_rotation(meshes[PLANE].Get_Rotation());
+
+        ImGui::SliderAngle("z_dgree", &meshes[PLANE].Get_Rotation().z);
+        meshes[PLANE].set_rotation(meshes[PLANE].Get_Rotation());
+
+        ImGui::SliderFloat3("position_plane", &meshes[PLANE].Get_position().x, -1.f,1.f);
+        meshes[PLANE].set_position(meshes[PLANE].Get_position());
+
     }
     if (is_switch_pressed("Cube", meshSwitch[CUBE]))
     {
-        ImGui::SliderFloat3("rotation_cube", &rotation[CUBE].x, 0.0, 2.f * PI);
-        cube.set_rotation(rotation[CUBE]);
+        ImGui::SliderAngle("Cube x dgree", &meshes[CUBE].Get_Rotation().x);
+        meshes[CUBE].set_rotation(meshes[CUBE].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("Cube y dgree", &meshes[CUBE].Get_Rotation().y);
+        meshes[CUBE].set_rotation(meshes[CUBE].Get_Rotation());
+
+        ImGui::SliderAngle("Cube z dgree", &meshes[CUBE].Get_Rotation().z);
+        meshes[CUBE].set_rotation(meshes[CUBE].Get_Rotation());
+        ImGui::SliderFloat3("position_cube", &meshes[CUBE].Get_position().x, -1.f, 1.f);
+        meshes[CUBE].set_position(meshes[CUBE].Get_position());
     }
     if (is_switch_pressed("Sphere", meshSwitch[SPHERE]))
     {
-        ImGui::SliderFloat3("rotation_sphere", &rotation[SPHERE].x, 0.0, 2.f * PI);
-        sphere.set_rotation(rotation[SPHERE]);
+        ImGui::SliderAngle("Sphere x dgree", &meshes[SPHERE].Get_Rotation().x);
+        meshes[SPHERE].set_rotation(meshes[SPHERE].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("Sphere y dgree", &meshes[SPHERE].Get_Rotation().y);
+        meshes[SPHERE].set_rotation(meshes[SPHERE].Get_Rotation());
+
+        ImGui::SliderAngle("Sphere z dgree", &meshes[SPHERE].Get_Rotation().z);
+        meshes[SPHERE].set_rotation(meshes[SPHERE].Get_Rotation());
+        ImGui::SliderFloat3("position_sphere", &meshes[SPHERE].Get_position().x, -1.f, 1.f);
+        meshes[SPHERE].set_position(meshes[SPHERE].Get_position());
     }
     if (is_switch_pressed("Torus", meshSwitch[TORUS]))
     {
-        ImGui::SliderFloat3("rotation_torus", &rotation[TORUS].x, 0.0, 2.f * PI);
-        torus.set_rotation(rotation[TORUS]);
+        ImGui::SliderAngle("Torus x dgree", &meshes[TORUS].Get_Rotation().x);
+        meshes[TORUS].set_rotation(meshes[TORUS].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("Torus y dgree", &meshes[TORUS].Get_Rotation().y);
+        meshes[TORUS].set_rotation(meshes[TORUS].Get_Rotation());
+
+        ImGui::SliderAngle("Torus z dgree", &meshes[TORUS].Get_Rotation().z);
+        meshes[TORUS].set_rotation(meshes[TORUS].Get_Rotation());
+
+        ImGui::SliderFloat3("position_torus", &meshes[TORUS].Get_position().x, -1.f, 1.f);
+        meshes[TORUS].set_position(meshes[TORUS].Get_position());
     }
     if (is_switch_pressed("Cylinder", meshSwitch[CYLINDER]))
     {
-        ImGui::SliderFloat3("rotation_cylinder", &rotation[CYLINDER].x, 0.0, 2.f * PI);
-        cylinder.set_rotation(rotation[CYLINDER]);
+        ImGui::SliderAngle("Cylinder x dgree", &meshes[CYLINDER].Get_Rotation().x);
+        meshes[CYLINDER].set_rotation(meshes[CYLINDER].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("Cylinder y dgree", &meshes[CYLINDER].Get_Rotation().y);
+        meshes[CYLINDER].set_rotation(meshes[CYLINDER].Get_Rotation());
+
+        ImGui::SliderAngle("Cylinder z dgree", &meshes[CYLINDER].Get_Rotation().z);
+        meshes[CYLINDER].set_rotation(meshes[CYLINDER].Get_Rotation());
+        ImGui::SliderFloat3("position_cylinder", &meshes[CYLINDER].Get_position().x, -1.f, 1.f);
+        meshes[CYLINDER].set_position(meshes[CYLINDER].Get_position());
     }
     if (is_switch_pressed("Cone", meshSwitch[CONE]))
     {
-        ImGui::SliderFloat3("rotation_cone", &rotation[CONE].x, 0.0, 2.f * PI);
-        cone.set_rotation(rotation[CONE]);
+        ImGui::SliderAngle("Cone x dgree", &meshes[CONE].Get_Rotation().x);
+        meshes[CONE].set_rotation(meshes[CONE].Get_Rotation());
 
-        //ImGui::SliderFloat3("position", &position.x, 0.f,1.f);
-        //cube.set_position(position);
+        ImGui::SliderAngle("Cone y dgree", &meshes[CONE].Get_Rotation().y);
+        meshes[CONE].set_rotation(meshes[CONE].Get_Rotation());
+
+        ImGui::SliderAngle("Cone z dgree", &meshes[CONE].Get_Rotation().z);
+        meshes[CONE].set_rotation(meshes[CONE].Get_Rotation());
+        ImGui::SliderFloat3("position_cone", &meshes[CONE].Get_position().x, -1.f, 1.f);
+        meshes[CONE].set_position(meshes[CONE].Get_position());
     }
 }

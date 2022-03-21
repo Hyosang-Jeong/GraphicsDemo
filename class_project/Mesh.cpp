@@ -285,8 +285,10 @@ Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
 Mesh CreateCone(int stacks, int slices)
 {
     Mesh mesh;
+    Vertex v;
     Mesh top;
     Mesh bottom;
+
     float col = 0;
     float alpha = 0;
     for (int stack = 0; stack <= stacks; ++stack)
@@ -297,8 +299,6 @@ Mesh CreateCone(int stacks, int slices)
         {
             col = (float)slice / slices;
             alpha = col * PI * 2.0;
-
-            Vertex v;
 
             // side
             v.uv.x = row;
@@ -317,6 +317,62 @@ Mesh CreateCone(int stacks, int slices)
         }
     }
     BuildIndexBuffer(stacks, slices, mesh);
+
+    int vertex_size = mesh.vertexBuffer.size();
+
+    /// For the caps
+
+    for (int i = 0; i <1; i++)
+    {
+        if (i == 0)
+        {
+            v.pos = Vec3(0.0, -0.5, 0.0);
+            v.nrm.x = v.pos.x / 0.5;
+            v.nrm.y = v.pos.y / 0.5;
+            v.nrm.z = v.pos.z / 0.5;
+        }
+
+        addVertex(mesh, v);
+
+        float row = static_cast<float>(i) / stacks;
+
+        for (int j = 0; j <= slices; j++)
+        {
+            float col = static_cast<float>(j) / slices;
+            float alpha = col * 2.0 * PI;
+            float sinAlpha = sin(alpha);
+            float cosAlpha = cos(alpha);
+
+            v.uv.x = row;
+            v.uv.y = col;
+
+                v.pos = Vec3(0.5 * sinAlpha, -0.5, 0.5 * cosAlpha);
+
+                v.nrm.x = v.pos.x / 0.5;
+                v.nrm.y = v.pos.y / 0.5;
+                v.nrm.z = v.pos.z / 0.5;
+            
+
+            addVertex(mesh, v);
+        }
+    }
+
+    for (int i = 0; i <= stacks; i++)
+    {
+        vertex_size += (i * (slices + 2));
+
+        for (int j = 1; j < slices; j++)
+        {
+            addIndex(mesh, vertex_size);
+            addIndex(mesh, vertex_size + j);
+            addIndex(mesh, vertex_size + j + 1);
+        }
+        addIndex(mesh, vertex_size);
+        addIndex(mesh, vertex_size + slices);
+        addIndex(mesh, vertex_size + 1);
+    }
+
+
     return  mesh;
 }
 
@@ -406,10 +462,10 @@ void Mesh::setup_mesh()
     glUseProgram(renderProg.GetHandle());
 
     /*  Obtain the locations of the variables in the shaders with the given names */
-     mvpMatLoc = glGetUniformLocation(renderProg.GetHandle(), "mvpMat");
-     rotMatLoc = glGetUniformLocation(renderProg.GetHandle(), "rotMat");
+     modelLoc = glGetUniformLocation(renderProg.GetHandle(), "model");
+     viewLoc = glGetUniformLocation(renderProg.GetHandle(), "view");
      colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
-     textureLoc =   glGetUniformLocation(renderProg.GetHandle(), "tex");
+    projectionLoc = glGetUniformLocation(renderProg.GetHandle(), "projection");
 
     SendVertexData();
 
@@ -417,7 +473,7 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
@@ -428,70 +484,28 @@ void Mesh::setup_mesh()
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 {
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    float ratio = viewport[2] / static_cast<float>(viewport[3]);
-    scale.x = scale.y / ratio;
-
-    glm::vec4 pos_tmp = World_to_NDC * glm::vec4(position, 1.0) ;
-
-
-    glm::mat4 trans_mat =
-    {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        pos_tmp.x,pos_tmp.y,pos_tmp.z,1
-    };
-
-
-    glm::mat4 scale_mat =
-    {
-        scale.x,0,0,0,
-        0,scale.y,0,0,
-        0,0,scale.z,0,
-        0,0,0,1
-    };
-
-    glm::mat4  rotate_x_mat =
-    {
-        1,0,0,0,
-        0,cos(rotation.x),sin(rotation.x),0,
-       0,-sin(rotation.x),cos(rotation.x),0,
-        0,0,0,1
-    };
-
-    glm::mat4 rotate_y_mat =
-    {
-        cos(rotation.y),0,-sin(rotation.y),0,
-        0,1,0,0,
-      sin(rotation.y),0,cos(rotation.y),0,
-        0,0,0,1
-    };
-
-    glm::mat4 rotate_z_mat =
-    {
-      cos(rotation.z), -sin(rotation.z), 0 ,0,
-    sin(rotation.z), cos(rotation.z), 0, 0,
-    0, 0 ,1, 0,
-    0 ,0 ,0 ,1
-    };
-
-
-   rotate_mat = rotate_x_mat * rotate_y_mat * rotate_z_mat;
-    
-    SRT_mat = trans_mat* rotate_mat * scale_mat ;
-
-
-    //SRT_mat = scale_mat  * rotate_mat * trans_mat;
 
 }
 
-void Mesh::draw()
+void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection)
 {
-
-
-
+    glm::mat4 model = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+    };
+    model = glm::translate(model, position);
+    model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, { scale.x,scale.y,scale.z });
+    glUniform4fv(colorLoc, 1, ValuePtr(color));
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 }
 
 void Mesh::init(glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
@@ -501,16 +515,6 @@ void Mesh::init(glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
     rotation = Rotate;
     setup_shdrpgm();
     setup_mesh();
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-
-    World_to_NDC = {
-        2.f / viewport[2],0,0,0,
-        0, 2.f / viewport[3],0,0,
-        0,0,1,0,
-       -1,-1,0,1
-    };
-
 
 }
 

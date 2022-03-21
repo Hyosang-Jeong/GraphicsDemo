@@ -72,17 +72,14 @@ struct Mesh
     GLuint IBO;
     GLSLShader renderProg;
 
-    GLint mvpMatLoc;
-    GLint rotMatLoc;
+    GLint modelLoc;
+    GLint viewLoc;
+    GLint   projectionLoc;
     GLint colorLoc;
-    GLint   textureLoc;
 
-    glm::mat4 World_to_NDC;
-    glm::mat4 SRT_mat;
-    glm::vec3 position;
-    glm::vec3 scale;
-    glm::vec3 rotation;
-    glm::mat4 rotate_mat;
+    glm::vec3 position{ 0,0,0 };
+    glm::vec3 scale = { 1,1,1 };
+    glm::vec3 rotation{ 0,0,0 };
 
 
     void init(glm::vec3 Pos = {0,0,0}, glm::vec3 Scale = { 1,1,1 }, glm::vec3 Rotate = { 0,0,0 });
@@ -90,15 +87,28 @@ struct Mesh
     void setup_shdrpgm();
     void setup_mesh();
     void compute_matrix(float delta_time);
-    void draw();
+    void draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection);
     void set_position(glm::vec3 pos) 
     {
         position = pos;
+        update_flag = true;
     }
     void set_rotation(glm::vec3 angle)
     {
         rotation = angle;
+        update_flag = true;
     }
+    glm::vec3& Get_position()
+    {
+        return position;
+    }
+    glm::vec3& Get_Rotation()
+    {
+        return rotation;
+    }
+
+
+    bool update_flag = true;
 };
 
 
