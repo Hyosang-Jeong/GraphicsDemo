@@ -36,6 +36,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Toon_Fog.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glapp.h">
@@ -58,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="math.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Toon_Fog.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

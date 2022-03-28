@@ -8,16 +8,18 @@
 #include <imgui_impl_glfw.h>
 #include <glm/glm.hpp>
 #include"tests/TestTriangle.h"
+#include"tests/Toon_Fog.h"
 
 static void draw();
 static void update();
 static void init();
 static void cleanup();
 
-TriangleTest mesh_demo;
+//TriangleTest mesh_demo;
+Toon_Fog toon_fog_demo;
 
-
-int main() {
+int main() 
+{
     init();
 
     while (!glfwWindowShouldClose(GLHelper::ptr_window)) 
@@ -39,12 +41,14 @@ static void update() {
     sstr << std::fixed << std::setprecision(2) << GLHelper::title << ": " << GLHelper::fps;
     glfwSetWindowTitle(GLHelper::ptr_window, sstr.str().c_str());
 
-    mesh_demo.Update(GLHelper::update_time(1.0));
+    //mesh_demo.Update(GLHelper::update_time(1.0));
+    toon_fog_demo.Update(GLHelper::update_time(1.0));
 }
 
 static void draw() {
-    glClearColor(1, 1, 1, 1);
-    mesh_demo.Draw();
+    glClearColor(0.2, 0.2, 0.2,1);
+    //mesh_demo.Draw();
+    toon_fog_demo.Draw();
     // Render dear imgui into screen
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -56,14 +60,15 @@ static void draw() {
 static void init() {
     // Part 1
 
-    if (!GLHelper::init(1200, 1200, "Class Project")) {
+    if (!GLHelper::init(1600, 1600, "Class Project")) {
 
         std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
     // Part 2
-    mesh_demo.init();
+    //mesh_demo.init();
+    toon_fog_demo.init();
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
