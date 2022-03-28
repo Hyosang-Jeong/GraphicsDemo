@@ -194,6 +194,7 @@ void TriangleTest::onOffSwitch()
 {
     if (is_switch_pressed("Plane", meshSwitch[PLANE]))
     {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         ImGui::SliderFloat3("rotation_plane", &rotation[PLANE].x, 0.0, 2.f * PI);
         plane.set_rotation(rotation[PLANE]);
 
@@ -202,6 +203,7 @@ void TriangleTest::onOffSwitch()
     }
     if (is_switch_pressed("Cube", meshSwitch[CUBE]))
     {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         ImGui::SliderFloat3("rotation_cube", &rotation[CUBE].x, 0.0, 2.f * PI);
         cube.set_rotation(rotation[CUBE]);
 
