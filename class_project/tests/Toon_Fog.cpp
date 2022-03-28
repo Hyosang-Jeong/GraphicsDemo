@@ -49,9 +49,18 @@ void Toon_Fog::Update(float deltaTime)
     sphere.compute_matrix(deltaTime);
     cube.compute_matrix(deltaTime);
     static float angle = 0;
-    float x = 2.f * sin(angle);
-    float z = 2.f * cos(angle);
+    float x =  sin(angle);
+    float z =  2.f * cos(angle);
     light = { x,0,z };
+    glm::mat4 rot = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+    };
+    rot = glm::rotate(rot, glm::radians(45.f), glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::vec4 tmp(light.x, light.y, light.z, 1);
+    light = rot * tmp;
     sun.set_position({ light });
     angle += deltaTime*10;
 }

@@ -49,11 +49,11 @@ void main(void)
     else
         {
          if (diff > 0.75)
-               diff= 0.95;
+               diff= 1;
          else if (diff > 0.5)
-               diff= 0.9;
+               diff= 0.8;
           else if (diff > 0.0)
-               diff= 0.85 ;
+               diff= 0.7 ;
         else
                diff= 0.3 ;
          
