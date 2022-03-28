@@ -10,12 +10,21 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+
+
 out vec2 UV;
+out vec3 FragPos; 
 
 void main(void) 
 {
     gl_Position = projection * view * model * vec4(pos, 1.0);
+
+    FragPos = vec3(model * vec4(pos, 1.0));
+
     UV = uv;
-    NRM = nrm;
+
+   // vec4 normal =  projection * view * model *vec4( nrm,1.0);
+   // vec4 normal =  model *vec4( nrm,1.0);
+    NRM = mat3(transpose(inverse(model))) * nrm;
 }
 

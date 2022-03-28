@@ -70,13 +70,13 @@ void TriangleTest::Draw()
     ImGui::Begin("Triangle Position/Color");
     onOffSwitch();
     
-    for (int i = 0; i < NUM_MESHES; i++)
-    {
-        if (meshSwitch[i] == true)
-        {
-            meshes[i].draw(useNormal, view, projection);
-        }
-    }
+    //for (int i = 0; i < NUM_MESHES; i++)
+    //{
+    //    if (meshSwitch[i] == true)
+    //    {
+    //        meshes[i].draw(useNormal, view, projection);
+    //    }
+    //}
 
 }
 

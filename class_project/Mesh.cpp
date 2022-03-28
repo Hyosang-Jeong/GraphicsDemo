@@ -33,7 +33,7 @@ Mesh CreatePlane(int stacks, int slices)
             Vertex v;
 
             v.pos = glm::vec3(col - 0.5f, 0.5f - row, 0.0f);
-            v.nrm = glm::vec3(0.0f, 0.0f, 1.0f);
+            v.nrm = glm::vec3(0.0f, 0.0f, -1.0f);
             v.uv = glm::vec2(col, row);
 
             addVertex(mesh, v);
@@ -50,30 +50,33 @@ Mesh CreateCube(int stacks, int slices)
     Mesh planeMesh = CreatePlane(stacks, slices);
     Mesh mesh;
 
-    glm::vec3 const translateArray[] =
+    Vec3 const translateArray[] =
     {
-        glm::vec3(+0.0f, +0.0f, -0.5f), // Z+
-        glm::vec3(+0.0f, +0.0f, 0.5f), // Z-
-        glm::vec3(+0.5f, +0.0f, +0.0f), // X+
-        glm::vec3(-0.5f, +0.0f, +0.0f), // X-
-        glm::vec3(+0.0f, +0.5f, +0.0f), // Y+
-        glm::vec3(+0.0f, -0.5f, +0.0f), // Y-
+        Vec3(+0.0f, +0.0f, +0.5f), // Z+
+        Vec3(+0.0f, +0.0f, -0.5f), // Z-
+        Vec3(+0.5f, +0.0f, +0.0f), // X+
+        Vec3(-0.5f, +0.0f, +0.0f), // X-
+        Vec3(+0.0f, +0.5f, +0.0f), // Y+
+        Vec3(+0.0f, -0.5f, +0.0f), // Y-
     };
 
-    glm::vec2 const rotateArray[] =
+    Vec2 const rotateArray[] =
     {
-        glm::vec2(+0.0f, +0.0f),             // Z+
-        glm::vec2(+0.0f, (float)+PI),        // Z-
-        glm::vec2(+0.0f, (float)+HALF_PI),   // X+       
-        glm::vec2(+0.0f, (float)-HALF_PI),   // X-
-        glm::vec2((float)-HALF_PI, +0.0f),   // Y+
-        glm::vec2((float)+HALF_PI, +0.0f)    // Y-
+        Vec2(+0.0f, +0.0f),             // Z+
+        Vec2(+0.0f, (float)+PI),        // Z-
+        Vec2(+0.0f, (float)+HALF_PI),   // X+       
+        Vec2(+0.0f, (float)-HALF_PI),   // X-
+        Vec2((float)-HALF_PI, +0.0f),   // Y+
+        Vec2((float)+HALF_PI, +0.0f)    // Y-
     };
+
 
     /*  Transform the plane to 6 positions to form the faces of the cube */
     for (int i = 0; i < 6; ++i)
     {
-        Mat4 transformMat = Translate(translateArray[i]) * Rotate(rotateArray[i][YINDEX], { 0,1,0 }) * Rotate(rotateArray[i][XINDEX], { 1,0,0 });
+        Mat4 transformMat = Translate(translateArray[i]) *
+            Rotate(rotateArray[i][YINDEX], { 0,1,0 }) *
+            Rotate(rotateArray[i][XINDEX], { 1,0,0 });
 
         for (int j = 0; j < planeMesh.numVertices; ++j)
         {
@@ -89,9 +92,7 @@ Mesh CreateCube(int stacks, int slices)
         }
 
         for (int j = 0; j < planeMesh.numIndices; ++j)
-        {
             addIndex(mesh, planeMesh.indexBuffer[j] + planeMesh.numVertices * i);
-        }
     }
 
     return mesh;
@@ -466,6 +467,9 @@ void Mesh::setup_mesh()
      viewLoc = glGetUniformLocation(renderProg.GetHandle(), "view");
      colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
     projectionLoc = glGetUniformLocation(renderProg.GetHandle(), "projection");
+    LightLoc = glGetUniformLocation(renderProg.GetHandle(), "lightPos");
+    ViewPosLoc = glGetUniformLocation(renderProg.GetHandle(), "viewPos");
+
 
     SendVertexData();
 
@@ -473,13 +477,13 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-   // glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
+   glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
 }
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
@@ -487,7 +491,7 @@ void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 
 }
 
-void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection)
+void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3 light_pos, glm::vec3 view_pos)
 {
     glm::mat4 model = {
         1,0,0,0,
@@ -504,6 +508,9 @@ void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection)
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform3fv(LightLoc, 1,  ValuePtr(light_pos));
+    glUniform3fv(ViewPosLoc, 1, ValuePtr(view_pos));
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 }

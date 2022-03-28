@@ -10,7 +10,7 @@
 \date   8/1/2015
 */
 /******************************************************************************/
-
+#pragma once
 #include <vector>
 #include <GL/glew.h> 
 #include"math.h"
@@ -75,7 +75,9 @@ struct Mesh
     GLint modelLoc;
     GLint viewLoc;
     GLint   projectionLoc;
+    GLint   LightLoc;
     GLint colorLoc;
+    GLint  ViewPosLoc;
 
     glm::vec3 position{ 0,0,0 };
     glm::vec3 scale = { 1,1,1 };
@@ -87,7 +89,7 @@ struct Mesh
     void setup_shdrpgm();
     void setup_mesh();
     void compute_matrix(float delta_time);
-    void draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection);
+    void draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3 light_pos, glm::vec3 view_pos);
     void set_position(glm::vec3 pos) 
     {
         position = pos;
