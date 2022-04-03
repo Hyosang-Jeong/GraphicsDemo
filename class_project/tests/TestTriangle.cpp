@@ -111,6 +111,7 @@ void TriangleTest::onOffSwitch()
     }
     if (is_switch_pressed("Plane", meshSwitch[PLANE]))
     {
+
         ImGui::SliderAngle("x_dgree", &meshes[PLANE].Get_Rotation().x);
         meshes[PLANE].set_rotation(meshes[PLANE].Get_Rotation());
 
@@ -131,8 +132,10 @@ void TriangleTest::onOffSwitch()
     }
     if (is_switch_pressed("Cube", meshSwitch[CUBE]))
     {
+
         ImGui::SliderAngle("Cube x dgree", &meshes[CUBE].Get_Rotation().x);
         meshes[CUBE].set_rotation(meshes[CUBE].Get_Rotation());
+
 
         ImGui::SliderAngle("Cube y dgree", &meshes[CUBE].Get_Rotation().y);
         meshes[CUBE].set_rotation(meshes[CUBE].Get_Rotation());
