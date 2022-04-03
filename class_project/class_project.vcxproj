@@ -163,16 +163,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glapp.cpp" />
     <ClCompile Include="glhelper.cpp" />
     <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
+    <ClCompile Include="tests\ValueNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="glapp.h" />
     <ClInclude Include="glhelper.h" />
     <ClInclude Include="glslshader.h" />
     <ClInclude Include="math.h" />
@@ -180,6 +179,7 @@
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />
     <ClInclude Include="tests\Toon_Fog.h" />
+    <ClInclude Include="tests\ValueNoise.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

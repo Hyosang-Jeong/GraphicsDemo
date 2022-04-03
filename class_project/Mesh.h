@@ -15,6 +15,8 @@
 #include <GL/glew.h> 
 #include"math.h"
 #include"glslshader.h"
+
+/*  Mesh function(s) */
 struct Vertex
 {
     Vertex(glm::vec3 pos, glm::vec3 nrm, glm::vec3 uv) : pos(pos), nrm(nrm), uv(uv) {}
@@ -84,9 +86,9 @@ struct Mesh
     glm::vec3 rotation{ 0,0,0 };
 
 
-    void init(glm::vec3 Pos = {0,0,0}, glm::vec3 Scale = { 1,1,1 }, glm::vec3 Rotate = { 0,0,0 });
+    void init(std::string shader, glm::vec3 Pos = {0,0,0}, glm::vec3 Scale = { 1,1,1 }, glm::vec3 Rotate = { 0,0,0 });
     void SendVertexData();
-    void setup_shdrpgm();
+    void setup_shdrpgm(std::string shader);
     void setup_mesh();
     void compute_matrix(float delta_time);
     void draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3 light_pos, glm::vec3 view_pos);
@@ -109,30 +111,25 @@ struct Mesh
         return rotation;
     }
 
+    int* get_stack_slice()
+    {
+        return stack_slice;
+    }
 
+
+
+    int stack_slice[2];
     bool update_flag = true;
 };
 
-
-/*  Mesh function(s) */
 Mesh CreatePlane(int stacks, int slices);
 Mesh CreateCube(int stacks, int slices);
 Mesh CreateSphere(int stacks, int slices);
 Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle);
 Mesh CreateCylinder(int stacks, int slices);
 Mesh CreateCone(int stacks, int slices);
-
-
-
 /******************************************************************************/
 /*  Pre-defined shapes                                                        */
 /******************************************************************************/
 enum MeshID { PLANE, CUBE,SPHERE,TORUS,CYLINDER,CONE, NUM_MESHES };
 
-static Mesh mesh[NUM_MESHES] = { CreatePlane(1, 1),
-                                 CreateCube(10, 10),
-                                 CreateSphere(16, 16),
-                                 CreateTorus(16, 32, 0,TWO_PI),
-                                 CreateCylinder(1,8),
-                                 CreateCone(16,8)
-};

@@ -27,28 +27,36 @@ Toon_Fog::~Toon_Fog()
 
 void Toon_Fog::init()
 {
-    GLint wid = GLHelper::width;
-    GLint hei = GLHelper::height;
-
    cube = CreateCylinder(10,10);
    sphere = CreateSphere(30, 30);
    sun = CreateSphere(30, 30);
-   sphere.init({ 0,0,0 },{ 0.5,0.5,0.5 });
-    cube.init();
     light = { 1,0,0 };
-
-    sun.init(light, { 0.5,0.5,0.5 });
-
+    sphere.init("toon_fog",{ 0, 0, 0 }, {0.5,0.5,0.5});
+    cube.init("toon_fog");
+    sun.init("toon_fog",light, { 0.5,0.5,0.5 });
+    view = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+    };
+    projection = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+    };
+    angle = 0;
+    eye = { 0.0f, 0.0f, -3.0f };
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), (float)GLHelper::width / (float)GLHelper::height, 0.1f, 100.0f);
-
 }
 
 void Toon_Fog::Update(float deltaTime)
 {
     sphere.compute_matrix(deltaTime);
     cube.compute_matrix(deltaTime);
-    static float angle = 0;
+
     float x =  sin(angle);
     float z =  2.f * cos(angle);
     light = { x,0,z };
@@ -62,11 +70,12 @@ void Toon_Fog::Update(float deltaTime)
     glm::vec4 tmp(light.x, light.y, light.z, 1);
     light = rot * tmp;
     sun.set_position({ light });
-    angle += deltaTime*10;
+    angle += deltaTime;
 }
 
 void Toon_Fog::Draw()
 {
+    glClearColor(0., 0., 0., 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -74,15 +83,12 @@ void Toon_Fog::Draw()
     ImGui::NewFrame();
 
     // Display FPS in another viewport
-    ImGui::Begin("Triangle Position/Color");
-    onOffSwitch();
+  //  ImGui::Begin("Triangle Position/Color");
+    //onOffSwitch();
 
     glm::vec4 sun_color = { 1,0.83,0,1 };
     sphere.draw(useNormal, view, projection, light, { 0.0f, 0.0f, 3.0f });
-
     sun.draw(sun_color, view, projection, -light, { 0.0f, 0.0f, 3.0f });
-
-
 
    //cube.draw(useNormal, view, projection, { 0,0,1 }, { 0.0f, 0.0f, 3.0f });
 }

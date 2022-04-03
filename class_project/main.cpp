@@ -1,5 +1,4 @@
 #include "glhelper.h"
-#include "glapp.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -9,17 +8,31 @@
 #include <glm/glm.hpp>
 #include"tests/TestTriangle.h"
 #include"tests/Toon_Fog.h"
-
+#include"tests/ValueNoise.h"
 static void draw();
 static void update();
 static void init();
 static void cleanup();
-
-//TriangleTest mesh_demo;
-Toon_Fog toon_fog_demo;
+void demo_switch();
+enum DEMO
+{
+    TRIANGLE,
+    TOON_FOG,
+    VALUE_NOISE
+};
+std::vector<Test*> tests;
+DEMO current = VALUE_NOISE;
 
 int main() 
 {
+
+    TriangleTest triangle;
+    Toon_Fog toon_fog;
+    ValueNoise value_noise;
+    tests.push_back(&triangle);
+    tests.push_back(&toon_fog);
+    tests.push_back(&value_noise);
+
     init();
 
     while (!glfwWindowShouldClose(GLHelper::ptr_window)) 
@@ -31,34 +44,48 @@ int main()
     cleanup();
 }
 
-static void update() {
-    // Part 1
+static void update()
+{
     glfwPollEvents();
-
     double delta_time = GLHelper::update_time(1.0);
-    // write window title with current fps ...
-    std::stringstream sstr;
-    sstr << std::fixed << std::setprecision(2) << GLHelper::title << ": " << GLHelper::fps;
-    glfwSetWindowTitle(GLHelper::ptr_window, sstr.str().c_str());
-
-    //mesh_demo.Update(GLHelper::update_time(1.0));
-    toon_fog_demo.Update(GLHelper::update_time(1.0));
+    tests[current]->Update(delta_time);
 }
 
 static void draw() {
-    glClearColor(0.2, 0.2, 0.2,1);
-    //mesh_demo.Draw();
-    toon_fog_demo.Draw();
-    // Render dear imgui into screen
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // Part 2: swap buffers: front <-> back
+    tests[current]->Draw();
+
+     ImGui::Begin("Demo");
+     demo_switch();
+     ImGui::Render();
+     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
     glfwSwapBuffers(GLHelper::ptr_window);
 }
+void demo_switch()
+{
+    if (ImGui::Button("Procedure Modeling"))
+    {
+        tests[current]->UnLoad();
+        current = TRIANGLE;
+        tests[current]->init();
+    }
 
+    if (ImGui::Button("Toon Fog"))
+    {
+        tests[current]->UnLoad();
+        current = TOON_FOG;
+        tests[current]->init();
+    }
+
+    if (ImGui::Button("Value Noise"))
+    {
+        tests[current]->UnLoad();
+        current = VALUE_NOISE;
+        tests[current]->init();
+    }
+}
 static void init() {
-    // Part 1
 
     if (!GLHelper::init(1600, 1600, "Class Project")) {
 
@@ -66,25 +93,25 @@ static void init() {
         std::exit(EXIT_FAILURE);
     }
 
-    // Part 2
-    //mesh_demo.init();
-    toon_fog_demo.init();
-    // Setup Dear ImGui context
+
+    tests[current]->init();
+
+
+
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(GLHelper::ptr_window, true);
     const char* glsl_version = "#version 330";
     ImGui_ImplOpenGL3_Init(glsl_version);
-    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 }
 
 void cleanup() {
-    // Part 1
+
     GLHelper::cleanup();
-    // Part 2
+
 
     //todo destructor에서 하는걸로 change
     //triangle_test.triangle.cleanup();

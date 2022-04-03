@@ -21,7 +21,8 @@ void addIndex(Mesh& mesh, int index);
 Mesh CreatePlane(int stacks, int slices)
 {
     Mesh mesh;
-
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     for (int stack = 0; stack <= stacks; ++stack)
     {
         float row = (float)stack / stacks;
@@ -32,8 +33,8 @@ Mesh CreatePlane(int stacks, int slices)
 
             Vertex v;
 
-            v.pos = glm::vec3(col - 0.5f, 0.5f - row, 0.0f);
-            v.nrm = glm::vec3(0.0f, 0.0f, -1.0f);
+            v.pos = glm::vec3(col - 0.5f, row - 0.5f , 0.0f);
+            v.nrm = glm::vec3(0.0f, 0.0f, 1.0f);
             v.uv = glm::vec2(col, row);
 
             addVertex(mesh, v);
@@ -49,7 +50,8 @@ Mesh CreateCube(int stacks, int slices)
 {
     Mesh planeMesh = CreatePlane(stacks, slices);
     Mesh mesh;
-
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     Vec3 const translateArray[] =
     {
         Vec3(+0.0f, +0.0f, +0.5f), // Z+
@@ -74,9 +76,7 @@ Mesh CreateCube(int stacks, int slices)
     /*  Transform the plane to 6 positions to form the faces of the cube */
     for (int i = 0; i < 6; ++i)
     {
-        Mat4 transformMat = Translate(translateArray[i]) *
-            Rotate(rotateArray[i][YINDEX], { 0,1,0 }) *
-            Rotate(rotateArray[i][XINDEX], { 1,0,0 });
+        Mat4 transformMat = Translate(translateArray[i]) * Rotate(rotateArray[i][YINDEX], { 0,1,0 }) *  Rotate(rotateArray[i][XINDEX], { 1,0,0 });
 
         for (int j = 0; j < planeMesh.numVertices; ++j)
         {
@@ -101,7 +101,8 @@ Mesh CreateCube(int stacks, int slices)
 Mesh CreateSphere(int stacks, int slices)
 {
     Mesh mesh;
-
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     for (int stack = 0; stack <= stacks; ++stack)
     {
         float row = (float)stack / stacks;
@@ -138,7 +139,8 @@ Mesh CreateCylinder(int stacks, int slices)
 {
     Mesh mesh;
     Vertex vertex;
-
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     /// For the body
 
     for (int i = 0; i <= stacks; i++)
@@ -245,6 +247,8 @@ Mesh CreateCylinder(int stacks, int slices)
 Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
 {
     Mesh mesh;
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     for (int stack = 0; stack <= stacks; ++stack)
     {
         float row = (float)stack / stacks; // [0.0, 1.0]
@@ -289,7 +293,8 @@ Mesh CreateCone(int stacks, int slices)
     Vertex v;
     Mesh top;
     Mesh bottom;
-
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
     float col = 0;
     float alpha = 0;
     for (int stack = 0; stack <= stacks; ++stack)
@@ -347,11 +352,11 @@ Mesh CreateCone(int stacks, int slices)
             v.uv.x = row;
             v.uv.y = col;
 
-                v.pos = Vec3(0.5 * sinAlpha, -0.5, 0.5 * cosAlpha);
+            v.pos = Vec3(0.5 * sinAlpha, -0.5, 0.5 * cosAlpha);
 
-                v.nrm.x = v.pos.x / 0.5;
-                v.nrm.y = v.pos.y / 0.5;
-                v.nrm.z = v.pos.z / 0.5;
+            v.nrm.x = v.pos.x / 0.5;
+            v.nrm.y = v.pos.y / 0.5;
+            v.nrm.z = v.pos.z / 0.5;
             
 
             addVertex(mesh, v);
@@ -365,12 +370,12 @@ Mesh CreateCone(int stacks, int slices)
         for (int j = 1; j < slices; j++)
         {
             addIndex(mesh, vertex_size);
-            addIndex(mesh, vertex_size + j);
             addIndex(mesh, vertex_size + j + 1);
+            addIndex(mesh, vertex_size + j);
         }
         addIndex(mesh, vertex_size);
-        addIndex(mesh, vertex_size + slices);
         addIndex(mesh, vertex_size + 1);
+        addIndex(mesh, vertex_size + slices);
     }
 
 
@@ -441,17 +446,19 @@ void addIndex(Mesh& mesh, int index)
         ++mesh.numTris;
 }
 
-void Mesh::setup_shdrpgm()
+void Mesh::setup_shdrpgm(std::string shader)
 {
+    std::string vert = "../shaders/";
+    std::string frag = "../shaders/";
+    vert = vert + shader + ".vert";
+    frag = frag + shader + ".frag";
+
     std::vector<std::pair<GLenum, std::string>> shdr_files;
-    shdr_files.push_back(std::make_pair(
-        GL_VERTEX_SHADER,
-        "../shaders/triangle.vert"));
-    shdr_files.push_back(std::make_pair(
-        GL_FRAGMENT_SHADER,
-        "../shaders/triangle.frag"));
+    shdr_files.push_back(std::make_pair(GL_VERTEX_SHADER, vert));
+    shdr_files.push_back(std::make_pair(GL_FRAGMENT_SHADER, frag));
     renderProg.CompileLinkValidate(shdr_files);
-    if (GL_FALSE == renderProg.IsLinked()) {
+    if (GL_FALSE == renderProg.IsLinked()) 
+    {
         std::cout << "Unable to compile/link/validate shader programs" << "\n";
         std::cout << renderProg.GetLog() << std::endl;
         std::exit(EXIT_FAILURE);
@@ -460,7 +467,7 @@ void Mesh::setup_shdrpgm()
 
 void Mesh::setup_mesh()
 {
-    glUseProgram(renderProg.GetHandle());
+      glUseProgram(renderProg.GetHandle());
 
     /*  Obtain the locations of the variables in the shaders with the given names */
      modelLoc = glGetUniformLocation(renderProg.GetHandle(), "model");
@@ -477,13 +484,12 @@ void Mesh::setup_mesh()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     /*  Initially drawing using filled mode */
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-   glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
+  //  glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
 }
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
@@ -504,6 +510,8 @@ void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3
     model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::scale(model, { scale.x,scale.y,scale.z });
+
+    
     glUniform4fv(colorLoc, 1, ValuePtr(color));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -511,18 +519,21 @@ void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3
     glUniform3fv(LightLoc, 1,  ValuePtr(light_pos));
     glUniform3fv(ViewPosLoc, 1, ValuePtr(view_pos));
 
+    //todo renderProg.use??
+    //renderProg.Use();
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
+
 }
 
-void Mesh::init(glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
+void Mesh::init(std::string shader, glm::vec3 Pos, glm::vec3 Scale, glm::vec3 Rotate)
 {
     position = Pos;
     scale = Scale;
     rotation = Rotate;
-    setup_shdrpgm();
+    setup_shdrpgm(shader);
     setup_mesh();
-
 }
 
 void Mesh::SendVertexData()

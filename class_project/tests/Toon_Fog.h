@@ -1,7 +1,6 @@
 #pragma once
 
 #include"Test.h"
-#include"../glapp.h"
 #include"../Mesh.h"
 
 class Toon_Fog : public Test
@@ -9,7 +8,7 @@ class Toon_Fog : public Test
 public:
 	Toon_Fog();
 	~Toon_Fog();
-	void init();
+	void init() override;
 	void Update(float deltaTime)  override;
 	void Draw() override;
 	void OnImGuiRender() override;
@@ -27,7 +26,7 @@ private:
 	glm::mat4  projection;
 	glm::vec3 eye;
 	glm::vec3 light;
-
+	float angle = 0;
 	bool meshSwitch[NUM_MESHES] = { true,true,true,true,true,true };
 	bool is_switch_pressed(const char* buttonName, bool& buttonType);
 	void onOffSwitch();
