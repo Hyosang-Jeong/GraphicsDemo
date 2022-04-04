@@ -5,15 +5,16 @@
 enum state
 {
 	value_noise,
-	fractal,
 	wood,
-	marble
+	fractal,
+	marble,
+	Turbulence
 };
-class ValueNoise : public Test
+class Noise : public Test
 {
 public:
-	ValueNoise();
-	~ValueNoise();
+	Noise();
+	~Noise();
 	void init() override;
 	void Update(float deltaTime)  override;
 	void Draw() override;
@@ -30,6 +31,7 @@ public:
 	void generate_value_noise();
 	void generate_wood();
 	void generate_marble();
+	void generate_turbulence();
 private:
 	GLuint VBO;
 	GLuint VAO;
@@ -38,15 +40,15 @@ private:
 	unsigned int texture;
 	
 
-	static constexpr unsigned int width = 512;
-	static constexpr unsigned int height = 512;
+	static constexpr unsigned int width = 256;
+	static constexpr unsigned int height = 256;
 	static constexpr unsigned int size = 100;
 	state currstate = value_noise;
 
 	float frequency =0.1f;
 	float frequencyMult = 1.8;
 	float amplitudeMult = 0.35;
-	unsigned numLayers = 5;
+	int numLayers = 5;
 
 	float max = 1.f;
 	float random_values[size][size];

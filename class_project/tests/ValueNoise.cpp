@@ -15,14 +15,14 @@ unsigned int indices[] = {
     1, 2, 3  // second triangle
 };
 
-ValueNoise::ValueNoise()
+Noise::Noise()
 {}
 
-ValueNoise::~ValueNoise()
+Noise::~Noise()
 {
 }
 
-float ValueNoise::evalute(glm::vec2 p)
+float Noise::evalute(glm::vec2 p)
 {
 
     int xi = static_cast<int>(p.x);
@@ -52,16 +52,18 @@ float ValueNoise::evalute(glm::vec2 p)
     return lerp(nx0, nx1, sy);
 }
 
-void ValueNoise::generate_fractal()
+void Noise::generate_fractal()
 {
+    memset(data, 0, height * width * 3);
     float maxNoiseVal = 0;
     for (int i = 0; i < height; i++)
     {
-
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
             glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
-            float amplitude = 1;
+
+            float amplitude = 0.35f;
+
             for (unsigned k = 0; k < numLayers; k++)
             {
                 data[i][j] +=static_cast<unsigned char>( evalute(val) * amplitude *255.f);
@@ -82,8 +84,64 @@ void ValueNoise::generate_fractal()
     }
 }
 
+void Noise::generate_marble()
+{
+    memset(data, 0, height * width * 3);
 
-void ValueNoise::generate_value_noise()
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+
+            float amplitude = 0.35f;
+            float noiseValue = 0;
+            for (unsigned k = 0; k < numLayers; k++)
+            {
+                noiseValue += evalute(val) * amplitude;
+                val *= frequencyMult;
+                amplitude *= amplitudeMult;
+            }
+
+            data[i][j] = static_cast<unsigned char>(((sin((j/3 + noiseValue * 50) * 2 * PI / 100.f) + 1) / 2.f)*255.f);
+
+        }
+    }
+}
+
+void Noise::generate_turbulence()
+{
+    memset(data, 0, height * width * 3);
+    float maxNoiseVal = 0;
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+
+            float amplitude = 0.35f;
+
+            for (unsigned k = 0; k < numLayers; k++)
+            {
+                data[i][j] += static_cast<unsigned char>(std::fabs(2* evalute(val)-1) * amplitude * 255.f);
+                val *= frequencyMult;
+                amplitude *= amplitudeMult;
+            }
+            if (data[i][j] > maxNoiseVal)
+                maxNoiseVal = data[i][j];
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            data[i][j] = static_cast<unsigned char>((static_cast<float>(data[i][j]) / maxNoiseVal) * 255.f);
+        }
+    }
+}
+
+void Noise::generate_value_noise()
 {
     for (int i = 0; i < height; i++)
     {
@@ -95,7 +153,7 @@ void ValueNoise::generate_value_noise()
     }
 }
 
-void ValueNoise::generate_wood()
+void Noise::generate_wood()
 {
     for (int i = 0; i < height; i++)
     {
@@ -109,12 +167,9 @@ void ValueNoise::generate_wood()
     }
 }
 
-void ValueNoise::generate_marble()
-{
-}
 
 
-void ValueNoise::init()
+void Noise::init()
 {   
     generate_random_value();
     setup_opengl();
@@ -130,14 +185,13 @@ void ValueNoise::init()
         }
 }
 
-void ValueNoise::Update(float )
+void Noise::Update(float )
 {
 
 }
 
-void ValueNoise::Draw()
+void Noise::Draw()
 {
-
     glClearColor(1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Prog.Use();
@@ -162,24 +216,36 @@ void ValueNoise::Draw()
     if (ImGui::Button("Wood") == true)
     {
         currstate = wood;
-         frequency = 0.001f;
-         max = 0.2f;
+        frequency = 0.005f;
+        max = 0.2f;
         generate_wood();
     }
 
-    if (ImGui::Button("fractal") == true)
+    if (ImGui::Button("Fractal") == true)
     {
         currstate = fractal;
-        memset(data, 0, height * width * 3);
+        frequencyMult = 1.8;
+        amplitudeMult = 0.35;
+        numLayers = 5;
+        max = 1.f;
         generate_fractal();
     }
+
     if (ImGui::Button("Marble") == true)
     {
         currstate = marble;
         generate_marble();
     }
-
-    if (ImGui::SliderFloat("Frequency", &frequency, 0.001f, max))
+    if (ImGui::Button("Turblence") == true)
+    {
+        currstate = Turbulence;
+        frequencyMult = 1.8;
+        amplitudeMult = 0.35;
+        numLayers = 5;
+        max = 1.f;
+        generate_turbulence();
+    }
+    if (ImGui::SliderFloat("Frequency", &frequency, 0.005f, max))
     {
         switch (currstate)
         {
@@ -198,16 +264,92 @@ void ValueNoise::Draw()
             generate_marble();
             break;
         }
+        case fractal: 
+        {
+            generate_fractal();
+            break; 
+        }
+        case Turbulence:
+        {
+            generate_turbulence();
+            break;
+        }
         }
     }
 
+    if (currstate >= fractal)
+    {
+        if (ImGui::SliderFloat("frequenyMult", &frequencyMult, 0.f, 10.f))
+        {
+            switch (currstate)
+            {
+            case fractal:
+            {
+                generate_fractal();
+                break;
+            }
+            case marble:
+            {
+                generate_marble();
+                break;
+            }
+            case Turbulence:
+            {
+                generate_turbulence();
+                break;
+            }
+            }
+        }
+        if (ImGui::SliderFloat("amplitudeMult", &amplitudeMult, 0.f, 0.8f))
+        {
+            switch (currstate)
+            {
+            case fractal:
+            {
+                generate_fractal();
+                break;
+            }
+            case marble:
+            {
+                generate_marble();
+                break;
+            }
+            case Turbulence:
+            {
+                generate_turbulence();
+                break;
+            }
+            }
+        }
+        if (ImGui::SliderInt("numLayers", &numLayers, 1, 10))
+        {
+            switch (currstate)
+            {
+            case fractal:
+            {
+                generate_fractal();
+                break;
+            }
+            case marble:
+            {
+                generate_marble();
+                break;
+            }
+            case Turbulence:
+            {
+                generate_turbulence();
+                break;
+            }
+            }
+        }
+    }
 }
 
-void ValueNoise::OnImGuiRender()
+void Noise::OnImGuiRender()
 {
 }
 
-void ValueNoise::UnLoad()
+void Noise::UnLoad()
 {
     //glDeleteVertexArrays(1, &VAO);
     //glDeleteBuffers(1, &VBO);
@@ -215,7 +357,7 @@ void ValueNoise::UnLoad()
     //glDeleteTextures()
 }
 
-void ValueNoise::setup_shdrpgm(std::string shader)
+void Noise::setup_shdrpgm(std::string shader)
 {
     std::string vert = "../shaders/";
     std::string frag = "../shaders/";
@@ -234,17 +376,17 @@ void ValueNoise::setup_shdrpgm(std::string shader)
     }
 }
 
-float ValueNoise::lerp(float min, float max, float t)
+float Noise::lerp(float min, float max, float t)
 {
     return  (min * (1 - t)) + (max * t);
 }
 
-float ValueNoise::smoothstep(const float& t)
+float Noise::smoothstep(const float& t)
 {
     return t * t * (3 - (2 * t));
 }
 
-void ValueNoise::generate_random_value()
+void Noise::generate_random_value()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -261,7 +403,7 @@ void ValueNoise::generate_random_value()
     }
 }
 
-void ValueNoise::setup_opengl()
+void Noise::setup_opengl()
 {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
