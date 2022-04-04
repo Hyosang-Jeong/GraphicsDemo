@@ -4,9 +4,9 @@
 \par    Purpose: Library for generating polygonal meshes.
 \par    Language: C++
 \par    Platform: Visual Studio 2013, Windows 7 64-bit
-\author Sang Le, YOUR_NAME
-\par    Email: sang.le\@digipen.edu, YOUR_EMAIL_ID
-\par    DigiPen login: sang.le, YOUR_LOGIN_ID
+\author Sang Le, 
+\par    Email: sang.le\@digipen.edu,
+\par    DigiPen login: sang.le, 
 \date   YOUR_COMPLETION_DATE
 */
 /******************************************************************************/

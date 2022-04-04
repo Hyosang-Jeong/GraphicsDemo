@@ -1,3 +1,17 @@
+/*!
+@file    ValueNoise.cpp
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file is for Third demo that shows
+       5 demo that(fractal, valueNoise, Wood, Marble, Turbulence).
+       In Value Noise and Wood demo, you can control Frequency by Imgui.
+       And In Fracttal,Marble and Turblence demo, you can control frequency
+       frequencyMult,amplitudeMult, numLayers. Also If you clicked Animated, all demos are
+       update every frame. so it looks moving to left smoothly.
+       Also it has Imgui implementing for showing another demo in left top side.
+
+*//*__________________________________________________________________________*/
 #include "ValueNoise.h"
 #include<random>
 #include <imgui.h>
@@ -52,7 +66,7 @@ float Noise::evalute(glm::vec2 p)
     return lerp(nx0, nx1, sy);
 }
 
-void Noise::generate_fractal()
+void Noise::generate_fractal(float dt)
 {
     memset(data, 0, height * width * 3);
     float maxNoiseVal = 0;
@@ -60,7 +74,7 @@ void Noise::generate_fractal()
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+            glm::vec2 val = glm::vec2((j / 3)+dt, i) * frequency;  //     /3  because  r  g  b
 
             float amplitude = 0.35f;
 
@@ -84,7 +98,7 @@ void Noise::generate_fractal()
     }
 }
 
-void Noise::generate_marble()
+void Noise::generate_marble(float dt)
 {
     memset(data, 0, height * width * 3);
 
@@ -92,7 +106,7 @@ void Noise::generate_marble()
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+            glm::vec2 val = glm::vec2((j / 3) + dt, i) * frequency;  //     /3  because  r  g  b
 
             float amplitude = 0.35f;
             float noiseValue = 0;
@@ -103,13 +117,13 @@ void Noise::generate_marble()
                 amplitude *= amplitudeMult;
             }
 
-            data[i][j] = static_cast<unsigned char>(((sin((j/3 + noiseValue * 50) * 2 * PI / 100.f) + 1) / 2.f)*255.f);
+            data[i][j] = static_cast<unsigned char>(((sin(((j / 3) + dt + noiseValue * 50) * 2 * PI / 100.f) + 1) / 2.f)*255.f);
 
         }
     }
 }
 
-void Noise::generate_turbulence()
+void Noise::generate_turbulence(float dt)
 {
     memset(data, 0, height * width * 3);
     float maxNoiseVal = 0;
@@ -117,7 +131,7 @@ void Noise::generate_turbulence()
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+            glm::vec2 val = glm::vec2((j / 3) + dt, i) * frequency;  //     /3  because  r  g  b
 
             float amplitude = 0.35f;
 
@@ -141,25 +155,25 @@ void Noise::generate_turbulence()
     }
 }
 
-void Noise::generate_value_noise()
+void Noise::generate_value_noise(float dt)
 {
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            float val = evalute(glm::vec2(j / 3, i) * frequency);  //     /3  because  r  g  b
+            float val = evalute(glm::vec2((j / 3) + dt, i) * frequency);  //     /3  because  r  g  b
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
     }
 }
 
-void Noise::generate_wood()
+void Noise::generate_wood(float dt)
 {
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            float val = evalute(glm::vec2(j / 3, i) * frequency);  //     /3  because  r  g  b
+            float val = evalute(glm::vec2((j / 3) + dt, i) * frequency);  //     /3  because  r  g  b
             if (currstate == wood)
                 val *= 10.f;
             data[i][j] = static_cast<unsigned char>(val * 255.f);
@@ -185,9 +199,41 @@ void Noise::init()
         }
 }
 
-void Noise::Update(float )
+void Noise::Update(float dt)
 {
+    if (animated == true)
+    {
+        offset += dt * 10.f;
 
+        switch (currstate)
+        {
+        case value_noise:
+        {
+            generate_value_noise(offset);
+            break;
+        }
+        case wood:
+        {
+            generate_wood(offset);
+            break;
+        }
+        case marble:
+        {
+            generate_marble(offset);
+            break;
+        }
+        case fractal:
+        {
+            generate_fractal(offset);
+            break;
+        }
+        case Turbulence:
+        {
+            generate_turbulence(offset);
+            break;
+        }
+        }
+    }
 }
 
 void Noise::Draw()
@@ -201,7 +247,12 @@ void Noise::Draw()
     glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    OnImGuiRender();
 
+}
+
+void Noise::OnImGuiRender()
+{
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -211,14 +262,15 @@ void Noise::Draw()
     {
         currstate = value_noise;
         max = 1.f;
-        generate_value_noise();
+        frequency = 0.01f;
+        generate_value_noise(0);
     }
     if (ImGui::Button("Wood") == true)
     {
         currstate = wood;
         frequency = 0.005f;
         max = 0.2f;
-        generate_wood();
+        generate_wood(0);
     }
 
     if (ImGui::Button("Fractal") == true)
@@ -228,13 +280,13 @@ void Noise::Draw()
         amplitudeMult = 0.35;
         numLayers = 5;
         max = 1.f;
-        generate_fractal();
+        generate_fractal(0);
     }
 
     if (ImGui::Button("Marble") == true)
     {
         currstate = marble;
-        generate_marble();
+        generate_marble(0);
     }
     if (ImGui::Button("Turblence") == true)
     {
@@ -243,35 +295,38 @@ void Noise::Draw()
         amplitudeMult = 0.35;
         numLayers = 5;
         max = 1.f;
-        generate_turbulence();
+        generate_turbulence(0);
     }
+
+    ImGui::Checkbox("Animated", &animated);
+
     if (ImGui::SliderFloat("Frequency", &frequency, 0.005f, max))
     {
         switch (currstate)
         {
         case value_noise:
         {
-            generate_value_noise();
+            generate_value_noise(0);
             break;
         }
         case wood:
         {
-            generate_wood();
+            generate_wood(0);
             break;
         }
         case marble:
         {
-            generate_marble();
+            generate_marble(0);
             break;
         }
-        case fractal: 
+        case fractal:
         {
-            generate_fractal();
-            break; 
+            generate_fractal(0);
+            break;
         }
         case Turbulence:
         {
-            generate_turbulence();
+            generate_turbulence(0);
             break;
         }
         }
@@ -285,17 +340,17 @@ void Noise::Draw()
             {
             case fractal:
             {
-                generate_fractal();
+                generate_fractal(0);
                 break;
             }
             case marble:
             {
-                generate_marble();
+                generate_marble(0);
                 break;
             }
             case Turbulence:
             {
-                generate_turbulence();
+                generate_turbulence(0);
                 break;
             }
             }
@@ -306,17 +361,17 @@ void Noise::Draw()
             {
             case fractal:
             {
-                generate_fractal();
+                generate_fractal(0);
                 break;
             }
             case marble:
             {
-                generate_marble();
+                generate_marble(0);
                 break;
             }
             case Turbulence:
             {
-                generate_turbulence();
+                generate_turbulence(0);
                 break;
             }
             }
@@ -327,35 +382,27 @@ void Noise::Draw()
             {
             case fractal:
             {
-                generate_fractal();
+                generate_fractal(0);
                 break;
             }
             case marble:
             {
-                generate_marble();
+                generate_marble(0);
                 break;
             }
             case Turbulence:
             {
-                generate_turbulence();
+                generate_turbulence(0);
                 break;
             }
             }
         }
     }
-
-}
-
-void Noise::OnImGuiRender()
-{
 }
 
 void Noise::UnLoad()
 {
-    //glDeleteVertexArrays(1, &VAO);
-    //glDeleteBuffers(1, &VBO);
-    //glDeleteBuffers(1, &EBO);
-    //glDeleteTextures()
+
 }
 
 void Noise::setup_shdrpgm(std::string shader)

@@ -1,3 +1,14 @@
+/*!
+@file    ValueNoise.h
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file contains the declaration Noise class member function
+and this class inherited by Test, So it has all function what Test class have.
+Also, there is a enum state for what is now demo showing.
+
+
+*//*__________________________________________________________________________*/
 #pragma once
 #include"Test.h"
 #include <GL/glew.h> 
@@ -29,11 +40,11 @@ public:
 	void setup_opengl();
 	float evalute(glm::vec2 p);
 
-	void generate_fractal();
-	void generate_value_noise();
-	void generate_wood();
-	void generate_marble();
-	void generate_turbulence();
+	void generate_fractal(float dt);
+	void generate_value_noise(float dt);
+	void generate_wood(float dt);
+	void generate_marble(float dt);
+	void generate_turbulence(float dt);
 private:
 	GLuint VBO;
 	GLuint VAO;
@@ -56,5 +67,6 @@ private:
 	float random_values[size][size];
 	unsigned char data[height][width * 3] = { 0 };
 
-	//float offset = 0.f;
+	float offset = 0.f;
+	bool animated = false;
 };

@@ -1,3 +1,12 @@
+/*!
+@file    Toon_Fog.h
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file contains the declaration Toon_Fog class member function
+and this class inherited by Test, So it has all function what Test class have.
+
+*//*__________________________________________________________________________*/
 #pragma once
 
 #include"Test.h"
@@ -19,7 +28,6 @@ public:
 
 private:
 	Mesh sphere;
-	Mesh cube;
 	Mesh sun;
 
 	glm::mat4  view;

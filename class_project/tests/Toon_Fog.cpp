@@ -1,3 +1,14 @@
+/*!
+@file    Toon_Fog.cpp
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file is for Second demo that shows
+       one demo that two sphere and both of them has toon shading.
+       And Yellow Sphere is for fog shading. They are spinning in the demo.
+              Also it has Imgui implementing for showing another demo in left top side.
+
+*//*__________________________________________________________________________*/
 #include "Toon_Fog.h"
 #include"../glhelper.h"
 #include <imgui.h>
@@ -27,12 +38,12 @@ Toon_Fog::~Toon_Fog()
 
 void Toon_Fog::init()
 {
-   cube = CreateCylinder(10,10);
+
    sphere = CreateSphere(30, 30);
    sun = CreateSphere(30, 30);
     light = { 1,0,0 };
     sphere.init("toon_fog",{ 0, 0, 0 }, {0.5,0.5,0.5});
-    cube.init("toon_fog");
+
     sun.init("toon_fog",light, { 0.5,0.5,0.5 });
     view = {
     1,0,0,0,
@@ -54,8 +65,6 @@ void Toon_Fog::init()
 
 void Toon_Fog::Update(float deltaTime)
 {
-    sphere.compute_matrix(deltaTime);
-    cube.compute_matrix(deltaTime);
 
     float x =  sin(angle);
     float z =  2.f * cos(angle);
@@ -82,15 +91,13 @@ void Toon_Fog::Draw()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    // Display FPS in another viewport
-  //  ImGui::Begin("Triangle Position/Color");
-    //onOffSwitch();
+
 
     glm::vec4 sun_color = { 1,0.83,0,1 };
     sphere.draw(useNormal, view, projection, light, { 0.0f, 0.0f, 3.0f });
     sun.draw(sun_color, view, projection, -light, { 0.0f, 0.0f, 3.0f });
 
-   //cube.draw(useNormal, view, projection, { 0,0,1 }, { 0.0f, 0.0f, 3.0f });
+
 }
 
 void Toon_Fog::OnImGuiRender()
@@ -99,29 +106,7 @@ void Toon_Fog::OnImGuiRender()
 
 void Toon_Fog::onOffSwitch()
 {
-    ImGui::SliderAngle("sphere x dgree", &sphere.Get_Rotation().x);
-    sphere.set_rotation(sphere.Get_Rotation());
 
-    ImGui::SliderAngle("sphere y dgree", &sphere.Get_Rotation().y);
-    sphere.set_rotation(sphere.Get_Rotation());
-
-    ImGui::SliderAngle("sphere z dgree", &sphere.Get_Rotation().z);
-    sphere.set_rotation(sphere.Get_Rotation());
-    ImGui::SliderFloat3("position_sphere", &sphere.Get_position().x, -1.f, 1.f);
-    sphere.set_position(sphere.Get_position());
-
-
-
-    ImGui::SliderAngle("Cube x dgree", &cube.Get_Rotation().x);
-    cube.set_rotation(cube.Get_Rotation());
-
-    ImGui::SliderAngle("Cube y dgree", &cube.Get_Rotation().y);
-    cube.set_rotation(cube.Get_Rotation());
-
-    ImGui::SliderAngle("Cube z dgree", &cube.Get_Rotation().z);
-    cube.set_rotation(cube.Get_Rotation());
-    ImGui::SliderFloat3("position_cube", &cube.Get_position().x, -10.f, 10.f);
-    cube.set_position(cube.Get_position());
 }
 
 

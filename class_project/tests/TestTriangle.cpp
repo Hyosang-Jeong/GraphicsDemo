@@ -1,10 +1,19 @@
+/*!
+@file    TestTriangle.cpp
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file is for First demo that shows
+       six demo(plane,cube,sphere,torus,Cylinder,cone).
+              Also it has Imgui implementing for showing another demo in left top side.
+
+*//*__________________________________________________________________________*/
 #include "TestTriangle.h"
 #include"../glhelper.h"
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
-#include <iostream>
 TriangleTest::TriangleTest()
 {
 
@@ -50,10 +59,7 @@ void TriangleTest::init()
 
 void TriangleTest::Update(float deltaTime)
 {
-    //for (int i = 0; i < NUM_MESHES; i++)
-    //{
-    //    meshes[i].compute_matrix(deltaTime);
-    //}
+
 }
 
 void TriangleTest::Draw()

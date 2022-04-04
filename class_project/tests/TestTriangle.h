@@ -1,3 +1,12 @@
+/*!
+@file    TestTriangle.h
+@author  Hyosang Jung, Jaewoo.choi
+@date    04/04/2022
+
+Note : This file contains the declaration TriangleTest class member function
+and this class inherited by Test, So it has all function what Test class have.
+
+*//*__________________________________________________________________________*/
 #pragma once
 
 #include"Test.h"
