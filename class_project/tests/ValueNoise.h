@@ -2,6 +2,13 @@
 #include"Test.h"
 #include <GL/glew.h> 
 #include"../glslshader.h"
+enum state
+{
+	value_noise,
+	fractal,
+	wood,
+	marble
+};
 class ValueNoise : public Test
 {
 public:
@@ -18,6 +25,11 @@ public:
 	void generate_random_value();
 	void setup_opengl();
 	float evalute(glm::vec2 p);
+
+	void generate_fractal();
+	void generate_value_noise();
+	void generate_wood();
+	void generate_marble();
 private:
 	GLuint VBO;
 	GLuint VAO;
@@ -28,10 +40,16 @@ private:
 
 	static constexpr unsigned int width = 512;
 	static constexpr unsigned int height = 512;
-	static constexpr unsigned int size = 200;
+	static constexpr unsigned int size = 100;
+	state currstate = value_noise;
 
+	float frequency =0.1f;
+	float frequencyMult = 1.8;
+	float amplitudeMult = 0.35;
+	unsigned numLayers = 5;
 
+	float max = 1.f;
 	float random_values[size][size];
-	unsigned char data[height][width*3];
+	unsigned char data[height][width * 3] = { 0 };
 
 };

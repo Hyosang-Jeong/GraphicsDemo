@@ -24,25 +24,21 @@ ValueNoise::~ValueNoise()
 
 float ValueNoise::evalute(glm::vec2 p)
 {
-    p.x /=  float(width);
-    p.y /= float(height);
-    p.x*= float(size-1);
-    p.y*=float(size-1);
-    int xi = std::floor(p.x);
-    int yi = std::floor(p.y);
 
+    int xi = static_cast<int>(p.x);
+    int xMin = xi % size;
     float tx = p.x - xi;
+    int xMax = (xMin == size - 1) ? 0 : xMin + 1;
+
+    int yi = static_cast<int>(p.y);
+    int yMin = yi % size;
     float ty = p.y - yi;
+    int yMax = (yMin == size - 1) ? 0 : yMin + 1;
 
-    int rx0 = xi;
-    int rx1 = (rx0 == size) ? 0 : rx0 + 1;
-    int ry0 = yi;
-    int ry1 = (ry0 == size) ? 0 : ry0 + 1;
-
-    const float& c00 = random_values[ry0][rx0];
-    const float& c10 = random_values[ry0][rx1];
-    const float& c01 = random_values[ry1][rx0];
-    const float& c11 = random_values[ry1][rx1];
+    const float& c00 = random_values[yMin][xMin];
+    const float& c10 = random_values[yMin][xMax];
+    const float& c01 = random_values[yMax][xMin];
+    const float& c11 = random_values[yMax][xMax];
 
     // remapping of tx and ty using the Smoothstep function 
     float sx =  smoothstep( tx);
@@ -56,6 +52,67 @@ float ValueNoise::evalute(glm::vec2 p)
     return lerp(nx0, nx1, sy);
 }
 
+void ValueNoise::generate_fractal()
+{
+    float maxNoiseVal = 0;
+    for (int i = 0; i < height; i++)
+    {
+
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec2 val = glm::vec2(j / 3, i) * frequency;  //     /3  because  r  g  b
+            float amplitude = 1;
+            for (unsigned k = 0; k < numLayers; k++)
+            {
+                data[i][j] +=static_cast<unsigned char>( evalute(val) * amplitude *255.f);
+                val *= frequencyMult;
+                amplitude *= amplitudeMult;
+            }
+            if (data[i][j] > maxNoiseVal)
+                maxNoiseVal = data[i][j];
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            data[i][j] = static_cast<unsigned char>((static_cast<float>(data[i][j]) /maxNoiseVal)*255.f);
+        }
+    }
+}
+
+
+void ValueNoise::generate_value_noise()
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            float val = evalute(glm::vec2(j / 3, i) * frequency);  //     /3  because  r  g  b
+            data[i][j] = static_cast<unsigned char>(val * 255.f);
+        }
+    }
+}
+
+void ValueNoise::generate_wood()
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            float val = evalute(glm::vec2(j / 3, i) * frequency);  //     /3  because  r  g  b
+            if (currstate == wood)
+                val *= 10.f;
+            data[i][j] = static_cast<unsigned char>(val * 255.f);
+        }
+    }
+}
+
+void ValueNoise::generate_marble()
+{
+}
+
 
 void ValueNoise::init()
 {   
@@ -63,15 +120,14 @@ void ValueNoise::init()
     setup_opengl();
     setup_shdrpgm("value_noise");
 
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        for (int i = 0; i < height; i++)
         {
-
-            float val = evalute(glm::vec2(j / 3, i));  //     /3  because  r  g  b
-            data[i][j] = static_cast<unsigned char>(val * 255.f);
+            for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+            {
+                float val = evalute(glm::vec2(j / 3, i) * frequency);  //     /3  because  r  g  b
+                data[i][j] = static_cast<unsigned char>(val * 255.f);
+            }
         }
-    }
 }
 
 void ValueNoise::Update(float )
@@ -81,21 +137,69 @@ void ValueNoise::Update(float )
 
 void ValueNoise::Draw()
 {
+
     glClearColor(1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Prog.Use();
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
- //   glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+
+    if (ImGui::Button("Value Noise") == true)
+    {
+        currstate = value_noise;
+        max = 1.f;
+        generate_value_noise();
+    }
+    if (ImGui::Button("Wood") == true)
+    {
+        currstate = wood;
+         frequency = 0.001f;
+         max = 0.2f;
+        generate_wood();
+    }
+
+    if (ImGui::Button("fractal") == true)
+    {
+        currstate = fractal;
+        memset(data, 0, height * width * 3);
+        generate_fractal();
+    }
+    if (ImGui::Button("Marble") == true)
+    {
+        currstate = marble;
+        generate_marble();
+    }
+
+    if (ImGui::SliderFloat("Frequency", &frequency, 0.001f, max))
+    {
+        switch (currstate)
+        {
+        case value_noise:
+        {
+            generate_value_noise();
+            break;
+        }
+        case wood:
+        {
+            generate_wood();
+            break;
+        }
+        case marble:
+        {
+            generate_marble();
+            break;
+        }
+        }
+    }
 
 }
 
@@ -132,12 +236,12 @@ void ValueNoise::setup_shdrpgm(std::string shader)
 
 float ValueNoise::lerp(float min, float max, float t)
 {
-    return  min * (1 - t) + max * t;
+    return  (min * (1 - t)) + (max * t);
 }
 
 float ValueNoise::smoothstep(const float& t)
 {
-    return t * t * (3 - 2 * t);
+    return t * t * (3 - (2 * t));
 }
 
 void ValueNoise::generate_random_value()
