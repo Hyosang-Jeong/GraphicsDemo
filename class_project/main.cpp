@@ -28,7 +28,7 @@ int main()
 
     TriangleTest triangle;
     Toon_Fog toon_fog;
-    ValueNoise value_noise;
+    Noise value_noise;
     tests.push_back(&triangle);
     tests.push_back(&toon_fog);
     tests.push_back(&value_noise);
