@@ -85,7 +85,8 @@ void TriangleTest::OnImGuiRender()
 void TriangleTest::UnLoad()
 {
     meshes.clear();
-    
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    useNormal.r = 1;
 }
 
 bool TriangleTest::is_switch_pressed(const char* buttonName, bool& buttonType)
