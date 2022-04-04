@@ -22,6 +22,8 @@ public:
 	void setup_shdrpgm(std::string shader);
 	float lerp(float min, float max, float t);
 	float smoothstep(const float& t);
+	float cosinestep(const float& t);
+	float quinticstep(const float& t);
 	void generate_random_value();
 	void setup_opengl();
 	float evalute(glm::vec2 p);
@@ -52,4 +54,5 @@ private:
 	float random_values[size][size];
 	unsigned char data[height][width * 3] = { 0 };
 
+	//float offset = 0.f;
 };

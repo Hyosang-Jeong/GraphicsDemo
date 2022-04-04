@@ -200,7 +200,28 @@ void ValueNoise::Draw()
         }
         }
     }
-
+    if (ImGui::SliderFloat("Amplitude", &amplitudeMult, 0.001f, max))
+    {
+        switch (currstate)
+        {
+        //case value_noise:
+        //{
+        //    generate_value_noise();
+        //    break;
+        //}
+        //case wood:
+        //{
+        //    generate_wood();
+        //    break;
+        //}
+        case marble:
+        {
+            generate_marble();
+            break;
+        }
+        }
+    }
+    //if(ImGui::ListBox("smooth Step",))
 }
 
 void ValueNoise::OnImGuiRender()
@@ -244,6 +265,14 @@ float ValueNoise::smoothstep(const float& t)
     return t * t * (3 - (2 * t));
 }
 
+float ValueNoise::cosinestep(const float& t)
+{
+    return (1.f - cos(t * PI)) * 0.5f;
+}
+float ValueNoise::quinticstep(const float& t)
+{
+    return t * t * t * (t * (t * 6.f - 15.f) + 10.f);
+}
 void ValueNoise::generate_random_value()
 {
     std::random_device rd;
