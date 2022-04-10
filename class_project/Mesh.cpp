@@ -14,9 +14,7 @@
 #include "Mesh.h"
 
 /*  Function prototype(s) */
-void BuildIndexBuffer(int stacks, int slices, Mesh& mesh);
-void addVertex(Mesh& mesh, const Vertex& v);
-void addIndex(Mesh& mesh, int index);
+
 
 Mesh CreatePlane(int stacks, int slices)
 {
@@ -470,9 +468,9 @@ void Mesh::setup_mesh()
       glUseProgram(renderProg.GetHandle());
 
     /*  Obtain the locations of the variables in the shaders with the given names */
-     modelLoc = glGetUniformLocation(renderProg.GetHandle(), "model");
-     viewLoc = glGetUniformLocation(renderProg.GetHandle(), "view");
-     colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
+    modelLoc = glGetUniformLocation(renderProg.GetHandle(), "model");
+    viewLoc = glGetUniformLocation(renderProg.GetHandle(), "view");
+    colorLoc       = glGetUniformLocation(renderProg.GetHandle(), "color");
     projectionLoc = glGetUniformLocation(renderProg.GetHandle(), "projection");
     LightLoc = glGetUniformLocation(renderProg.GetHandle(), "lightPos");
     ViewPosLoc = glGetUniformLocation(renderProg.GetHandle(), "viewPos");

@@ -16,7 +16,10 @@
 #include"math.h"
 #include"glslshader.h"
 
+
+
 /*  Mesh function(s) */
+
 struct Vertex
 {
     Vertex(glm::vec3 pos, glm::vec3 nrm, glm::vec3 uv) : pos(pos), nrm(nrm), uv(uv) {}
@@ -128,6 +131,9 @@ Mesh CreateSphere(int stacks, int slices);
 Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle);
 Mesh CreateCylinder(int stacks, int slices);
 Mesh CreateCone(int stacks, int slices);
+void BuildIndexBuffer(int stacks, int slices, Mesh& mesh);
+void addVertex(Mesh& mesh, const Vertex& v);
+void addIndex(Mesh& mesh, int index);
 /******************************************************************************/
 /*  Pre-defined shapes                                                        */
 /******************************************************************************/

@@ -9,6 +9,7 @@
 #include"tests/TestTriangle.h"
 #include"tests/Toon_Fog.h"
 #include"tests/ValueNoise.h"
+#include"tests/GradientNoise.h"
 static void draw();
 static void update();
 static void init();
@@ -18,10 +19,11 @@ enum DEMO
 {
     TRIANGLE,
     TOON_FOG,
-    VALUE_NOISE
+    VALUE_NOISE,
+    GRADIENT_NOISE
 };
 std::vector<Test*> tests;
-DEMO current = VALUE_NOISE;
+DEMO current = GRADIENT_NOISE;
 
 int main() 
 {
@@ -29,9 +31,12 @@ int main()
     TriangleTest triangle;
     Toon_Fog toon_fog;
     Noise value_noise;
+    Gradient_Noise gradient_noise;
+
     tests.push_back(&triangle);
     tests.push_back(&toon_fog);
     tests.push_back(&value_noise);
+    tests.push_back(&gradient_noise);
 
     init();
 
@@ -84,6 +89,12 @@ void demo_switch()
         current = VALUE_NOISE;
         tests[current]->init();
     }
+    if (ImGui::Button("Gradient Noise"))
+    {
+        tests[current]->UnLoad();
+        current = GRADIENT_NOISE;
+        tests[current]->init();
+    }
 }
 static void init() {
 
@@ -95,9 +106,6 @@ static void init() {
 
 
     tests[current]->init();
-
-
-
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

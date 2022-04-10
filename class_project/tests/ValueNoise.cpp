@@ -17,17 +17,7 @@ Note : This file is for Third demo that shows
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
-float vertices[] = {
 
-    0.5f,  0.5f, -1.f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   
-    0.5f, -0.5f, -1.f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   
-   -0.5f, -0.5f,-1.f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,  
-   -0.5f,  0.5f, -1.f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    
-};
-unsigned int indices[] = {
-    0, 1, 3, // first triangle
-    1, 2, 3  // second triangle
-};
 
 Noise::Noise()
 {}
@@ -188,7 +178,8 @@ void Noise::init()
     generate_random_value();
     setup_opengl();
     setup_shdrpgm("value_noise");
-
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b

@@ -13,19 +13,12 @@ Also, there is a enum state for what is now demo showing.
 #include"Test.h"
 #include <GL/glew.h> 
 #include"../glslshader.h"
-enum state
-{
-	value_noise,
-	wood,
-	fractal,
-	marble,
-	Turbulence
-};
-class Noise : public Test
+#include"../Mesh.h"
+class Gradient_Noise : public Test
 {
 public:
-	Noise();
-	~Noise();
+	Gradient_Noise();
+	~Gradient_Noise();
 	void init() override;
 	void Update(float deltaTime)  override;
 	void Draw() override;
@@ -39,46 +32,39 @@ public:
 	void generate_random_value();
 	void setup_opengl();
 	float evalute(glm::vec2 p);
-
-	void generate_fractal(float dt);
 	void generate_value_noise(float dt);
-	void generate_wood(float dt);
-	void generate_marble(float dt);
-	void generate_turbulence(float dt);
+	Mesh create_gradient_plane(int stacks, int slices);
 private:
-	GLuint VBO;
-	GLuint VAO;
+
 	GLuint EBO;
-	GLSLShader Prog;
+
+
+	glm::mat4  view;
+	glm::mat4  projection;
+	glm::vec3 eye;
+	//GLint modelLoc;
+	//GLint viewLoc;
+	//GLint   projectionLoc;
+
+
 	unsigned int texture;
-	
 
-	static constexpr unsigned int width = 256;
-	static constexpr unsigned int height = 256;
+	static constexpr unsigned int stack = 30;
+	static constexpr unsigned int slice = 30;
 	static constexpr unsigned int size = 100;
-	state currstate = value_noise;
 
-	float frequency =0.1f;
+
+	float frequency = 0.1f;
 	float frequencyMult = 1.8;
 	float amplitudeMult = 0.35;
 	int numLayers = 5;
 
 	float max = 1.f;
 	float random_values[size][size];
-	unsigned char data[height][width * 3] = { 0 };
+	float data[stack+1][slice+1] = { 0 };
 
 	float offset = 0.f;
 	bool animated = false;
 
-	float vertices[32] = {
-
-0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
--0.5f, -0.5f,-0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
--0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
-	};
-	unsigned int indices[6] = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
-	};
+	Mesh plane;
 };

@@ -39,6 +39,9 @@
     <ClCompile Include="tests\ValueNoise.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\GradientNoise.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glhelper.h">
@@ -63,6 +66,9 @@
       <Filter>tests</Filter>
     </ClInclude>
     <ClInclude Include="tests\ValueNoise.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\GradientNoise.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>

@@ -167,6 +167,7 @@
     <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="tests\GradientNoise.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
     <ClCompile Include="tests\ValueNoise.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="glslshader.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="tests\GradientNoise.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />
     <ClInclude Include="tests\Toon_Fog.h" />
