@@ -485,9 +485,9 @@ void Mesh::setup_mesh()
 
     /*  Hidden surface removal */
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+   // glDepthFunc(GL_LESS);
 
-  //  glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
+  // glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
 }
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
