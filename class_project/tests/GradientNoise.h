@@ -28,6 +28,7 @@ public:
 	float smoothstep(const float& t);
 	float cosinestep(const float& t);
 	float quinticstep(const float& t);
+	float quinticstepDeriv(const float& t);
 	void generate_random_value();
 	float evalute(glm::vec3 p, glm::vec3& derivs);
 	float smoothstepDeriv(const float& t);
