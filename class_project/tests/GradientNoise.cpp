@@ -91,7 +91,7 @@ void Gradient_Noise::generate_gradient(float dt)
         {
 
             glm::vec3 derives{ 0,0,0 };
-            float val = (evalute(glm::vec3((j / 3) + 0.5, 0, i + 0.5) * frequency, derives) + 1) * 0.5f;
+            float val = (evalute(glm::vec3((j / 3) + 0.5 + dt, i + 0.5,0) * frequency, derives) + 1) * 0.5f;
 
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
@@ -194,7 +194,7 @@ void Gradient_Noise::update_plane(float dt)
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
 
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(v.pos.x , 0, v.pos.z ) * frequency, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(slice + dt * 3, 0, stack +dt) * frequency, derivs);  //     /3  because  r  g  b
             v.pos.y = val;
 
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
@@ -266,24 +266,10 @@ void Gradient_Noise::init()
     generate_gradient(0);
 
     eye = { 0.f,  0.f, -2.f };
-
-
     light = { 0.0f,  2.f, 0.f };
-    view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
-    //view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
-        {
-            glm::vec3 derives{ 0,0,0 };
-            float val = (evalute(glm::vec3((j / 3)+0.5, 0, i + 0.5) * frequency, derives) + 1) * 0.5f;
-            data[i][j] = static_cast<unsigned char>(val * 255.f);
-        }
-    }
 
 
     glGenTextures(1, &texture);
@@ -295,12 +281,12 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
-    if (currstate == Gradient_plane)
-        update_plane(timer);
-        update_sun(timer);
+   // if (currstate == Gradient_plane)
+       // update_plane(timer);
+       // update_sun(timer);
 
 
-    update_plane(timer);
+    //update_plane(timer);
     if (animated == true)
     {
         offset += dt * 10.f;
@@ -338,6 +324,7 @@ void Gradient_Noise::Draw()
     0,0,1,0,
     0,0,0,1
     };
+    
     glm::vec4 color;
 
     if (currstate == Gradient_noise || currstate == Gradient_plane)
@@ -347,7 +334,6 @@ void Gradient_Noise::Draw()
         else
 
             color = { 0.68, 0.0, 0.89 ,1};
-
         glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
         glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -388,35 +374,81 @@ void Gradient_Noise::OnImGuiRender()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-   
+    ImGui::Checkbox("Animated", &animated);
 
-    ImGui::SliderFloat("frequeny", &frequency, 0.f, 0.2f);
-
-
-    ImGui::SliderFloat3("Eye", &eye.x, -10.f, 10.f);
-    ImGui::SliderFloat3("light", &light.x, -10.f, 10.f);
-
-    if (ImGui::Button("Gradient Noise") == true)
+    if (ImGui::SliderFloat("frequeny", &frequency, 0.f, 0.2f))
     {
-        plane = CreatePlane(stack,slice);
-        plane.init("gradient_noise");
-        currstate = Gradient_noise;
-        generate_gradient(0);
+        switch (currstate)
+        {
+        case Gradient_noise:
+        {
+            generate_gradient(0);
+            break;
+        }
+        case Gradient_plane:
+        {
+            update_plane(0);
+            break;
+        }
+        case Sun:
+        {
+            update_sun(0);
+            break;
+        }
+        }
     }
 
-    else if (ImGui::Button("Gradient plane") == true)
-    {
-        update_plane(0);
-        currstate = Gradient_plane;
-    }
+        ImGui::SliderFloat3("Eye", &eye.x, -10.f, 10.f);
+        ImGui::SliderFloat3("light", &light.x, -10.f, 10.f);
 
-    else if (ImGui::Button("Gradient Sun") == true)
-    {
-       // sun.init("gradient_noise");
-        currstate = Sun;
-        update_sun(0);
+
+        if (ImGui::Button("Gradient Noise") == true)
+        {
+            view = {
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+            };
+            eye = { 0.f,  0.f, -2.f };
+            view = glm::translate(view, eye);
+            plane = CreatePlane(stack, slice);
+            plane.init("gradient_noise");
+            currstate = Gradient_noise;
+            generate_gradient(0);
+        }
+
+        else if (ImGui::Button("Gradient plane") == true)
+        {
+            view = {
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+            };
+            eye = { 2.f,  -3.f, -2.f };
+            view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+            view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+            view = glm::translate(view, eye);
+            update_plane(0);
+            currstate = Gradient_plane;
+        }
+
+        else if (ImGui::Button("Gradient Sun") == true)
+        {
+            view = {
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+            };
+            eye = { 0.f,  0.f, -2.f };
+            view = glm::translate(view, eye);
+            // sun.init("gradient_noise");
+            currstate = Sun;
+            update_sun(0);
+        }
     }
-}
 
 void Gradient_Noise::UnLoad()
 {
