@@ -247,9 +247,9 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
-   // update_plane(timer);
-    sun = create_gradient_sphere(stack, slice, timer);
-    sun.init("gradient_noise");
+    update_plane(timer);
+    //sun = create_gradient_sphere(stack, slice, timer);
+    //sun.init("gradient_noise");
 }
 
 void Gradient_Noise::Draw()
@@ -276,19 +276,19 @@ void Gradient_Noise::Draw()
     glDrawElements(GL_TRIANGLES,plane.numIndices, GL_UNSIGNED_INT, 0);
 
 
-    //model = glm::scale(model, { 0.5,1,1});
-    model = glm::translate(model, { 0,1.5,0 });
-    //model = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-    //model = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
-    //model = glm::translate(view, eye);
-    glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
-    glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
-    glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
-    glBindVertexArray(sun.VAO);
-    glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
+    ////model = glm::scale(model, { 0.5,1,1});
+    //model = glm::translate(model, { 0,1.5,0 });
+    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+    ////model = glm::translate(view, eye);
+    //glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
+    //glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    //glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    //glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    //glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
+    //glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
+    //glBindVertexArray(sun.VAO);
+    //glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
 
 
 

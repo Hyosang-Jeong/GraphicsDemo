@@ -24,6 +24,6 @@ void main()
 {
    				outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
 				outColor= diff * outColor ;
-				utColor = vec4(Color,1);	
+				//outColor = vec4(Color,1);	
 }
 
