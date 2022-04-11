@@ -170,7 +170,7 @@ void Gradient_Noise::Update(float dt)
     timer += dt;
     plane = create_gradient_plane(stack, slice,timer);
     plane.init("gradient_noise");
-   // generate_gradient(0);
+    //generate_gradient(0);
 }
 
 void Gradient_Noise::Draw()
