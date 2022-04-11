@@ -76,6 +76,7 @@ private:
 
 	float frequency = 0.1f;
 
+
 	float offset = 0.f;
 	bool animated = false;
 	Mesh plane;
@@ -119,5 +120,6 @@ private:
 	    case 15: return -y - z; // (0,-1,-1) 
 	    }
 	}
+
 
 };
