@@ -87,7 +87,6 @@ void Gradient_Noise::generate_gradient(float dt)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-
             glm::vec3 derives{ 0,0,0 };
             float val = (evalute(glm::vec3((j / 3) + 0.5 + dt, i + 0.5, 0) * frequency, derives) + 1) * 0.5f;
 
@@ -402,7 +401,6 @@ void Gradient_Noise::OnImGuiRender()
         currstate = Gradient_noise;
         generate_gradient(0);
     }
-
     else if (ImGui::Button("Gradient plane") == true)
     {
         view = {
@@ -418,7 +416,6 @@ void Gradient_Noise::OnImGuiRender()
         update_plane(0);
         currstate = Gradient_plane;
     }
-
     else if (ImGui::Button("Gradient Sun") == true)
     {
         view = {
