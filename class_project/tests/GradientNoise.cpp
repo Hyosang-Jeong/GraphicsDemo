@@ -50,7 +50,6 @@ float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
     float v = quinticstep(ty);
     float w = quinticstep(tz);
 
-    // generate vectors going from the grid points to p
     float x0 = tx, x1 = tx - 1;
     float y0 = ty, y1 = ty - 1;
     float z0 = tz, z1 = tz - 1;
@@ -125,6 +124,8 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
 
             v.uv = glm::vec2(col, row);
 
+            v.color = glm::vec3(0.68, 0.87, 0.89);
+
             addVertex(mesh, v);
         }
     }
@@ -134,15 +135,91 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
     return mesh;
 }
 
+Mesh Gradient_Noise::create_gradient_sphere(int stacks, int slices, float dt)
+{
+    Mesh mesh;
+    mesh.stack_slice[0] = stacks;
+    mesh.stack_slice[1] = slices;
+    for (int stack = 0; stack <= stacks; ++stack)
+    {
+        float row = (float)stack / stacks;
+        float beta = PI * (row - 0.5);
+
+        for (int slice = 0; slice <= slices; ++slice)
+        {
+            float col = (float)slice / slices;
+            float alpha = col * PI * 2.0;
+            Vertex v;
+            v.uv.x = col;
+            v.uv.y = row * (-1.0);
+
+            v.pos.x = 0.5f * sin(alpha) * cos(beta);
+            v.pos.y = 0.5f * sin(beta);
+            v.pos.z = 0.5f * cos(alpha) * cos(beta);
+
+            v.nrm.x = v.pos.x;
+            v.nrm.y = v.pos.y;
+            v.nrm.z = v.pos.z;
+
+            v.nrm /= 0.5;
+
+            glm::vec3 derivs;
+            float val = evalute(glm::vec3(v.pos.x+dt, v.pos.y, v.pos.z) * frequency, derivs);  //     /3  because  r  g  b
+            
+            v.color = 2.f * abs(val)* glm::vec3(1.0, 0.5, 0.0);
+
+            addVertex(mesh, v);
+        }
+    }
+
+    BuildIndexBuffer(stacks, slices, mesh);
+
+    return mesh;
+}
+
+void Gradient_Noise::update_plane(float dt)
+{
+    plane.vertexBuffer.clear();
+    plane.numVertices = 0;
+    for (int stack = 0; stack <= 30; ++stack)
+    {
+        float row = (float)stack / 30;
+
+        for (int slice = 0; slice <= 30; ++slice)
+        {
+            float col = (float)slice / 30;
+
+            Vertex v;
+            glm::vec3 derivs;
+            float val = evalute(glm::vec3(slice + dt * 3, 0, stack + sin(dt * 3) / 2.f) * frequency, derivs);  //     /3  because  r  g  b
+
+            v.pos = glm::vec3(col - 0.5f, val, row - 0.5f);
+
+            v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
+
+            v.nrm /= v.nrm.length();
+
+            v.uv = glm::vec2(col, row);
+
+            v.color = glm::vec3(0.68, 0.87, 0.89);
+
+
+            addVertex(plane, v);
+        }
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, plane.VBO);
+    glBufferData(GL_ARRAY_BUFFER, plane.numVertices * vertexSize, &plane.vertexBuffer[0], GL_DYNAMIC_DRAW);
+}
+
 
 void Gradient_Noise::init()
 {
-  //  glEnable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     generate_random_value();
-
-    //plane = create_gradient_plane(stack,slice);
-    //plane.init("gradient_noise");
+    plane = create_gradient_plane(stack, slice, 0);
+    sun = create_gradient_sphere(stack, slice,0);
+    plane.init("gradient_noise");
+    sun.init("gradient_noise");
 
     view = {
         1,0,0,0,
@@ -162,22 +239,25 @@ void Gradient_Noise::init()
     view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
+
 }
 
 void Gradient_Noise::Update(float dt)
 {
     static float timer = 0;
     timer += dt;
-    plane = create_gradient_plane(stack, slice,timer);
-    plane.init("gradient_noise");
-    //generate_gradient(0);
+
+
+    update_plane(timer);
+    //sun = create_gradient_sphere(stack, slice, timer);
+    //sun.init("gradient_noise");
+
 }
 
 void Gradient_Noise::Draw()
 {
     glClearColor(0.68, 0.87, 0.89, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
     glm::mat4 model = {
     1,0,0,0,
@@ -186,6 +266,7 @@ void Gradient_Noise::Draw()
     0,0,0,1
     };
 
+
     glm::vec3 color(0.68, 0.87, 0.89 );
     glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
     glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -193,10 +274,25 @@ void Gradient_Noise::Draw()
     glUniformMatrix4fv(plane.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(plane.LightLoc, 1, ValuePtr(light));
     glUniform3fv(plane.ViewPosLoc, 1, ValuePtr(-eye));
-
-
     glBindVertexArray(plane.VAO);
     glDrawElements(GL_TRIANGLES,plane.numIndices, GL_UNSIGNED_INT, 0);
+
+
+    ////model = glm::scale(model, { 0.5,1,1});
+    //model = glm::translate(model, { 0,1.5,0 });
+    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+    ////model = glm::translate(view, eye);
+    //glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
+    //glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    //glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    //glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    //glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
+    //glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
+    //glBindVertexArray(sun.VAO);
+    //glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
+
+
 
     OnImGuiRender();
 
@@ -252,7 +348,6 @@ float Gradient_Noise::quinticstepDeriv(const float& t)
 
 
 void Gradient_Noise::generate_random_value()
-
 {
     std::random_device rd;
     std::mt19937 gen(rd());

@@ -28,6 +28,7 @@ struct Vertex
 
     glm::vec3 pos, nrm;
     glm::vec2 uv;
+    glm::vec3 color;
 };
 
 const int vertexSize = sizeof(Vertex);
@@ -49,7 +50,9 @@ const VertexLayout vLayout[] =
 {
     { 0, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, pos) },
     { 1, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, nrm) },
-    { 2, 2, GL_FLOAT, GL_FALSE, offsetof(Vertex, uv) }
+    { 2, 2, GL_FLOAT, GL_FALSE, offsetof(Vertex, uv) },
+    {3, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, color) }
+
 };
 
 const int layoutSize = sizeof(VertexLayout);

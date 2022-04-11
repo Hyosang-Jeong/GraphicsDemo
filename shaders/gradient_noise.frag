@@ -5,6 +5,7 @@ layout(location=1) in vec3 NRM;
 out vec4 outColor;
 in vec3 FragPos; 
 in vec2 TexCoord;
+in vec3 Color;
 
 uniform sampler2D ourTexture;
 uniform vec4 color;
@@ -23,5 +24,6 @@ void main()
 {
    				outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
 				outColor= diff * outColor ;
-
+				//outColor = vec4(Color,1);	
 }
+
