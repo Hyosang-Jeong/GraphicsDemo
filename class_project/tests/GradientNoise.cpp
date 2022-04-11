@@ -48,13 +48,13 @@ float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
     int yi1 = (yi0 == size - 1) ? 0 : yi0 + 1;
     int zi1 = (zi0 == size - 1) ? 0 : zi0 + 1;
 
-    float du = smoothstepDeriv(tx);
-    float dv = smoothstepDeriv(ty);
-    float dw = smoothstepDeriv(tz);
+    float du = quinticstepDeriv(tx);
+    float dv = quinticstepDeriv(ty);
+    float dw = quinticstepDeriv(tz);
 
-    float u = smoothstep(tx);
-    float v = smoothstep(ty);
-    float w = smoothstep(tz);
+    float u = quinticstep(tx);
+    float v = quinticstep(ty);
+    float w = quinticstep(tz);
 
     glm::vec3 c000  = random_values[zi0][xi0];
     glm::vec3 c100  = random_values[zi0][xi1];
@@ -131,7 +131,7 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
 
             Vertex v;
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(slice+dt, 0, stack) * frequency, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(slice+dt*3, 0, stack+sin(dt*3)/2.f) * frequency, derivs);  //     /3  because  r  g  b
 
             v.pos = glm::vec3(col - 0.5f, val, row - 0.5f);
 
@@ -172,9 +172,10 @@ void Gradient_Noise::init()
         0,0,1,0,
         0,0,0,1
     };
-    eye = { 0.0f,  -2.f, -2.f };
-    light = { 0.0f,  3.f, 0.f };
+    eye = { 2.0f,  -3.f, -2.f };
+    light = { 0.0f,  2.f, 0.f };
     view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+    view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 }
@@ -190,7 +191,7 @@ void Gradient_Noise::Update(float dt)
 
 void Gradient_Noise::Draw()
 {
-    glClearColor(1, 0, 1, 1);
+    glClearColor(0.68, 0.87, 0.89, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -201,7 +202,7 @@ void Gradient_Noise::Draw()
     0,0,0,1
     };
 
-    glm::vec3 color(1, 1, 1);
+    glm::vec3 color(0.68, 0.87, 0.89 );
     glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
     glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -223,7 +224,7 @@ void Gradient_Noise::OnImGuiRender()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
    
-
+    ImGui::SliderFloat("frequeny", &frequency, 0.f, 0.25f);
     ImGui::SliderFloat3("Eye", &eye.x, -10.f, 10.f);
     ImGui::SliderFloat3("light", &light.x, -10.f, 10.f);
     if (ImGui::Button("Gradient Noise") == true)
@@ -259,6 +260,10 @@ float Gradient_Noise::quinticstep(const float& t)
 {
     return t * t * t * (t * (t * 6.f - 15.f) + 10.f);
 }
+float Gradient_Noise::quinticstepDeriv(const float& t)
+{
+    return 30.f * t * t * (t * (t - 2.f) + 1.f);
+}
 
 
 void Gradient_Noise::generate_random_value()
@@ -268,11 +273,11 @@ void Gradient_Noise::generate_random_value()
 	std::uniform_real_distribution<float> distrFloat(0, 0.5);
 
 
-	// create an array of random values
-	for (unsigned i = 0; i < size; ++i)
-	{
-        for (unsigned j = 0; j < size; ++j)
-		{
+        // create an array of random values
+        for (unsigned i = 0; i < size; ++i)
+        {
+            for (unsigned j = 0; j < size; ++j)
+            {
 
                 float theta = acos(2 * distrFloat(gen) - 1);
                 float phi = 2 * distrFloat(gen) * PI;
@@ -281,9 +286,9 @@ void Gradient_Noise::generate_random_value()
                 float y = sin(phi) * sin(theta);
                 float z = cos(theta);
                 random_values[i][j] = glm::vec3(x, y, z);
-            
-		}
-	}
+
+            }
+        }
 }
 
 
