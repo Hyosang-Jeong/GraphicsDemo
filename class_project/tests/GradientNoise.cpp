@@ -63,9 +63,9 @@ float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
     float g = gradientDotV(hash(xi0, yi1, zi1), x0, y1, z1);
     float h = gradientDotV(hash(xi1, yi1, zi1), x1, y1, z1);
 
-    float du = smoothstepDeriv(tx);
-    float dv = smoothstepDeriv(ty);
-    float dw = smoothstepDeriv(tz);
+    float du = quinticstepDeriv(tx);
+    float dv = quinticstepDeriv(ty);
+    float dw = quinticstepDeriv(tz);
 
     float k0 = a;
     float k1 = (b - a);
@@ -91,7 +91,6 @@ void Gradient_Noise::generate_gradient(float dt)
         {
             glm::vec3 derivs;
             float val = (evalute(glm::vec3(j / 3, 0, i) * frequency, derivs) + 1) * 0.5f;  //     /3  because  r  g  b
-
 
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
@@ -216,11 +215,12 @@ void Gradient_Noise::init()
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     generate_random_value();
-    plane = create_gradient_plane(stack, slice, 0);
-    sun = create_gradient_sphere(stack, slice,0);
-    plane.init("gradient_noise");
-    sun.init("gradient_noise");
+    //plane = create_gradient_plane(stack, slice, 0);
+    //sun = create_gradient_sphere(stack, slice,0);
+    //plane.init("gradient_noise");
+    //sun.init("gradient_noise");
 
+    generate_gradient(0);
     view = {
         1,0,0,0,
         0,1,0,0,
@@ -247,11 +247,10 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
-
     update_plane(timer);
     //sun = create_gradient_sphere(stack, slice, timer);
     //sun.init("gradient_noise");
-
+    //generate_gradient(dt);
 }
 
 void Gradient_Noise::Draw()
