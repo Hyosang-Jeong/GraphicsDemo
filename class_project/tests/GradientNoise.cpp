@@ -191,8 +191,10 @@ void Gradient_Noise::update_plane(float dt)
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
 
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(slice + dt * 3, 0, stack + dt) * frequency, derivs);  //     /3  because  r  g  b
-            v.pos.y = val;
+
+            float val = evalute(glm::vec3(slice , 0, stack +dt) * frequency, derivs);  //     /3  because  r  g  b
+            v.pos.y = (val+1)/2.f;
+
 
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
 
@@ -252,19 +254,19 @@ void Gradient_Noise::update_sun(float dt)
 
 void Gradient_Noise::init()
 {
+   view = {
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,1
+    };
+     projection = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+    };
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    view = {
-                1,0,0,0,
-                0,1,0,0,
-                0,0,1,0,
-                0,0,0,1
-    };
-    projection = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-    };
     generate_random_value();
     plane = CreatePlane(stack, slice);
     sun = create_gradient_sphere(stack, slice, 0);
@@ -334,7 +336,11 @@ void Gradient_Noise::Draw()
         if (currstate == Gradient_noise)
             color = { -1,0,0,-1 };
         else
+        {
+            model = glm::scale(model, { 2,1,2 });
             color = { 0.68, 0.0, 0.89 ,1 };
+         }
+
         glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
         glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -350,6 +356,9 @@ void Gradient_Noise::Draw()
 
     else
     {
+
+        glClearColor(0,0,0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         color = { -1,0,0,0 };
 
         glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
