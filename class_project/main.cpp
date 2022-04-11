@@ -121,7 +121,7 @@ void cleanup() {
     GLHelper::cleanup();
 
 
-    //todo destructor에서 하는걸로 change
+    //todo Change to Implement in a destructor
     //triangle_test.triangle.cleanup();
 
     ImGui_ImplOpenGL3_Shutdown();

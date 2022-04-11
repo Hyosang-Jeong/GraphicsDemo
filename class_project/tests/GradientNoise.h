@@ -1,9 +1,9 @@
 /*!
 @file    ValueNoise.h
 @author  Hyosang Jung, Jaewoo.choi
-@date    04/04/2022
+@date    04/11/2022
 
-Note : This file contains the declaration Noise class member function
+Note : This file contains the declaration gradient_state class member function
 and this class inherited by Test, So it has all function what Test class have.
 Also, there is a enum state for what is now demo showing.
 
