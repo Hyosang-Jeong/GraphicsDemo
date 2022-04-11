@@ -50,9 +50,9 @@ void TriangleTest::init()
     0,0,1,0,
     0,0,0,1
     };
-    eye = { 0.0f, 0.0f, -3.0f };
+    eye = { 0.0f, 0.0f, 6.0f };
     light = { 0.0f, 0.0f, 3.0f };
-
+    view = glm::rotate(view, PI, glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 }
