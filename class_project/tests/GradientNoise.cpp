@@ -1,5 +1,5 @@
 /*!
-@file    ValueNoise.cpp
+@file    GradientNoise.cpp
 @author  Hyosang Jung, Jaewoo.choi
 @date    04/11/2022
 
@@ -267,18 +267,6 @@ void Gradient_Noise::init()
         0,0,0,1
     };
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    view = {
-                1,0,0,0,
-                0,1,0,0,
-                0,0,1,0,
-                0,0,0,1
-    };
-    projection = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-    };
     generate_random_value();
     plane = CreatePlane(stack, slice);
     sun = create_gradient_sphere(stack, slice, 0);
