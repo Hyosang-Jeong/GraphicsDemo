@@ -13,6 +13,8 @@ Note : This file is for Third demo that shows
 
 *//*__________________________________________________________________________*/
 #include "GradientNoise.h"
+
+#include <functional>
 #include<random>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -32,87 +34,68 @@ float Gradient_Noise::smoothstepDeriv(const float& t)
 
 float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
 {
-    int xi = static_cast<int>(p.x);
-    int yi = static_cast<int>(p.y);
-    int zi = static_cast<int>(p.z);
+    int xi0 = ((int)std::floor(p.x)) & tableSizeMask;
+    int yi0 = ((int)std::floor(p.y)) & tableSizeMask;
+    int zi0 = ((int)std::floor(p.z)) & tableSizeMask;
 
-    float tx = p.x - xi;
-    float ty = p.y - yi;
-    float tz = p.z -  zi;
+    int xi1 = (xi0 + 1) & tableSizeMask;
+    int yi1 = (yi0 + 1) & tableSizeMask;
+    int zi1 = (zi0 + 1) & tableSizeMask;
 
-    int xi0 = xi % size;
-    int yi0 = yi % size;
-    int zi0 = zi % size;
-
-    int xi1 = (xi0 == size - 1) ? 0 : xi0 + 1;
-    int yi1 = (yi0 == size - 1) ? 0 : yi0 + 1;
-    int zi1 = (zi0 == size - 1) ? 0 : zi0 + 1;
-
-    float du = quinticstepDeriv(tx);
-    float dv = quinticstepDeriv(ty);
-    float dw = quinticstepDeriv(tz);
+    float tx = p.x - ((int)std::floor(p.x));
+    float ty = p.y - ((int)std::floor(p.y));
+    float tz = p.z - ((int)std::floor(p.z));
 
     float u = quinticstep(tx);
     float v = quinticstep(ty);
     float w = quinticstep(tz);
 
-    glm::vec3 c000  = random_values[zi0][yi0][xi0];
-    glm::vec3 c100  = random_values[zi0][yi0][xi1];
-    glm::vec3 c010  = random_values[zi0][yi1][xi0];
-    glm::vec3 c110  = random_values[zi0][yi1][xi1];
-    glm::vec3 c001  = random_values[zi1][yi0][xi0];
-    glm::vec3 c101 = random_values[zi1][yi0][xi1];
-    glm::vec3 c011 = random_values[zi1][yi1][xi0];
-    glm::vec3 c111 = random_values[zi1][yi1][xi1];
-
     float x0 = tx, x1 = tx - 1;
     float y0 = ty, y1 = ty - 1;
     float z0 = tz, z1 = tz - 1;
 
-     glm::vec3 p000 =  glm::vec3(x0, y0, z0);
-     glm::vec3 p100 =  glm::vec3(x1, y0, z0);
-     glm::vec3 p010 =  glm::vec3(x0, y1, z0);
-     glm::vec3 p110 =  glm::vec3(x1, y1, z0);
-                           
-     glm::vec3 p001 =  glm::vec3(x0, y0, z1);
-     glm::vec3 p101 =  glm::vec3(x1, y0, z1);
-     glm::vec3 p011 =  glm::vec3(x0, y1, z1);
-     glm::vec3 p111 =  glm::vec3(x1, y1, z1);
+    float a = gradientDotV(hash(xi0, yi0, zi0), x0, y0, z0);
+    float b = gradientDotV(hash(xi1, yi0, zi0), x1, y0, z0);
+    float c = gradientDotV(hash(xi0, yi1, zi0), x0, y1, z0);
+    float d = gradientDotV(hash(xi1, yi1, zi0), x1, y1, z0);
+    float e = gradientDotV(hash(xi0, yi0, zi1), x0, y0, z1);
+    float f = gradientDotV(hash(xi1, yi0, zi1), x1, y0, z1);
+    float g = gradientDotV(hash(xi0, yi1, zi1), x0, y1, z1);
+    float h = gradientDotV(hash(xi1, yi1, zi1), x1, y1, z1);
 
-	 float  a = dot(c000, p000);
-	 float  b = dot(c100, p100);
-	 float  c = dot(c010, p010);
-	 float  d = dot(c110, p110);
-	 float  e = dot(c001, p001);
-	 float  f = dot(c101, p101);
-	 float  g = dot(c011, p011);
-	 float  h = dot(c111, p111);
+    float du = smoothstepDeriv(tx);
+    float dv = smoothstepDeriv(ty);
+    float dw = smoothstepDeriv(tz);
 
-     float k0 = (b - a);
-     float k1 = (c - a);
-     float k2 = (e - a);
-     float k3 = (a + d - b - c);
-     float k4 = (a + f - b - e);
-     float k5 = (a + g - c - e);
-     float k6 = (b + c + e + h - a - d - f - g);
+    float k0 = a;
+    float k1 = (b - a);
+    float k2 = (c - a);
+    float k3 = (e - a);
+    float k4 = (a + d - b - c);
+    float k5 = (a + f - b - e);
+    float k6 = (a + g - c - e);
+    float k7 = (b + c + e + h - a - d - f - g);
 
-     derivs.x = du * (k0 + v * k3 + w * k4 + v * w * k6);
-     derivs.y = dv * (k1 + u * k3 + w * k5 + u * w * k6);
-     derivs.z = dw * (k2 + u * k4 + v * k5 + u * v * k6);
+    derivs.x = du * (k1 + k4 * v + k5 * w + k7 * v * w);
+    derivs.y = dv * (k2 + k4 * u + k6 * w + k7 * v * w);
+    derivs.z = dw * (k3 + k5 * u + k6 * v + k7 * v * w);
 
-     return a + u * k0 + v * k1 + w * k2 + u * v * k3 + u * w * k4 + v * w * k5 + u * v * w * k6;
+    return k0 + k1 * u + k2 * v + k3 * w + k4 * u * v + k5 * u * w + k6 * v * w + k7 * u * v * w;
 }
 
-void Gradient_Noise::generate_value_noise(float dt)
+void Gradient_Noise::generate_gradient(float dt)
 {
-    //for (int i = 0; i < stack; i++)
-    //{
-    //    for (int j = 0; j < slice; j++) //  *3  because  r  g  b
-    //    {
-    //        float val = evalute(glm::vec2((j) + dt, i) * frequency);  //     /3  because  r  g  b
-    //        data[i][j] = static_cast<unsigned char>(val * 255.f);
-    //    }
-    //}
+    for (int i = 0; i < tableSize; i++)
+    {
+        for (int j = 0; j < tableSize * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec3 derivs;
+            float val = (evalute(glm::vec3(j / 3, 0, i) * frequency, derivs) + 1) * 0.5f;  //     /3  because  r  g  b
+
+
+            data[i][j] = static_cast<unsigned char>(val * 255.f);
+        }
+    }
 }
 
 Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
@@ -263,6 +246,7 @@ void Gradient_Noise::Update(float dt)
 {
     static float timer = 0;
     timer += dt;
+
    // update_plane(timer);
     sun = create_gradient_sphere(stack, slice, timer);
     sun.init("gradient_noise");
@@ -327,6 +311,7 @@ void Gradient_Noise::OnImGuiRender()
         frequency = 0.01f;
        // generate_value_noise(0);
     }
+
 }
 
 void Gradient_Noise::UnLoad()
@@ -362,27 +347,33 @@ float Gradient_Noise::quinticstepDeriv(const float& t)
 
 void Gradient_Noise::generate_random_value()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> distrFloat(0, 1);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> distrFloat(0, 1);
+    auto dice = std::bind(distrFloat, gen);
 
-        // create an array of random values
-        for (unsigned i = 0; i < size; ++i)
-        {
-            for (unsigned j = 0; j < size; ++j)
-            {
-                for (unsigned k = 0; k < size; ++k)
-                {
-                    //float theta = acos(2 * distrFloat(gen) - 1);
-                    //float phi = 2 * distrFloat(gen) * PI;
+    // create an array of random values and initialize permutation table
+    for (unsigned i = 0; i < tableSize; ++i)
+    {
 
-                    //float x = cos(phi) * sin(theta);
-                    //float y = sin(phi) * sin(theta);
-                    //float z = cos(theta);
-                    random_values[i][j][k] = glm::vec3(distrFloat(gen), distrFloat(gen), distrFloat(gen));
-                }
-            }
-        }
+        float theta = acos(2 * dice() - 1);
+        float phi = 2 * dice() * PI;
+
+        float x = cos(phi) * sin(theta);
+        float y = sin(phi) * sin(theta);
+        float z = cos(theta);
+        gradients[i] = glm::vec3(x, y, z);
+        permutationTable[i] = i;
+    }
+    std::uniform_int_distribution<unsigned> distributionInt;
+    auto diceInt = std::bind(distributionInt, gen);
+    // create permutation table
+    for (unsigned i = 0; i < tableSize; ++i)
+        std::swap(permutationTable[i], permutationTable[diceInt() & tableSizeMask]);
+    // extend the permutation table in the index range [256:512]
+    for (unsigned i = 0; i < tableSize; ++i) {
+        permutationTable[tableSize + i] = permutationTable[i];
+    }
 }
 
 
