@@ -475,8 +475,6 @@ void Mesh::setup_mesh()
     LightLoc = glGetUniformLocation(renderProg.GetHandle(), "lightPos");
     ViewPosLoc = glGetUniformLocation(renderProg.GetHandle(), "viewPos");
 
-
-
     SendVertexData();
 
     /*  Bind framebuffer to 0 to render to the screen (by default already 0) */
