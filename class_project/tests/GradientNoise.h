@@ -74,13 +74,7 @@ private:
 	unsigned int texture;
 
 
-
-	float frequency = 1.f;
-	float frequencyMult = 1.1;
-	float amplitudeMult = 0.35;
-	int numLayers = 5;
-	float max = 1.f;
-
+	float frequency = 0.1f;
 
 	float offset = 0.f;
 	bool animated = false;

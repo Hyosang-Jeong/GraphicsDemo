@@ -89,10 +89,8 @@ void Gradient_Noise::generate_gradient(float dt)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-
             glm::vec3 derives{ 0,0,0 };
             float val = (evalute(glm::vec3((j / 3) + 0.5, i + 0.5, 0) * frequency, derives) + 1) * 0.5f;
-
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
     }
@@ -364,6 +362,7 @@ void Gradient_Noise::OnImGuiRender()
     else if (ImGui::Button("Gradient Sun") == true)
     {
        // sun.init("gradient_noise");
+        generate_gradient(0);
         currstate = Sun;
         update_sun(0);
     }
