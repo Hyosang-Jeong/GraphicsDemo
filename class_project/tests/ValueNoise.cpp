@@ -414,18 +414,14 @@ void Noise::setup_shdrpgm(std::string shader)
         std::exit(EXIT_FAILURE);
     }
 }
-
 float Noise::lerp(float min, float max, float t)
 {
     return  (min * (1 - t)) + (max * t);
 }
-
 float Noise::smoothstep(const float& t)
 {
     return t * t * (3 - (2 * t));
 }
-
-
 float Noise::cosinestep(const float& t)
 {
     return (1.f - cos(t * PI)) * 0.5f;
@@ -434,7 +430,6 @@ float Noise::quinticstep(const float& t)
 {
     return t * t * t * (t * (t * 6.f - 15.f) + 10.f);
 }
-
 void Noise::generate_random_value()
 
 {

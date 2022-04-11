@@ -35,41 +35,32 @@ public:
 
 	void generate_value_noise(float dt);
 	Mesh create_gradient_plane(int stacks, int slices,float dt);
-
+	Mesh create_gradient_sphere(int stacks, int slices, float dt);
+	void update_plane(float dt);
 private:
-
-	GLuint EBO;
-
 
 	glm::mat4  view;
 	glm::mat4  projection;
 	glm::vec3 eye;
 	glm::vec3 light;
-	//GLint modelLoc;
-	//GLint viewLoc;
-	//GLint   projectionLoc;
-
-
-	unsigned int texture;
 
 	static constexpr unsigned int stack = 30;
 	static constexpr unsigned int slice = 30;
-	static constexpr unsigned int size = 100;
+	static constexpr unsigned int size = 20;
 
-
-	float frequency = 0.2f;
+	float frequency = 1.f;
 	float frequencyMult = 1.8;
 	float amplitudeMult = 0.35;
 	int numLayers = 5;
 
 	float max = 1.f;
-	glm::vec3 random_values[size][size];
+
+	glm::vec3 random_values[size][size][size];
 
 	float data[stack+1][slice+1] = { 0 };
 
 	float offset = 0.f;
 	bool animated = false;
 	Mesh plane;
-
-
+	Mesh sun;
 };

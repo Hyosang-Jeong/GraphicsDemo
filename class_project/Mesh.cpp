@@ -544,14 +544,14 @@ void Mesh::SendVertexData()
     /*  Copy vertex attributes to GPU */
     glBufferData(GL_ARRAY_BUFFER,
         numVertices * vertexSize, &vertexBuffer[0],
-        GL_STATIC_DRAW);
+        GL_DYNAMIC_DRAW);
 
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     /*  Copy vertex indices to GPU */
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
         numIndices * indexSize, &indexBuffer[0],
-        GL_STATIC_DRAW);
+        GL_DYNAMIC_DRAW);
 
     /*  Send vertex attributes to shaders */
     for (int i = 0; i < numAttribs; ++i)
