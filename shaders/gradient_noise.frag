@@ -22,8 +22,12 @@ vec3 viewDir = normalize(viewPos - FragPos);
 
 void main()
 {
-   				outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
-				outColor= diff * outColor ;
+   				//outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
+				//outColor= diff * outColor ;
 				//outColor = vec4(Color,1);	
+		  if(color.r == 0)
+				outColor = texture(ourTexture, TexCoord);
+		    else
+				outColor = color;
 }
 

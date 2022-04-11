@@ -20,7 +20,7 @@ enum state
 	fractal,
 	marble,
 	Turbulence,
-        Gradient
+    Gradient
 };
 class Noise : public Test
 {

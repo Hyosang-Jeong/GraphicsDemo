@@ -14,6 +14,14 @@ Also, there is a enum state for what is now demo showing.
 #include <GL/glew.h> 
 #include"../glslshader.h"
 #include"../Mesh.h"
+
+enum gradient_state
+{
+	Gradient_noise,
+	Gradient_plane,
+	Sun
+};
+
 class Gradient_Noise : public Test
 {
 public:
@@ -37,33 +45,48 @@ public:
 	Mesh create_gradient_plane(int stacks, int slices,float dt);
 	Mesh create_gradient_sphere(int stacks, int slices, float dt);
 	void update_plane(float dt);
+	void update_sun(float dt);
 private:
 
-	glm::mat4  view;
-	glm::mat4  projection;
+	glm::mat4 view = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+	glm::mat4 projection = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
 	glm::vec3 eye;
 	glm::vec3 light;
 
-	static constexpr unsigned int stack = 30;
-	static constexpr unsigned int slice = 30;
+	static constexpr unsigned int stack = 100;
+	static constexpr unsigned int slice = 100;
 	static constexpr unsigned int size = 20;
+	//for texture
+	static constexpr unsigned int width = 256;
+	static constexpr unsigned int height = 256;
+	unsigned char data[height][width * 3] = { 0 };
+	unsigned int texture;
+
 
 	float frequency = 1.f;
-	float frequencyMult = 1.8;
+	float frequencyMult = 1.1;
 	float amplitudeMult = 0.35;
 	int numLayers = 5;
-
 	float max = 1.f;
 
-	glm::vec3 random_values[size][size][size];
-
-	float data[stack+1][slice+1] = { 0 };
 
 	float offset = 0.f;
 	bool animated = false;
 	Mesh plane;
-
 	Mesh sun;
+
+	gradient_state currstate = Gradient_noise;
+
 
 	static const unsigned tableSize = 256;
 	static const unsigned tableSizeMask = tableSize - 1;
