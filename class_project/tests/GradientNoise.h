@@ -63,6 +63,7 @@ private:
 	glm::vec3 eye;
 	glm::vec3 light;
 
+
 	static constexpr unsigned int stack = 100;
 	static constexpr unsigned int slice = 100;
 	static constexpr unsigned int size = 20;
@@ -71,6 +72,7 @@ private:
 	static constexpr unsigned int height = 256;
 	unsigned char data[height][width * 3] = { 0 };
 	unsigned int texture;
+
 
 
 	float frequency = 1.f;
@@ -85,6 +87,7 @@ private:
 	Mesh plane;
 	Mesh sun;
 
+
 	gradient_state currstate = Gradient_noise;
 
 
@@ -97,6 +100,7 @@ private:
 	{
 	    return permutationTable[permutationTable[permutationTable[x] + y] + z];
 	}
+
 
 	float gradientDotV(
 	    uint8_t perm, // a value between 0 and 255 
@@ -121,4 +125,16 @@ private:
 	    case 15: return -y - z; // (0,-1,-1) 
 	    }
 	}
+	static const unsigned tableSize = 100;
+	float data[tableSize +1][tableSize  * 3] = { 0 };
+	static const unsigned tableSizeMask = tableSize - 1;
+	glm::vec3 gradients[tableSize];
+	unsigned permutationTable[tableSize * 2];
+	/* inline */
+	uint8_t hash(const int& x, const int& y, const int& z) const
+	{
+	    return permutationTable[permutationTable[permutationTable[x] + y] + z];
+	}
+
+
 };

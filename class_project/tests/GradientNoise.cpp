@@ -63,9 +63,9 @@ float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
     float g = gradientDotV(hash(xi0, yi1, zi1), x0, y1, z1);
     float h = gradientDotV(hash(xi1, yi1, zi1), x1, y1, z1);
 
-    float du = smoothstepDeriv(tx);
-    float dv = smoothstepDeriv(ty);
-    float dw = smoothstepDeriv(tz);
+    float du = quinticstepDeriv(tx);
+    float dv = quinticstepDeriv(ty);
+    float dw = quinticstepDeriv(tz);
 
     float k0 = a;
     float k1 = (b - a);
@@ -89,8 +89,10 @@ void Gradient_Noise::generate_gradient(float dt)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
+
             glm::vec3 derives{ 0,0,0 };
             float val = (evalute(glm::vec3((j / 3) + 0.5, i + 0.5, 0) * frequency, derives) + 1) * 0.5f;
+
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
     }
@@ -261,6 +263,7 @@ void Gradient_Noise::init()
     generate_gradient(0);
 
     eye = { 0.f,  0.f, -2.f };
+
     light = { 0.0f,  2.f, 0.f };
 
     view = glm::translate(view, eye);
