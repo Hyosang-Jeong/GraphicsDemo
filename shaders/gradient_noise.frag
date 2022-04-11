@@ -40,7 +40,7 @@ void main()
     else
     {
            outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
-				outColor= diff * outColor ;      
+		   outColor= diff * outColor ;      
      }
      
 }
