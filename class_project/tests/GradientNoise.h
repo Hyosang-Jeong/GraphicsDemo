@@ -1,5 +1,5 @@
 /*!
-@file    ValueNoise.h
+@file    GradientNoise.h
 @author  Hyosang Jung, Jaewoo.choi
 @date    04/11/2022
 
