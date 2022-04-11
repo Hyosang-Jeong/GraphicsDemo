@@ -13,6 +13,8 @@ Note : This file is for Third demo that shows
 
 *//*__________________________________________________________________________*/
 #include "ValueNoise.h"
+
+#include <functional>
 #include<random>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -56,6 +58,57 @@ float Noise::evalute(glm::vec2 p)
     return lerp(nx0, nx1, sy);
 }
 
+float Noise::evalute(glm::vec3 p, glm::vec3& derivs)
+{
+    int xi0 = ((int)std::floor(p.x)) & tableSizeMask;
+    int yi0 = ((int)std::floor(p.y)) & tableSizeMask;
+    int zi0 = ((int)std::floor(p.z)) & tableSizeMask;
+
+    int xi1 = (xi0 + 1) & tableSizeMask;
+    int yi1 = (yi0 + 1) & tableSizeMask;
+    int zi1 = (zi0 + 1) & tableSizeMask;
+
+    float tx = p.x - ((int)std::floor(p.x));
+    float ty = p.y - ((int)std::floor(p.y));
+    float tz = p.z - ((int)std::floor(p.z));
+
+    float u = quinticstep(tx);
+    float v = quinticstep(ty);
+    float w = quinticstep(tz);
+
+    // generate vectors going from the grid points to p
+    float x0 = tx, x1 = tx - 1;
+    float y0 = ty, y1 = ty - 1;
+    float z0 = tz, z1 = tz - 1;
+
+    float a = gradientDotV(hash(xi0, yi0, zi0), x0, y0, z0);
+    float b = gradientDotV(hash(xi1, yi0, zi0), x1, y0, z0);
+    float c = gradientDotV(hash(xi0, yi1, zi0), x0, y1, z0);
+    float d = gradientDotV(hash(xi1, yi1, zi0), x1, y1, z0);
+    float e = gradientDotV(hash(xi0, yi0, zi1), x0, y0, z1);
+    float f = gradientDotV(hash(xi1, yi0, zi1), x1, y0, z1);
+    float g = gradientDotV(hash(xi0, yi1, zi1), x0, y1, z1);
+    float h = gradientDotV(hash(xi1, yi1, zi1), x1, y1, z1);
+
+    float du = smoothstepDeriv(tx);
+    float dv = smoothstepDeriv(ty);
+    float dw = smoothstepDeriv(tz);
+
+    float k0 = a;
+    float k1 = (b - a);
+    float k2 = (c - a);
+    float k3 = (e - a);
+    float k4 = (a + d - b - c);
+    float k5 = (a + f - b - e);
+    float k6 = (a + g - c - e);
+    float k7 = (b + c + e + h - a - d - f - g);
+
+    derivs.x = du * (k1 + k4 * v + k5 * w + k7 * v * w);
+    derivs.y = dv * (k2 + k4 * u + k6 * w + k7 * v * w);
+    derivs.z = dw * (k3 + k5 * u + k6 * v + k7 * v * w);
+
+    return k0 + k1 * u + k2 * v + k3 * w + k4 * u * v + k5 * u * w + k6 * v * w + k7 * u * v * w;
+}
 void Noise::generate_fractal(float dt)
 {
     memset(data, 0, height * width * 3);
@@ -171,6 +224,20 @@ void Noise::generate_wood(float dt)
     }
 }
 
+void Noise::generate_gradient(float dt)
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec3 derivs;
+            float val = (evalute(glm::vec3(j/3, 0, i) * frequency, derivs) + 1 ) * 0.5f;  //     /3  because  r  g  b
+            
+
+            data[i][j] = static_cast<unsigned char>(val * 255.f);
+        }
+    }
+}
 
 
 void Noise::init()
@@ -221,6 +288,11 @@ void Noise::Update(float dt)
         case Turbulence:
         {
             generate_turbulence(offset);
+            break;
+        }
+        case Gradient:
+        {
+            generate_gradient(offset);
             break;
         }
         }
@@ -288,6 +360,13 @@ void Noise::OnImGuiRender()
         max = 1.f;
         generate_turbulence(0);
     }
+    if (ImGui::Button("Gradient") == true)
+    {
+        currstate = Gradient;
+        max = 0.2f;
+        frequency = 0.01f;
+        generate_gradient(0);
+    }
 
     ImGui::Checkbox("Animated", &animated);
 
@@ -318,6 +397,11 @@ void Noise::OnImGuiRender()
         case Turbulence:
         {
             generate_turbulence(0);
+            break;
+        }
+        case Gradient:
+        {
+            generate_gradient(0);
             break;
         }
         }
@@ -424,7 +508,10 @@ float Noise::smoothstep(const float& t)
 {
     return t * t * (3 - (2 * t));
 }
-
+float Noise::smoothstepDeriv(const float& t)
+{
+    return t * (6 - 6 * t);
+}
 
 float Noise::cosinestep(const float& t)
 {
@@ -441,15 +528,30 @@ void Noise::generate_random_value()
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> distrFloat(0,1);
-       
+    auto dice = std::bind(distrFloat, gen);
 
     // create an array of random values and initialize permutation table
-    for (unsigned i = 0; i < size; ++i)
+    for (unsigned i = 0; i < tableSize; ++i)
     {
-        for (unsigned j = 0; j < size; ++j)
-        {
-            random_values[i][j] = distrFloat(gen);
-        }
+       
+        float theta = acos(2 * dice() - 1);
+        float phi = 2 * dice() * PI;
+
+        float x = cos(phi) * sin(theta);
+        float y = sin(phi) * sin(theta);
+        float z = cos(theta);
+        gradients[i] = glm::vec3(x, y, z);
+            permutationTable[i] = i;
+            //random_values[i][j] = distrFloat(gen);
+    }
+    std::uniform_int_distribution<unsigned> distributionInt;
+    auto diceInt = std::bind(distributionInt, gen);
+    // create permutation table
+    for (unsigned i = 0; i < tableSize; ++i)
+        std::swap(permutationTable[i], permutationTable[diceInt() & tableSizeMask]);
+    // extend the permutation table in the index range [256:512]
+    for (unsigned i = 0; i < tableSize; ++i) {
+        permutationTable[tableSize + i] = permutationTable[i];
     }
 }
 

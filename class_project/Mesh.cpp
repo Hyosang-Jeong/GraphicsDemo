@@ -12,7 +12,7 @@
 /******************************************************************************/
 
 #include "Mesh.h"
-
+#include "glhelper.h"
 /*  Function prototype(s) */
 
 
@@ -474,6 +474,7 @@ void Mesh::setup_mesh()
     projectionLoc = glGetUniformLocation(renderProg.GetHandle(), "projection");
     LightLoc = glGetUniformLocation(renderProg.GetHandle(), "lightPos");
     ViewPosLoc = glGetUniformLocation(renderProg.GetHandle(), "viewPos");
+
 
 
     SendVertexData();

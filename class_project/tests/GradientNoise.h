@@ -33,7 +33,7 @@ public:
 	float evalute(glm::vec3 p, glm::vec3& derivs);
 	float smoothstepDeriv(const float& t);
 
-	void generate_value_noise(float dt);
+	void generate_gradient(float dt);
 	Mesh create_gradient_plane(int stacks, int slices,float dt);
 
 private:
@@ -72,4 +72,37 @@ private:
 	Mesh plane;
 
 
+	static const unsigned tableSize = 256;
+	static const unsigned tableSizeMask = tableSize - 1;
+	glm::vec3 gradients[tableSize];
+	unsigned permutationTable[tableSize * 2];
+	/* inline */
+	uint8_t hash(const int& x, const int& y, const int& z) const
+	{
+	    return permutationTable[permutationTable[permutationTable[x] + y] + z];
+	}
+
+	float gradientDotV(
+	    uint8_t perm, // a value between 0 and 255 
+	    float x, float y, float z) const
+	{
+	    switch (perm & 15) {
+	    case  0: return  x + y; // (1,1,0) 
+	    case  1: return -x + y; // (-1,1,0) 
+	    case  2: return  x - y; // (1,-1,0) 
+	    case  3: return -x - y; // (-1,-1,0) 
+	    case  4: return  x + z; // (1,0,1) 
+	    case  5: return -x + z; // (-1,0,1) 
+	    case  6: return  x - z; // (1,0,-1) 
+	    case  7: return -x - z; // (-1,0,-1) 
+	    case  8: return  y + z; // (0,1,1), 
+	    case  9: return -y + z; // (0,-1,1), 
+	    case 10: return  y - z; // (0,1,-1), 
+	    case 11: return -y - z; // (0,-1,-1) 
+	    case 12: return  y + x; // (1,1,0) 
+	    case 13: return -x + y; // (-1,1,0) 
+	    case 14: return -y + z; // (0,-1,1) 
+	    case 15: return -y - z; // (0,-1,-1) 
+	    }
+	}
 };
