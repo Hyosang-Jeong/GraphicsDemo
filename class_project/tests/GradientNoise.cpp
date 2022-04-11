@@ -1,19 +1,17 @@
 /*!
 @file    ValueNoise.cpp
 @author  Hyosang Jung, Jaewoo.choi
-@date    04/04/2022
+@date    04/11/2022
 
-Note : This file is for Third demo that shows
-       5 demo that(fractal, valueNoise, Wood, Marble, Turbulence).
-       In Value Noise and Wood demo, you can control Frequency by Imgui.
-       And In Fracttal,Marble and Turblence demo, you can control frequency
-       frequencyMult,amplitudeMult, numLayers. Also If you clicked Animated, all demos are
-       update every frame. so it looks moving to left smoothly.
+Note : This file is for Fourth demo that shows
+       3 demo that(Gradient Noise,Gradient Plane,Gradient Sun).
+       All of these demo, you can control Frequency by Imgui.
+       Also If you clicked Animated, all demos are update every frame. so it looks moving to left smoothly.
        Also it has Imgui implementing for showing another demo in left top side.
+       Gradient Noise is 2D gradient plane and sun is 3D, we want to show like a sun burning.
 
 *//*__________________________________________________________________________*/
 #include "GradientNoise.h"
-
 #include <functional>
 #include<random>
 #include <imgui.h>
@@ -91,14 +89,14 @@ void Gradient_Noise::generate_gradient(float dt)
         {
 
             glm::vec3 derives{ 0,0,0 };
-            float val = (evalute(glm::vec3((j / 3) + 0.5 + dt, i + 0.5,0) * frequency, derives) + 1) * 0.5f;
+            float val = (evalute(glm::vec3((j / 3) + 0.5 + dt, i + 0.5, 0) * frequency, derives) + 1) * 0.5f;
 
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
     }
 }
 
-Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
+Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices, float dt)
 {
     Mesh mesh;
     mesh.stack_slice[0] = stacks;
@@ -116,7 +114,7 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
 
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(v.pos.x + 0.5, 0, v.pos.z + 0.5) * frequency*2.f, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(v.pos.x + 0.5, 0, v.pos.z + 0.5) * frequency * 2.f, derivs);  //     /3  because  r  g  b
             v.pos.y = val;
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
 
@@ -164,9 +162,9 @@ Mesh Gradient_Noise::create_gradient_sphere(int stacks, int slices, float dt)
             v.nrm /= 0.5;
 
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(v.pos.x+dt, v.pos.y, v.pos.z) * frequency, derivs);  //     /3  because  r  g  b
-            
-            v.color = 2.f * abs(val)* glm::vec3(1.0, 0.5, 0.0);
+            float val = evalute(glm::vec3(v.pos.x + dt, v.pos.y, v.pos.z) * frequency, derivs);  //     /3  because  r  g  b
+
+            v.color = 2.f * abs(val) * glm::vec3(1.0, 0.5, 0.0);
 
             addVertex(mesh, v);
         }
@@ -194,7 +192,7 @@ void Gradient_Noise::update_plane(float dt)
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
 
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(slice + dt * 3, 0, stack +dt) * frequency, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(slice + dt * 3, 0, stack + dt) * frequency, derivs);  //     /3  because  r  g  b
             v.pos.y = val;
 
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
@@ -242,7 +240,7 @@ void Gradient_Noise::update_sun(float dt)
 
             glm::vec3 derives{ 0,0,0 };
 
-            float val = (evalute(glm::vec3((v.pos.x+0.5 + dt*0.005)*255 , (v.pos.y + 0.5 + dt * 0.001) * 255, (v.pos.z + 0.5 + dt * 0.0001) * 255) * frequency, derives) + 1) * 0.5f;
+            float val = (evalute(glm::vec3((v.pos.x + 0.5 + dt * 0.005) * 255, (v.pos.y + 0.5 + dt * 0.001) * 255, (v.pos.z + 0.5 + dt * 0.0001) * 255) * frequency, derives) + 1) * 0.5f;
             v.color = glm::vec3(1.0, 0.3, 0) * val;
 
             addVertex(sun, v);
@@ -258,7 +256,7 @@ void Gradient_Noise::init()
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     generate_random_value();
     plane = CreatePlane(stack, slice);
-    sun = create_gradient_sphere(stack, slice,0);
+    sun = create_gradient_sphere(stack, slice, 0);
     plane.init("gradient_noise");
     sun.init("gradient_noise");
 
@@ -271,7 +269,6 @@ void Gradient_Noise::init()
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 
 
-
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 }
@@ -281,12 +278,6 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
-   // if (currstate == Gradient_plane)
-       // update_plane(timer);
-       // update_sun(timer);
-
-
-    //update_plane(timer);
     if (animated == true)
     {
         offset += dt * 10.f;
@@ -294,21 +285,21 @@ void Gradient_Noise::Update(float dt)
 
         switch (currstate)
         {
-            case Gradient_noise:
-            {
-                generate_gradient(offset);
-                break;
-            }
-            case Gradient_plane:
-            {
-                update_plane(offset);
-                break;
-            }
-            case Sun:
-            {
-                update_sun(offset);
-                break;
-            }
+        case Gradient_noise:
+        {
+            generate_gradient(offset);
+            break;
+        }
+        case Gradient_plane:
+        {
+            update_plane(offset);
+            break;
+        }
+        case Sun:
+        {
+            update_sun(offset);
+            break;
+        }
         }
     }
 }
@@ -324,16 +315,15 @@ void Gradient_Noise::Draw()
     0,0,1,0,
     0,0,0,1
     };
-    
+
     glm::vec4 color;
 
     if (currstate == Gradient_noise || currstate == Gradient_plane)
     {
-        if(currstate == Gradient_noise)
+        if (currstate == Gradient_noise)
             color = { -1,0,0,-1 };
         else
-
-            color = { 0.68, 0.0, 0.89 ,1};
+            color = { 0.68, 0.0, 0.89 ,1 };
         glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
         glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -349,21 +339,19 @@ void Gradient_Noise::Draw()
 
     else
     {
-
-
         color = { -1,0,0,0 };
 
-       glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
-       glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-       glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-       glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-       glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
-       glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
-       glBindVertexArray(sun.VAO);
-       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-       glGenerateMipmap(GL_TEXTURE_2D);
-       glBindTexture(GL_TEXTURE_2D, texture);
-       glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
+        glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
+        glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
+        glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
+        glBindVertexArray(sun.VAO);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
     }
     OnImGuiRender();
 
@@ -398,57 +386,54 @@ void Gradient_Noise::OnImGuiRender()
         }
     }
 
-        ImGui::SliderFloat3("Eye", &eye.x, -10.f, 10.f);
-        ImGui::SliderFloat3("light", &light.x, -10.f, 10.f);
 
-
-        if (ImGui::Button("Gradient Noise") == true)
-        {
-            view = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-            };
-            eye = { 0.f,  0.f, -2.f };
-            view = glm::translate(view, eye);
-            plane = CreatePlane(stack, slice);
-            plane.init("gradient_noise");
-            currstate = Gradient_noise;
-            generate_gradient(0);
-        }
-
-        else if (ImGui::Button("Gradient plane") == true)
-        {
-            view = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-            };
-            eye = { 2.f,  -3.f, -2.f };
-            view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-            view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
-            view = glm::translate(view, eye);
-            update_plane(0);
-            currstate = Gradient_plane;
-        }
-
-        else if (ImGui::Button("Gradient Sun") == true)
-        {
-            view = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-            };
-            eye = { 0.f,  0.f, -2.f };
-            view = glm::translate(view, eye);
-            // sun.init("gradient_noise");
-            currstate = Sun;
-            update_sun(0);
-        }
+    if (ImGui::Button("Gradient Noise") == true)
+    {
+        view = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+        };
+        eye = { 0.f,  0.f, -2.f };
+        view = glm::translate(view, eye);
+        plane = CreatePlane(stack, slice);
+        plane.init("gradient_noise");
+        currstate = Gradient_noise;
+        generate_gradient(0);
     }
+
+    else if (ImGui::Button("Gradient plane") == true)
+    {
+        view = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+        };
+        eye = { 2.f,  -3.f, -2.f };
+        view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+        view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::translate(view, eye);
+        update_plane(0);
+        currstate = Gradient_plane;
+    }
+
+    else if (ImGui::Button("Gradient Sun") == true)
+    {
+        view = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+        };
+        eye = { 0.f,  0.f, -2.f };
+        view = glm::translate(view, eye);
+        // sun.init("gradient_noise");
+        currstate = Sun;
+        update_sun(0);
+    }
+}
 
 void Gradient_Noise::UnLoad()
 {
