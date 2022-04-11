@@ -85,16 +85,18 @@ float Gradient_Noise::evalute(glm::vec3 p, glm::vec3& derivs)
 
 void Gradient_Noise::generate_gradient(float dt)
 {
-    for (int i = 0; i < tableSize; i++)
+    for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < tableSize * 3; j++) //  *3  because  r  g  b
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
-            glm::vec3 derivs;
-            float val = (evalute(glm::vec3(j / 3, 0, i) * frequency, derivs) + 1) * 0.5f;  //     /3  because  r  g  b
+
+            glm::vec3 derives{ 0,0,0 };
+            float val = (evalute(glm::vec3((j / 3) + 0.5, i + 0.5, 0) * frequency, derives) + 1) * 0.5f;
 
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
     }
+
 }
 
 Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
@@ -112,11 +114,11 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices,float dt)
             float col = (float)slice / slices;
 
             Vertex v;
+            v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
+
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(slice+dt*3, 0, stack+sin(dt*3)/2.f) * frequency, derivs);  //     /3  because  r  g  b
-
-            v.pos = glm::vec3(col - 0.5f, val, row - 0.5f);
-
+            float val = evalute(glm::vec3(v.pos.x + 0.5, 0, v.pos.z + 0.5) * frequency, derivs);  //     /3  because  r  g  b
+            v.pos.y = val;
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
 
             v.nrm /= v.nrm.length();
@@ -180,20 +182,21 @@ void Gradient_Noise::update_plane(float dt)
 {
     plane.vertexBuffer.clear();
     plane.numVertices = 0;
-    for (int stack = 0; stack <= 30; ++stack)
-    {
-        float row = (float)stack / 30;
 
-        for (int slice = 0; slice <= 30; ++slice)
+    for (int stack = 0; stack <= this->stack; ++stack)
+    {
+        float row = (float)stack / this->stack;
+
+        for (int slice = 0; slice <= this->slice; ++slice)
         {
-            float col = (float)slice / 30;
+            float col = (float)slice / this->slice;
 
             Vertex v;
+            v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
+
             glm::vec3 derivs;
-            float val = evalute(glm::vec3(slice + dt * 3, 0, stack + sin(dt * 3) / 2.f) * frequency, derivs);  //     /3  because  r  g  b
-
-            v.pos = glm::vec3(col - 0.5f, val, row - 0.5f);
-
+            float val = evalute(glm::vec3(v.pos.x + 0.5, 0, v.pos.z + 0.5) * frequency, derivs);  //     /3  because  r  g  b
+            v.pos.y = val;
             v.nrm = glm::vec3(-derivs.x, 1, -derivs.z);
 
             v.nrm /= v.nrm.length();
@@ -202,7 +205,6 @@ void Gradient_Noise::update_plane(float dt)
 
             v.color = glm::vec3(0.68, 0.87, 0.89);
 
-
             addVertex(plane, v);
         }
     }
@@ -210,36 +212,72 @@ void Gradient_Noise::update_plane(float dt)
     glBufferData(GL_ARRAY_BUFFER, plane.numVertices * vertexSize, &plane.vertexBuffer[0], GL_DYNAMIC_DRAW);
 }
 
+void Gradient_Noise::update_sun(float dt)
+{
+    sun.vertexBuffer.clear();
+    sun.numVertices = 0;
+
+    for (int stack = 0; stack <= sun.stack_slice[0]; ++stack)
+    {
+        float row = (float)stack / sun.stack_slice[0];
+        float beta = PI * (row - 0.5);
+
+        for (int slice = 0; slice <= sun.stack_slice[1]; ++slice)
+        {
+            float col = (float)slice / sun.stack_slice[1];
+            float alpha = col * PI * 2.0;
+            Vertex v;
+            v.uv.x = col;
+            v.uv.y = row * (-1.0);
+
+            v.pos.x = 0.5f * sin(alpha) * cos(beta);
+            v.pos.y = 0.5f * sin(beta);
+            v.pos.z = 0.5f * cos(alpha) * cos(beta);
+
+            v.nrm.x = v.pos.x;
+            v.nrm.y = v.pos.y;
+            v.nrm.z = v.pos.z;
+
+            v.nrm /= 0.5;
+
+            glm::vec3 derives{ 0,0,0 };
+            float val = (evalute(glm::vec3((v.pos.x+1)*255, (v.pos.y + 1) * 255, (v.pos.z + 1) * 255) * frequency, derives) + 1) * 0.5f;
+            v.color = glm::vec3(1.0, 0.5, 0) * val;
+            addVertex(sun, v);
+        }
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, sun.VBO);
+    glBufferData(GL_ARRAY_BUFFER, sun.numVertices * vertexSize, &sun.vertexBuffer[0], GL_DYNAMIC_DRAW);
+}
+
 
 void Gradient_Noise::init()
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     generate_random_value();
-    //plane = create_gradient_plane(stack, slice, 0);
-    //sun = create_gradient_sphere(stack, slice,0);
-    //plane.init("gradient_noise");
-    //sun.init("gradient_noise");
 
-    generate_gradient(0);
-    view = {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-    projection = {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-    eye = { 2.0f,  -3.f, -2.f };
+    plane = create_gradient_plane(stack, slice, 0);
+    sun = create_gradient_sphere(stack, slice,0);
+    plane.init("gradient_noise");
+    sun.init("gradient_noise");
+    eye = { 0.f,  0.f, -2.f };
+
     light = { 0.0f,  2.f, 0.f };
-    view = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
+        {
+            glm::vec3 derives{ 0,0,0 };
+            float val = (evalute(glm::vec3((j / 3)+0.5, i+0.5, 0) * frequency, derives) + 1) * 0.5f;
+            data[i][j] = static_cast<unsigned char>(val * 255.f);
+        }
+    }
 
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 }
 
 void Gradient_Noise::Update(float dt)
@@ -247,10 +285,9 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
+
     update_plane(timer);
-    //sun = create_gradient_sphere(stack, slice, timer);
-    //sun.init("gradient_noise");
-    //generate_gradient(dt);
+
 }
 
 void Gradient_Noise::Draw()
@@ -264,30 +301,44 @@ void Gradient_Noise::Draw()
     0,0,1,0,
     0,0,0,1
     };
+    glm::vec3 color(0.68, 0.87, 0.89);
 
+    if (currstate == Gradient_noise || currstate == Gradient_plane)
+    {
+        if(currstate == Gradient_noise)
+            color = { 0,0,0 };
+        else
+            color = { 0.68, 0.0, 0.89 };
 
-    glm::vec3 color(0.68, 0.87, 0.89 );
-    glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
-    glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(plane.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(plane.LightLoc, 1, ValuePtr(light));
-    glUniform3fv(plane.ViewPosLoc, 1, ValuePtr(-eye));
-    glBindVertexArray(plane.VAO);
-    glDrawElements(GL_TRIANGLES,plane.numIndices, GL_UNSIGNED_INT, 0);
+        glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
+        glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(plane.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform3fv(plane.LightLoc, 1, ValuePtr(light));
+        glUniform3fv(plane.ViewPosLoc, 1, ValuePtr(-eye));
+        glBindVertexArray(plane.VAO);
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 100, 100, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glDrawElements(GL_TRIANGLES, plane.numIndices, GL_UNSIGNED_INT, 0);
 
+    //model = glm::scale(model, { 0.5,1,1});
+  // model = glm::translate(model, { 0,1.5,0 });
+    //model = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
+    //model = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+    //model = glm::translate(view, eye);
 
-    ////model = glm::scale(model, { 0.5,1,1});
-    //model = glm::translate(model, { 0,1.5,0 });
-    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(1.0f, 0.0f, 0.0f));
-    ////model = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
-    ////model = glm::translate(view, eye);
     //glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
     //glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     //glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     //glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     //glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
     //glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 100, 100, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    //glGenerateMipmap(GL_TEXTURE_2D);
+    //glBindTexture(GL_TEXTURE_2D, texture);
     //glBindVertexArray(sun.VAO);
     //glDrawElements(GL_TRIANGLES, sun.numIndices, GL_UNSIGNED_INT, 0);
 
@@ -306,13 +357,26 @@ void Gradient_Noise::OnImGuiRender()
     ImGui::SliderFloat("frequeny", &frequency, 0.f, 0.25f);
     ImGui::SliderFloat3("Eye", &eye.x, -10.f, 10.f);
     ImGui::SliderFloat3("light", &light.x, -10.f, 10.f);
+
     if (ImGui::Button("Gradient Noise") == true)
     {
-        max = 1.f;
-        frequency = 0.01f;
-       // generate_value_noise(0);
+        plane = CreatePlane(stack,slice);
+        plane.init("gradient_noise");
+        currstate = Gradient_noise;
+        generate_gradient(0);
     }
 
+    else if (ImGui::Button("Gradient plane") == true)
+    {
+        update_plane(0);
+        currstate = Gradient_plane;
+    }
+
+    else if (ImGui::Button("Gradient Sun") == true)
+    {
+        sun = create_gradient_sphere(stack, slice, 0);
+        currstate = Sun;
+    }
 }
 
 void Gradient_Noise::UnLoad()
