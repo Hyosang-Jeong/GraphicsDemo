@@ -281,8 +281,10 @@ void Gradient_Noise::Update(float dt)
     static float timer = 0;
     timer += dt;
 
+
    //update_plane(timer);
    //update_sun(timer);
+
 
 }
 
