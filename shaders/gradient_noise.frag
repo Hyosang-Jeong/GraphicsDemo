@@ -1,11 +1,12 @@
 #version 450 core
 
 layout(location=1) in vec3 NRM;
+layout (location = 2) in vec3 coordcolor;
 
 out vec4 outColor;
 in vec3 FragPos; 
 in vec2 TexCoord;
-in vec3 Color;
+
 
 uniform sampler2D ourTexture;
 uniform vec4 color;
@@ -22,12 +23,23 @@ vec3 viewDir = normalize(viewPos - FragPos);
 
 void main()
 {
+
    				//outColor = vec4(u_ambient,1.0) + color * vec4(lightColor,1.0);
 				//outColor= diff * outColor ;
 				//outColor = vec4(Color,1);	
-		  if(color.r == 0)
-				outColor = texture(ourTexture, TexCoord);
-		    else
-				outColor = color;
+
+
+    if (color.r < 0)
+    {
+        if(color.a<0)
+           outColor = texture(ourTexture, TexCoord);  
+         else
+             outColor = vec4(coordcolor,1);      
+    }
+    else
+    {
+           outColor = color;      
+     }
+     
 }
 
