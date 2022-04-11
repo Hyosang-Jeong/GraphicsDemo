@@ -75,7 +75,7 @@ private:
 
 
 
-	float frequency = 1.f;
+	float frequency = 0.05f;
 	float frequencyMult = 1.1;
 	float amplitudeMult = 0.35;
 	int numLayers = 5;
@@ -125,16 +125,7 @@ private:
 	    case 15: return -y - z; // (0,-1,-1) 
 	    }
 	}
-	static const unsigned tableSize = 100;
-	float data[tableSize +1][tableSize  * 3] = { 0 };
-	static const unsigned tableSizeMask = tableSize - 1;
-	glm::vec3 gradients[tableSize];
-	unsigned permutationTable[tableSize * 2];
-	/* inline */
-	uint8_t hash(const int& x, const int& y, const int& z) const
-	{
-	    return permutationTable[permutationTable[permutationTable[x] + y] + z];
-	}
+
 
 
 };
