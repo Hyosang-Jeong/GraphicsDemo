@@ -24,7 +24,7 @@ GLint GLHelper::height;
 GLdouble GLHelper::fps;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
-
+bool GLHelper::mouse_pressed;
 /*  _________________________________________________________________________ */
 /*! init
 
@@ -51,7 +51,7 @@ bool GLHelper::init(GLint w, GLint h, std::string t) {
     GLHelper::width = w;
     GLHelper::height = h;
     GLHelper::title = t;
-
+    mouse_pressed = false;
     // Part 1
     if (!glfwInit()) {
         std::cout << "GLFW init has failed - abort program!!!" << std::endl;
@@ -195,7 +195,8 @@ were held down
 This function is called when mouse buttons are pressed.
 */
 void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod) {
-    switch (button) {
+    switch (button) 
+    {
     case GLFW_MOUSE_BUTTON_LEFT:
 #ifdef _DEBUG
         std::cout << "Left mouse button ";
@@ -207,16 +208,19 @@ void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod)
 #endif
         break;
     }
-    switch (action) {
+    switch (action) 
+    {
     case GLFW_PRESS:
 #ifdef _DEBUG
         std::cout << "pressed!!!" << std::endl;
 #endif
+        mouse_pressed = true;
         break;
     case GLFW_RELEASE:
 #ifdef _DEBUG
         std::cout << "released!!!" << std::endl;
 #endif
+        mouse_pressed = false;
         break;
     }
 }
