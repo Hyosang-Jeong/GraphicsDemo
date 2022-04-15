@@ -48,6 +48,7 @@ struct GLHelper
 	static GLdouble fps;
 	static std::string title;
 	static GLFWwindow* ptr_window;
+	static bool mouse_pressed;
 };
 
 #endif /* GLHELPER_H */

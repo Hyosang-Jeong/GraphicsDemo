@@ -10,6 +10,8 @@
 #include"tests/Toon_Fog.h"
 #include"tests/ValueNoise.h"
 #include"tests/GradientNoise.h"
+#include"tests/Curve.h"
+
 static void draw();
 static void update();
 static void init();
@@ -20,10 +22,11 @@ enum DEMO
     TRIANGLE,
     TOON_FOG,
     VALUE_NOISE,
-    GRADIENT_NOISE
+    GRADIENT_NOISE,
+    CURVE
 };
 std::vector<Test*> tests;
-DEMO current = GRADIENT_NOISE;
+DEMO current = CURVE;
 
 int main() 
 {
@@ -32,12 +35,13 @@ int main()
     Toon_Fog toon_fog;
     Noise value_noise;
     Gradient_Noise gradient_noise;
+    CurveTest curve_test;
 
     tests.push_back(&triangle);
     tests.push_back(&toon_fog);
     tests.push_back(&value_noise);
     tests.push_back(&gradient_noise);
-
+    tests.push_back(&curve_test);
     init();
 
     while (!glfwWindowShouldClose(GLHelper::ptr_window)) 
@@ -98,7 +102,7 @@ void demo_switch()
 }
 static void init() {
 
-    if (!GLHelper::init(1600, 1600, "Class Project")) {
+    if (!GLHelper::init(1600, 1000, "Class Project")) {
 
         std::cout << "Unable to create OpenGL context" << std::endl;
         std::exit(EXIT_FAILURE);
