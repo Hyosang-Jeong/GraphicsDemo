@@ -23,7 +23,7 @@ enum DEMO
     GRADIENT_NOISE
 };
 std::vector<Test*> tests;
-DEMO current = GRADIENT_NOISE;
+DEMO current = TRIANGLE;
 
 int main() 
 {
