@@ -99,6 +99,14 @@ void demo_switch()
         current = GRADIENT_NOISE;
         tests[current]->init();
     }
+    if (ImGui::Button("Hermite Curve"))
+    {
+        tests[current]->UnLoad();
+        current = CURVE;
+        tests[current]->init();
+    }
+
+
 }
 static void init() {
 

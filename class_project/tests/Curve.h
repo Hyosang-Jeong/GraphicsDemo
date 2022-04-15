@@ -13,6 +13,12 @@ and this class inherited by Test, So it has all function what Test class have.
 #include <GL/glew.h> 
 #include"../glslshader.h"
 
+struct Point
+{
+	glm::vec2 pos;
+	glm::vec2 tangent;
+};
+
 class CurveTest : public Test
 {
 public:
@@ -22,13 +28,20 @@ public:
 	void Update(float deltaTime)  override;
 	void Draw() override;
 	void UnLoad() override;
+	void OnImGuiRender() override;
+
+
 	void send_data();
+	void send_derive_data();
 	void setup_shader(std::string shader);
-	void compute_vertices(int num_vertices, glm::vec2 start, glm::vec2 end, glm::vec2 derive_start, glm::vec2 derive_end);
+	void compute_vertices();
 	void draw_curve();
 	void draw_derives();
 	void update_vertice();
-	std::vector<glm::vec2> vertices;
+	bool in_mouse(double mouse_pos_x, double mouse_pos_y, glm::vec2 pos);
+	void add_vertex();
+	void clear_vertices();
+	
 
 private:
 	GLuint VAO;
@@ -38,12 +51,9 @@ private:
 	GLuint Derive_VAO;
 	GLuint Derive_VBO;
 
-	glm::vec2 start;
-	glm::vec2 end;
-	glm::vec2 derive_start;
-	glm::vec2 derive_end;
+	std::vector<glm::vec2> vertices;
+	std::vector<Point> start_point;
+	std::vector<Point> end_point;
 
-
-
-	bool is_pressing[4] = { false };
+	int num_vertices;
 };

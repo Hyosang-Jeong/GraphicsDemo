@@ -4,6 +4,7 @@
 #include <imgui_impl_glfw.h>
 #include<vector>
 #include"../glhelper.h"
+#include<random>
 using namespace glm;
 
 CurveTest::CurveTest()
@@ -16,15 +17,20 @@ CurveTest::~CurveTest()
 
 void CurveTest::init()
 {
-   start = { -0.5, 0 };
-   end = { 0.5, 0 };
-   derive_start={ -0.7,- 0.5 };
-   derive_end = { 0.5, -0.5 };
+    if (start_point.size() != 0)
+    {
+        clear_vertices();
+    }
+    else
+    {
+        start_point.push_back({ { -0.5,0 },{ -0.7,-0.5} });
+        end_point.push_back({ { 0.5, 0 },{ 0.5, -0.5} });
+    }
+    num_vertices = 10;
 
-    compute_vertices(10, start, end, derive_start, derive_end);
+    compute_vertices();
     send_data();
     setup_shader("curve");
-
 }
 
 void CurveTest::Update(float deltaTime)
@@ -35,24 +41,55 @@ void CurveTest::Update(float deltaTime)
 void CurveTest::Draw()
 {
     glClearColor(0,0,0,1);
-    glClear(GL_COLOR_BUFFER_BIT );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     Prog.Use();
     glLineWidth(3.f);
 
     draw_derives();
     draw_curve();
 
-
-
     glLineWidth(1.f);
     glPointSize(1.f);
+
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    OnImGuiRender();
+
 }
 
 void CurveTest::UnLoad()
 {
+}
+
+void CurveTest::OnImGuiRender()
+{
+    if (ImGui::Button("Add Vertex") == true)
+    {
+        add_vertex();
+    }
+    if (ImGui::Button("Clear") == true)
+    {
+        clear_vertices();
+    }
+    if (ImGui::SliderInt("Vertice Number", &num_vertices, 10, 100))
+    {
+        compute_vertices();
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
+
+        std::vector<Point> tmp;
+        for (int i = 0; i < start_point.size(); i++)
+        {
+            tmp.push_back(start_point[i]);
+            tmp.push_back(end_point[i]);
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+    }
 }
 
 void CurveTest::send_data()
@@ -65,17 +102,24 @@ void CurveTest::send_data()
     // position attribute
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    
+    send_derive_data();
+}
 
-    vec2 derives[] = {
-        derive_start,start,
-        derive_end,end
-    };
+void CurveTest::send_derive_data()
+{
+    std::vector<Point> tmp;
+    for (int i = 0; i < start_point.size(); i++)
+    {
+        tmp.push_back(start_point[i]);
+        tmp.push_back(end_point[i]);
+    }
     glGenVertexArrays(1, &Derive_VAO);
     glGenBuffers(1, &Derive_VBO);
     glBindVertexArray(Derive_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) *4, &derives[0].x, GL_STATIC_DRAW);
-    // position attribute
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 }
@@ -100,22 +144,26 @@ void CurveTest::setup_shader(std::string shader)
 }
 
 
-void CurveTest::compute_vertices(int num_vertices, glm::vec2 start, glm::vec2 end, glm::vec2 derive_start, glm::vec2 derive_end)
+void CurveTest::compute_vertices()
 {
     vertices.clear();
 
 
     float diff =1.f/ static_cast<float>(num_vertices);
     float t = 0;
-    for (int i = 0; i <=num_vertices; i++)
+    for (int num = 0; num < start_point.size(); num++)
     {
-        float start_val = (2 * t * t * t) - (3 * t * t) + 1;
-        float start_derive_val = (t * t * t) - (2 * t * t) + t;
-        float end_val = (-2 * t * t * t) + (3 * t * t);
-        float end_derive_val = (t * t * t) - (t * t);
-        vec2 result = (start_val * start) + (start_derive_val * (derive_start-start)) + (end_val * end) + (end_derive_val * (derive_end-end));
-        vertices.push_back(result);
-        t += diff;
+        for (int i = 0; i <= num_vertices; i++)
+        {
+            float start_val = (2 * t * t * t) - (3 * t * t) + 1;
+            float start_derive_val = (t * t * t) - (2 * t * t) + t;
+            float end_val = (-2 * t * t * t) + (3 * t * t);
+            float end_derive_val = (t * t * t) - (t * t);
+            vec2 result = (start_val * start_point[num].pos) + (start_derive_val * (start_point[num].tangent - start_point[num].pos)) + (end_val * end_point[num].pos) + (end_derive_val * (end_point[num].tangent - end_point[num].pos));
+            vertices.push_back(result);
+            t += diff;
+        }
+        t = 0;
     }
 
 }
@@ -123,21 +171,21 @@ void CurveTest::compute_vertices(int num_vertices, glm::vec2 start, glm::vec2 en
 void CurveTest::draw_curve()
 {
     glBindVertexArray(VAO);
-    glVertexAttrib3f(1, 1.f, 1.0f, 1.f); // white color for line
-    glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
     glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points
     glPointSize(10.f);
     glDrawArrays(GL_POINTS, 0, vertices.size());
+    glVertexAttrib3f(1, 1.f, 1.0f, 1.f); // white color for line
+    glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 }
 
 void CurveTest::draw_derives()
 {
     glBindVertexArray(Derive_VAO);
-    glVertexAttrib3f(1, 0.f, 1.0f, 0.f); //for line
-    glDrawArrays(GL_LINES, 0, 4);
     glVertexAttrib3f(1, 1.f, 1.0f, 0.f); // for points
     glPointSize(10.f);
-    glDrawArrays(GL_POINTS, 0, 4);
+    glDrawArrays(GL_POINTS, 0, start_point.size() * 4);
+    glVertexAttrib3f(1, 0.f, 1.0f, 0.f); //for line
+    glDrawArrays(GL_LINES, 0, start_point.size() * 4);
 }
 
 void CurveTest::update_vertice()
@@ -153,80 +201,110 @@ void CurveTest::update_vertice()
     mouse_pos_x = ((mouse_pos_x / static_cast<double>(GLHelper::width))   *   2)  -  1;
     mouse_pos_y = ((mouse_pos_y / static_cast<double>(GLHelper::height))  *  -2) + 1;
 
-    float offset = 0.01f;
-
     if (GLHelper::mouse_pressed == true)
     {
-        if (mouse_pos_x >= start.x - offset && mouse_pos_x <= start.x + offset && 
-            mouse_pos_y >= start.y - offset && mouse_pos_y <= start.y + offset)
+
+        for (int i = 0; i < start_point.size(); i++)
         {
-            if((is_pressing[1]||is_pressing[2]||is_pressing[3]) == 0)
-            is_pressing[0] = true;
+            vec2 start_pos = start_point[i].pos;
+            vec2  start_derive = start_point[i].tangent;
+            vec2 end_pos = end_point[i].pos;
+            vec2  end_derive = end_point[i].tangent;
+            if (in_mouse(mouse_pos_x,mouse_pos_y, start_pos) == true)
+            {
+                start_point[i].pos.x = mouse_pos_x;
+                start_point[i].pos.y = mouse_pos_y;
+            }
+
+            else if (in_mouse(mouse_pos_x, mouse_pos_y, start_derive) == true)
+            {
+                start_point[i].tangent.x = mouse_pos_x;
+                start_point[i].tangent.y = mouse_pos_y;
+            }
+
+            else  if (in_mouse(mouse_pos_x, mouse_pos_y, end_pos) == true)
+            {
+                end_point[i].pos.x = mouse_pos_x;
+                end_point[i].pos.y = mouse_pos_y;
+            }
+
+            else if (in_mouse(mouse_pos_x, mouse_pos_y, end_derive) == true)
+            {
+                end_point[i].tangent.x = mouse_pos_x;
+                end_point[i].tangent.y = mouse_pos_y;
+            }
         }
-        
-        else if (mouse_pos_x >= end.x - offset && mouse_pos_x <= end.x + offset && 
-            mouse_pos_y >= end.y - offset && mouse_pos_y <= end.y + offset)
-        {
-            if ((is_pressing[0] || is_pressing[2] || is_pressing[3]) == 0)
-            is_pressing[1] = true;
-
-        }
-
-        else if (mouse_pos_x >= (derive_start.x - offset) && mouse_pos_x <=( derive_start.x + offset) && 
-            mouse_pos_y >= (derive_start.y - offset) && mouse_pos_y <= (derive_start.y + offset))
-        {
-            if ((is_pressing[1] || is_pressing[0] || is_pressing[3]) == 0)
-            is_pressing[2] = true;
-
-        }
-
-        else  if (mouse_pos_x >= derive_end.x - offset && mouse_pos_x <= derive_end.x + offset 
-            && mouse_pos_y >= derive_end.y - offset && mouse_pos_y <= derive_end.y + offset)
-        {
-            if ((is_pressing[1] || is_pressing[2] || is_pressing[0]) == 0)
-            is_pressing[3] = true;
-        }
-
     }
-    else
-    {
-        is_pressing[0] = false;
-        is_pressing[1] = false;
-        is_pressing[2] = false;
-        is_pressing[3] = false;
-    }
-
-    if (is_pressing[0] == true)
-    {
-        start.x = mouse_pos_x;
-        start.y = mouse_pos_y;
-    }
-    if (is_pressing[1] == true)
-    {
-        end.x = mouse_pos_x;
-        end.y = mouse_pos_y;
-    }
-    if (is_pressing[2] == true)
-    {
-        derive_start.x = mouse_pos_x;
-        derive_start.y = mouse_pos_y;
-    }
-    if (is_pressing[3] == true)
-    {
-        derive_end.x = mouse_pos_x;
-        derive_end.y = mouse_pos_y;
-    }
-
-    compute_vertices(10, start, end, derive_start, derive_end);
+    compute_vertices();
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
 
-    vec2 derives[] = 
+
+    std::vector<Point> tmp;
+    for (int i = 0; i < start_point.size(); i++)
     {
-    derive_start,start,
-     derive_end,end
-    };
+        tmp.push_back(start_point[i]);
+        tmp.push_back(end_point[i]);
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+}
+
+bool CurveTest::in_mouse(double mouse_pos_x, double mouse_pos_y, glm::vec2 pos)
+{
+    float offset = 0.01f;
+    if (mouse_pos_x >= pos.x - offset && mouse_pos_x <= pos.x + offset
+        && mouse_pos_y >= pos.y - offset && mouse_pos_y <= pos.y + offset)
+    {
+        return true;
+    }
+    return false;
+}
+
+void CurveTest::add_vertex()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<float> distrFloat(-0.5, 0.5);
+
+    start_point.push_back(*(end_point.end()-1));
+    end_point.push_back({ { distrFloat(gen), distrFloat(gen) },{ distrFloat(gen), distrFloat(gen)} });
+
+    compute_vertices();
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
+
+    std::vector<Point> tmp;
+    for (int i = 0; i < start_point.size(); i++)
+    {
+        tmp.push_back(start_point[i]);
+        tmp.push_back(end_point[i]);
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 4, &derives[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+}
+
+void CurveTest::clear_vertices()
+{
+    start_point.clear();
+    end_point.clear();
+
+    start_point.push_back({ { -0.5,0 },{ -0.7,-0.5} });
+    end_point.push_back({ { 0.5, 0 },{ 0.5, -0.5} });
+    compute_vertices();
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
+
+    std::vector<Point> tmp;
+    for (int i = 0; i < start_point.size(); i++)
+    {
+        tmp.push_back(start_point[i]);
+        tmp.push_back(end_point[i]);
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
 }
