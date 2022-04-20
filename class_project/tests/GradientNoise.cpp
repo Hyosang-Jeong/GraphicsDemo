@@ -241,7 +241,7 @@ void Gradient_Noise::update_sun(float dt)
 
             glm::vec3 derives{ 0,0,0 };
 
-            float val = (evalute(glm::vec3((v.pos.x + 0.5 + dt * 0.005) * 255, (v.pos.y + 0.5 + dt * 0.001) * 255, (v.pos.z + 0.5 + dt * 0.0001) * 255) * frequency, derives) + 1) * 0.5f;
+            float val = (evalute(glm::vec3((v.pos.x + 0.5 + dt * 0.005) * 255, (v.pos.y + 0.5 + dt * 0.001) * 255, (v.pos.z + 0.5 + dt * 0.0001) * 255) * frequency, derives) + 1) * 0.8f;
             v.color = glm::vec3(1.0, 0.3, 0) * val;
 
             addVertex(sun, v);
