@@ -26,7 +26,9 @@ enum DEMO
     CURVE
 };
 std::vector<Test*> tests;
+
 DEMO current = CURVE;
+
 
 int main() 
 {
