@@ -34,7 +34,8 @@ public:
 	void send_data();
 	void send_derive_data();
 	void setup_shader(std::string shader);
-	void compute_vertices();
+	void hermite_curve();
+	void catmullRom_curve();
 	void draw_curve();
 	void draw_derives();
 	void update_vertice();
@@ -56,4 +57,5 @@ private:
 	std::vector<Point> end_point;
 
 	int num_vertices;
+	bool is_hermite;
 };
