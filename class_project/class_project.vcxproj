@@ -167,6 +167,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="glhelper.cpp" />
     <ClCompile Include="glslshader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="tests\ValueNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="glhelper.h" />
     <ClInclude Include="glslshader.h" />
     <ClInclude Include="math.h" />
