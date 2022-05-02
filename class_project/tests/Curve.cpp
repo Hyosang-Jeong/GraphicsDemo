@@ -7,8 +7,8 @@ Note : This file is for Fifth demo that shows
        2 demo that(Hermite Curve and Catmull Rom Curve).
        All of these demo, you can control vertices by Imgui.
        Also If you clicked Add vertex, you can add vertex. so it add the end point of the line.
-       Also it has Imgui implementing for showing another demo in left top side.
-       Gradient Noise is 2D gradient plane and sun is 3D, we want to show like a sun burning.
+       Also it has Imgui implementing forclearing all vertex without default vertex.
+       if you click that button you can clear all.
 
 *//*__________________________________________________________________________*/
 #include "Curve.h"
