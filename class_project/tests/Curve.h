@@ -1,10 +1,11 @@
 /*!
 @file    Curve.h
 @author  Hyosang Jung, Jaewoo.choi
-@date    04/14/2022
+@date    05/02/2022
 
-Note : This file contains the declaration TriangleTest class member function
+Note : This file contains the declaration CurveTest class member function
 and this class inherited by Test, So it has all function what Test class have.
+Also, we have Point struct, it has vec2 position, and vec2 tangent
 
 *//*__________________________________________________________________________*/
 #pragma once
@@ -42,7 +43,7 @@ public:
 	bool in_mouse(double mouse_pos_x, double mouse_pos_y, glm::vec2 pos);
 	void add_vertex();
 	void clear_vertices();
-	
+	void calculate(std::vector<glm::vec2> vertice);
 
 private:
 	GLuint VAO;
@@ -58,4 +59,6 @@ private:
 
 	int num_vertices;
 	bool is_hermite;
+	float t_min;
+	float t_max;
 };

@@ -1,3 +1,16 @@
+/*!
+@file    Curve.cpp
+@author  Hyosang Jung, Jaewoo.choi
+@date    05/02/2022
+
+Note : This file is for Fifth demo that shows
+       2 demo that(Hermite Curve and Catmull Rom Curve).
+       All of these demo, you can control vertices by Imgui.
+       Also If you clicked Add vertex, you can add vertex. so it add the end point of the line.
+       Also it has Imgui implementing for showing another demo in left top side.
+       Gradient Noise is 2D gradient plane and sun is 3D, we want to show like a sun burning.
+
+*//*__________________________________________________________________________*/
 #include "Curve.h"
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -18,6 +31,8 @@ CurveTest::~CurveTest()
 void CurveTest::init()
 {
     is_hermite = true;
+    t_min = 0;
+    t_max = 1;
     if (start_point.size() != 0)
     {
         clear_vertices();
@@ -74,6 +89,41 @@ void CurveTest::OnImGuiRender()
     {
         is_hermite = false;
     }
+    if (is_hermite == false)
+    {
+        if (ImGui::SliderFloat("t_min", &t_min, -1.f, 0.f))
+        {
+            catmullRom_curve();
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
+
+            std::vector<Point> tmp;
+            for (int i = 0; i < start_point.size(); i++)
+            {
+                tmp.push_back(start_point[i]);
+                tmp.push_back(end_point[i]);
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+        }
+        if (ImGui::SliderFloat("t_max", &t_max, 1.f, 2.f))
+        {
+            catmullRom_curve();
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
+
+            std::vector<Point> tmp;
+            for (int i = 0; i < start_point.size(); i++)
+            {
+                tmp.push_back(start_point[i]);
+                tmp.push_back(end_point[i]);
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+        }
+    }
     if (ImGui::Button("Add Vertex") == true)
     {
         add_vertex();
@@ -81,6 +131,8 @@ void CurveTest::OnImGuiRender()
     if (ImGui::Button("Clear") == true)
     {
         clear_vertices();
+        t_min = 0;
+        t_max = 1;
     }
     if (ImGui::SliderInt("Vertice Number", &num_vertices, 10, 100))
     {
@@ -90,6 +142,7 @@ void CurveTest::OnImGuiRender()
             catmullRom_curve();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+
 
         std::vector<Point> tmp;
         for (int i = 0; i < start_point.size(); i++)
@@ -108,7 +161,7 @@ void CurveTest::send_data()
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
     // position attribute
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -159,6 +212,7 @@ void CurveTest::hermite_curve()
     vertices.clear();
 
 
+
     float diff =1.f/ static_cast<float>(num_vertices);
     float t = 0;
     for (int num = 0; num < start_point.size(); num++)
@@ -181,10 +235,13 @@ void CurveTest::hermite_curve()
 void CurveTest::catmullRom_curve()
 {
     vertices.clear();
+    calculate(vertices);
+}
 
-    float diff = 1.f / static_cast<float>(num_vertices);
-    float t = 0;
-
+void CurveTest::calculate(std::vector<glm::vec2> vertice)
+{
+    float diff = (t_max - t_min) / static_cast<float>(num_vertices);
+    float t = t_min;
     for (int num = 0; num < start_point.size(); num++)
     {
         vec2 P0 = start_point[num].tangent;
@@ -194,27 +251,27 @@ void CurveTest::catmullRom_curve()
 
         for (int i = 0; i <= num_vertices; i++)
         {
-            float start_val = (-( t * t * t) / 2.f) + (t*t) -  (t/2.f) ;
-            float start_derive_val = ((t * t * t)*1.5f)+ ( - t * t * 2.5f) + 1;
-            float end_val = ((-t * t * t) * 1.5f) + (t * t * 2.f) + (t/2.f);
-            float end_derive_val = (t * t * t * 0.5f) - (t * t*0.5f);
+            float start_val = (-(t * t * t) / 2.f) + (t * t) - (t / 2.f);
+            float start_derive_val = ((t * t * t) * 1.5f) + (-t * t * 2.5f) + 1;
+            float end_val = ((-t * t * t) * 1.5f) + (t * t * 2.f) + (t / 2.f);
+            float end_derive_val = (t * t * t * 0.5f) - (t * t * 0.5f);
             vec2 result = (start_val * P0) + (start_derive_val * P1) + (end_val * P2) + (end_derive_val * P3);
             vertices.push_back(result);
             t += diff;
         }
-        t = 0;
+        t = t_min;
     }
-
 }
-
 void CurveTest::draw_curve()
 {
     glBindVertexArray(VAO);
     glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points
     glPointSize(10.f);
     glDrawArrays(GL_POINTS, 0, vertices.size());
+
     glVertexAttrib3f(1, 1.f, 1.0f, 1.f); // white color for line
     glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
 }
 
 void CurveTest::draw_derives()
@@ -280,7 +337,7 @@ void CurveTest::update_vertice()
         catmullRom_curve();
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
 
 
     std::vector<Point> tmp;
@@ -295,7 +352,7 @@ void CurveTest::update_vertice()
 
 bool CurveTest::in_mouse(double mouse_pos_x, double mouse_pos_y, glm::vec2 pos)
 {
-    float offset = 0.05f;
+    float offset = 0.07f;
     if (mouse_pos_x >= pos.x - offset && mouse_pos_x <= pos.x + offset
         && mouse_pos_y >= pos.y - offset && mouse_pos_y <= pos.y + offset)
     {
@@ -320,7 +377,7 @@ void CurveTest::add_vertex()
         catmullRom_curve();
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
 
 
     std::vector<Point> tmp;
@@ -346,7 +403,7 @@ void CurveTest::clear_vertices()
     else
         catmullRom_curve();
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
 
 
     std::vector<Point> tmp;
