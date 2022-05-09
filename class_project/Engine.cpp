@@ -12,6 +12,7 @@ enum Demo
     GRADIENT_NOISE,
     CURVE,
     GEOMETRY
+
 };
 
 Engine::Engine()
@@ -110,10 +111,10 @@ void Engine::demo_switch()
         current = CURVE;
         tests[current]->init();
     }
-    if (ImGui::Button("Geometry"))
+    if (ImGui::Button("Geometry Demo"))
     {
-	tests[current]->UnLoad();
-	current = GEOMETRY;
-	tests[current]->init();
+        tests[current]->UnLoad();
+        current = GEOMOTRY;
+        tests[current]->init();
     }
 }
