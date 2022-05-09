@@ -114,7 +114,7 @@ void Engine::demo_switch()
     if (ImGui::Button("Geometry Demo"))
     {
         tests[current]->UnLoad();
-        current = GEOMOTRY;
+        current = GEOMETRY;
         tests[current]->init();
     }
 }

@@ -15,7 +15,7 @@ int main()
     Noise* value_noise = new Noise();
     Gradient_Noise* gradient_noise = new Gradient_Noise();
     CurveTest* curve_test = new CurveTest();
-    GeometryTest* geometry_test = new GeometryTest();
+    Geometry_test* geometry_test = new Geometry_test();
 
    engine.Add(triangle);
    engine.Add(toon_fog);
