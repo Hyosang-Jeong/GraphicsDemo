@@ -10,7 +10,8 @@ enum Demo
     TOON_FOG,
     VALUE_NOISE,
     GRADIENT_NOISE,
-    CURVE
+    CURVE,
+    GEOMOTRY
 };
 
 Engine::Engine()
@@ -107,6 +108,12 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = CURVE;
+        tests[current]->init();
+    }
+    if (ImGui::Button("Geometry Demo"))
+    {
+        tests[current]->UnLoad();
+        current = GEOMOTRY;
         tests[current]->init();
     }
 }

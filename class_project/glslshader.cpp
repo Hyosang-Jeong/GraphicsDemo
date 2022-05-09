@@ -56,9 +56,11 @@ GLSLShader::CompileShaderFromFile(GLenum shader_type, const std::string& file_na
         log_string = "File not found";
         return GL_FALSE;
     }
-    if (pgm_handle <= 0) {
+    if (pgm_handle <= 0)
+    {
         pgm_handle = glCreateProgram();
-        if (0 == pgm_handle) {
+        if (0 == pgm_handle)
+        {
             log_string = "Cannot create program handle";
             return GL_FALSE;
         }

@@ -48,6 +48,9 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\geometry_test.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glhelper.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\geometry_test.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

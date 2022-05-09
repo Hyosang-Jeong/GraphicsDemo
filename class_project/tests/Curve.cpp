@@ -144,6 +144,7 @@ void CurveTest::setup_shader(std::string shader)
     std::vector<std::pair<GLenum, std::string>> shdr_files;
     shdr_files.push_back(std::make_pair(GL_VERTEX_SHADER, vert));
     shdr_files.push_back(std::make_pair(GL_FRAGMENT_SHADER, frag));
+    
     Prog.CompileLinkValidate(shdr_files);
     if (GL_FALSE == Prog.IsLinked())
     {

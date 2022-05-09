@@ -487,7 +487,7 @@ void Mesh::setup_mesh()
     glDepthFunc(GL_LESS);
 
   // glEnable(GL_CULL_FACE);     /*  For efficiency, not drawing back-face */
-}
+}  
 
 void Mesh::compute_matrix([[maybe_unused]]float delta_time)
 {
