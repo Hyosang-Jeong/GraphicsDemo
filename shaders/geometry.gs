@@ -26,9 +26,9 @@ vec3 GetNormal(vec4 a_0,vec4 a_1,vec4 a_2)
 }  
 vec4 explode(vec4 position, vec3 normal)
 {
-    vec3 direction = normal * (((random2d(vec3(position.xyz)+1.5)) +sin(time*10)*(random2d(vec3(normal.xyz)+1.5)) + 1.0) / 2.0); 
+    vec3 direction = normal * (((random2d(vec3(position.xyz)+1.5)) +sin(time*5)*(random2d(vec3(normal.xyz)+1.5)) + 1.0) / 2.0); 
 
-    return  position + vec4( direction, 0.0);
+    return  position + vec4( direction * abs(sin(time)), 0.0);
 } 
 
 void main(void) 
@@ -39,50 +39,50 @@ void main(void)
     vec3  tmp = GetNormal(gl_in[0].gl_Position,gl_in[1].gl_Position,gl_in[2].gl_Position);
 
     gl_Position = gl_in[0].gl_Position; 
-    gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = tmp; 
     EmitVertex();
 
     gl_Position = explode(gl_in[0].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = tmp; 
     EmitVertex();
 
     gl_Position = gl_in[1].gl_Position; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = tmp; 
     EmitVertex();
 
 
     gl_Position = explode(gl_in[1].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM =  nrm[1]; 
     EmitVertex();
 
     gl_Position = gl_in[2].gl_Position; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[2]; 
     EmitVertex();
 
     gl_Position = explode(gl_in[2].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[2]; 
     EmitVertex();
 
     gl_Position = gl_in[0].gl_Position; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[0]; 
     EmitVertex();
 
     gl_Position = explode(gl_in[0].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[0]; 
     EmitVertex();
@@ -93,20 +93,20 @@ void main(void)
 
     //for top triangle
     gl_Position = explode(gl_in[0].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[0]; 
     EmitVertex();
 
     gl_Position = explode(gl_in[1].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM =  nrm[1]; 
     EmitVertex();
 
 
     gl_Position = explode(gl_in[2].gl_Position, tmp) ; 
-        gl_PointSize =12.0;
+    
     FragPos =vec3(gl_Position);
     NRM = nrm[2]; 
     EmitVertex();
