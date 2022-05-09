@@ -2,9 +2,9 @@
 @file    geometry_test.h
 @author  Hyosang Jung, Jaewoo.choi
 
-@date    05/6/2022
+@date    05/09/2022
 
-Note : This file contains the declaration TriangleTest class member function
+Note : This file contains the declaration geometry_test class member function
 and this class inherited by Test, So it has all function what Test class have.
 
 

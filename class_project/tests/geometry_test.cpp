@@ -1,10 +1,13 @@
 
 /*!
-@file    Curve.cpp
+@file    geometry_test.cpp
 @author  Hyosang Jung, Jaewoo.choi
 @date    05/09/2022
 
-Note : 
+Note : This file is for Sixth demo that shows 2 demo
+       All of these demo, you can control Slices and stacks by Imgui.
+       Also If you clicked Animated, you can see animation.
+       
 
 *//*__________________________________________________________________________*/
 
