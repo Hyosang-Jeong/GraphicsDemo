@@ -29,14 +29,25 @@ Geometry_test::~Geometry_test()
 void Geometry_test::init()
 {
     animated = true;
+    sphere_mode = true;
 	meshes.push_back(CreateSphere(stack, slice));
+    meshes.push_back(CreateSphere(stack, slice));
+    meshes.push_back(CreateSphere(stack, slice));
     meshes.push_back(CreateSphere(stack, slice));
     meshes[0].position = { 0,0,0 };
     meshes[0].scale = { 1,1,1 };
     meshes[0].rotation = { 0,0,0 };
+
     meshes[1].position = { 0,0,0 };
     meshes[1].scale = { 1,1,1 };
     meshes[1].rotation = { 0,0,0 };
+
+    meshes[2].position = { 0,0,-2 };
+    meshes[2].scale = { 1,1,1 };
+    meshes[2].rotation = { 0,0,0 };
+
+
+
     std::string vert = "../shaders/";
     std::string geo = "../shaders/";
     std::string frag = "../shaders/";
@@ -56,6 +67,7 @@ void Geometry_test::init()
         std::cout << meshes[0].renderProg.GetLog() << std::endl;
         std::exit(EXIT_FAILURE);
     }
+
     shdr_files.clear();
     vert = "../shaders/";
     frag = "../shaders/";
@@ -63,13 +75,31 @@ void Geometry_test::init()
     frag = frag + "triangle" + ".frag";
     shdr_files.push_back(std::make_pair(GL_VERTEX_SHADER, vert));
     shdr_files.push_back(std::make_pair(GL_FRAGMENT_SHADER, frag));
-
     meshes[1].renderProg.CompileLinkValidate(shdr_files);
+
+    shdr_files.clear();
+    vert = "../shaders/";
+    geo = "../shaders/";
+    frag = "../shaders/";
+
+    vert = vert + "geometry_virus" + ".vert";
+    geo = geo + "geometry_virus" + ".gs";
+    frag = frag + "geometry_virus" + ".frag";
+    shdr_files.push_back(std::make_pair(GL_VERTEX_SHADER, vert));
+    shdr_files.push_back(std::make_pair(GL_GEOMETRY_SHADER, geo));
+    shdr_files.push_back(std::make_pair(GL_FRAGMENT_SHADER, frag));
+    meshes[2].renderProg.CompileLinkValidate(shdr_files);
+    if (GL_FALSE == meshes[2].renderProg.IsLinked())
+    {
+        std::cout << "Unable to compile/link/validate shader programs" << "\n";
+        std::cout << meshes[2].renderProg.GetLog() << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
 
     meshes[0].setup_mesh();
     meshes[1].setup_mesh();
-
+    meshes[2].setup_mesh();
 
 
     view = {
@@ -99,8 +129,6 @@ void Geometry_test::Update(float deltaTime)
 
 void Geometry_test::Draw()
 {
-    glClearColor(0.0,0.0,0.0,1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -110,11 +138,25 @@ void Geometry_test::Draw()
 
     if (animated)
     {
-        meshes[0].renderProg.Use();
-        meshes[0].draw(useNormal, view, projection, light, -eye);
+        if (sphere_mode == true)
+        {
+            glClearColor(0.0, 0.0, 0.0, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            meshes[0].renderProg.Use();
+            meshes[0].draw(useNormal, view, projection, light, -eye);
+        }
+        else
+        {
+            glClearColor(1, 1, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            meshes[2].renderProg.Use();
+            meshes[2].draw(useNormal, view, projection, light, -eye);
+        }
     }
     else
     {
+        glClearColor(0.0, 0.0, 0.0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         meshes[1].renderProg.Use();
         meshes[1].draw(useNormal, view, projection, light, -eye);
     }
@@ -137,5 +179,15 @@ void Geometry_test::OnImGuiRender()
         init();
     }
     ImGui::Checkbox("Animated", &animated);
+
+    if (ImGui::Button("Sphere mode_1"))
+    {
+        sphere_mode = true;
+   }
+
+    if (ImGui::Button("Sphere mode_2"))
+    {
+        sphere_mode = false;
+    }
 }
 

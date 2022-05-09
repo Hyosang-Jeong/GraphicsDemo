@@ -41,6 +41,7 @@ private:
 	glm::vec3 light;
 	float timer{ 0 };
 	bool animated{ true };
+	bool sphere_mode;
 	int stack;
 	int slice;
 
