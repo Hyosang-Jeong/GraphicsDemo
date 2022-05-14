@@ -51,6 +51,9 @@
     <ClCompile Include="tests\geometry_test.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\tessellation.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glhelper.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests\geometry_test.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\tessellation.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>

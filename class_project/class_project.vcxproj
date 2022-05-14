@@ -175,6 +175,7 @@
     <ClCompile Include="tests\Curve.cpp" />
     <ClCompile Include="tests\geometry_test.cpp" />
     <ClCompile Include="tests\GradientNoise.cpp" />
+    <ClCompile Include="tests\tessellation.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
     <ClCompile Include="tests\ValueNoise.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="tests\Curve.h" />
     <ClInclude Include="tests\geometry_test.h" />
     <ClInclude Include="tests\GradientNoise.h" />
+    <ClInclude Include="tests\tessellation.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />
     <ClInclude Include="tests\Toon_Fog.h" />
