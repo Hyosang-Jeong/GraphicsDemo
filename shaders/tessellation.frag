@@ -1,20 +1,25 @@
 #version 450 core
 
-out vec4 FragColor;
+out vec4 outColor;
 
 in vec3 gNormal;
 
-uniform vec3 LightPosition;
-uniform vec3 diff;
-uniform vec3 Ambient;
+
+uniform vec4 color;
+uniform vec3 lightPos;
+uniform vec3 viewPos;
+vec3 norm = normalize(gNormal);
+
+vec3 lightDir = normalize(lightPos); 
+
+vec3 lightColor = vec3(1.0, 1, 1);
+
+float diff = max(dot(norm, lightDir), 0.5f);
 
 void main(void)
 {
-	vec3 N = normalize(gNormal);
-	vec3 L = normalize(-LightPosition);
-	float nl = max(dot(N,L),0);
+	outColor =  color * vec4(lightColor,1.0);
 
-	vec3 color = nl * diff + Ambient;
+	outColor = diff * outColor;
 
-	FragColor = vec4(color,1);
 }

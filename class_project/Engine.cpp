@@ -11,8 +11,8 @@ enum Demo
     VALUE_NOISE,
     GRADIENT_NOISE,
     CURVE,
-    GEOMETRY
-
+    GEOMETRY,
+    TESSELLATION
 };
 
 Engine::Engine()
@@ -115,6 +115,12 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = GEOMETRY;
+        tests[current]->init();
+    }
+    if (ImGui::Button("Tessellation Demo"))
+    {
+        tests[current]->UnLoad();
+        current = TESSELLATION;
         tests[current]->init();
     }
 }

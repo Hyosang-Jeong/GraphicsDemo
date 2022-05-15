@@ -6,7 +6,7 @@
 #include"tests/GradientNoise.h"
 #include"tests/Curve.h"
 #include"tests/geometry_test.h"
-
+#include"tests/tessellation.h"
 int main() 
 {
     Engine engine;
@@ -16,13 +16,14 @@ int main()
     Gradient_Noise* gradient_noise = new Gradient_Noise();
     CurveTest* curve_test = new CurveTest();
     Geometry_test* geometry_test = new Geometry_test();
-
+    Tessellation_test* tessellation_test = new Tessellation_test();
    engine.Add(triangle);
    engine.Add(toon_fog);
    engine.Add(value_noise);
    engine.Add(gradient_noise);
    engine.Add(curve_test);
    engine.Add(geometry_test);
+   engine.Add(tessellation_test);
 
    engine.init();
 
