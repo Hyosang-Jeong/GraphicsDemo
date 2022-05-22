@@ -60,6 +60,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Post-Mortem.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glhelper.h">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Post-Mortem.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -177,6 +177,7 @@
     <ClCompile Include="tests\geometry_test.cpp" />
     <ClCompile Include="tests\GradientNoise.cpp" />
     <ClCompile Include="tests\Shadow.cpp" />
+    <ClCompile Include="tests\Post-Mortem.cpp" />
     <ClCompile Include="tests\tessellation.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="tests\geometry_test.h" />
     <ClInclude Include="tests\GradientNoise.h" />
     <ClInclude Include="tests\Shadow.h" />
+    <ClInclude Include="tests\Post-Mortem.h" />
     <ClInclude Include="tests\tessellation.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />
