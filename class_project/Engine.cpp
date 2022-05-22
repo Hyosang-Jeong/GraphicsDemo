@@ -12,7 +12,8 @@ enum Demo
     GRADIENT_NOISE,
     CURVE,
     GEOMETRY,
-    TESSELLATION
+    TESSELLATION,
+    SHADOW
 };
 
 Engine::Engine()
@@ -29,6 +30,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
+    current = SHADOW;
 }
 
 Engine::~Engine()
@@ -121,6 +123,12 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = TESSELLATION;
+        tests[current]->init();
+    }
+    if (ImGui::Button("Shadow Demo"))
+    {
+        tests[current]->UnLoad();
+        current = SHADOW;
         tests[current]->init();
     }
 }

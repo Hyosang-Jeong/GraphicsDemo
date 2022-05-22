@@ -49,6 +49,7 @@ struct GLHelper
 	static std::string title;
 	static GLFWwindow* ptr_window;
 	static bool mouse_pressed;
+
 };
 
 #endif /* GLHELPER_H */

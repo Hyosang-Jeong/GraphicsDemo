@@ -516,9 +516,6 @@ void Mesh::draw(glm::vec3 color, glm::mat4 view, glm::mat4 projection, glm::vec3
     glUniform3fv(LightLoc, 1,  ValuePtr(light_pos));
     glUniform3fv(ViewPosLoc, 1, ValuePtr(view_pos));
 
-    //todo renderProg.use??
-    //renderProg.Use();
-
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 

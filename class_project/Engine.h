@@ -13,5 +13,5 @@ public:
 	bool ShouldClose();
 	void demo_switch();
 	std::vector<Test*> tests;
-	int current{ 6 };
+	int current;
 };

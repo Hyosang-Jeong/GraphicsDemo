@@ -167,6 +167,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="glhelper.cpp" />
     <ClCompile Include="glslshader.cpp" />
@@ -175,12 +176,14 @@
     <ClCompile Include="tests\Curve.cpp" />
     <ClCompile Include="tests\geometry_test.cpp" />
     <ClCompile Include="tests\GradientNoise.cpp" />
+    <ClCompile Include="tests\Shadow.cpp" />
     <ClCompile Include="tests\tessellation.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
     <ClCompile Include="tests\ValueNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="glhelper.h" />
     <ClInclude Include="glslshader.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="tests\Curve.h" />
     <ClInclude Include="tests\geometry_test.h" />
     <ClInclude Include="tests\GradientNoise.h" />
+    <ClInclude Include="tests\Shadow.h" />
     <ClInclude Include="tests\tessellation.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />

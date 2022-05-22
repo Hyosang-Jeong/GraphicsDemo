@@ -25,6 +25,8 @@ GLdouble GLHelper::fps;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 bool GLHelper::mouse_pressed;
+
+
 /*  _________________________________________________________________________ */
 /*! init
 
@@ -52,6 +54,7 @@ bool GLHelper::init(GLint w, GLint h, std::string t) {
     GLHelper::height = h;
     GLHelper::title = t;
     mouse_pressed = false;
+
     // Part 1
     if (!glfwInit()) {
         std::cout << "GLFW init has failed - abort program!!!" << std::endl;
@@ -151,17 +154,21 @@ This function is called when keyboard buttons are pressed.
 When the ESC key is pressed, the close flag of the window is set.
 */
 void GLHelper::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod) {
-    if (GLFW_PRESS == action) {
+    if (GLFW_PRESS == action) 
+    {
 #ifdef _DEBUG
         std::cout << "Key pressed" << std::endl;
 #endif
     }
-    else if (GLFW_REPEAT == action) {
+    else if (GLFW_REPEAT == action) 
+    {
 #ifdef _DEBUG
         std::cout << "Key repeatedly pressed" << std::endl;
 #endif
     }
-    else if (GLFW_RELEASE == action) {
+    else if (GLFW_RELEASE == action) 
+    {
+
 #ifdef _DEBUG
         std::cout << "Key released" << std::endl;
 #endif

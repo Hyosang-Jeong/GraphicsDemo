@@ -25,16 +25,20 @@ GLSLShader::FileExists(std::string const& file_name) {
 }
 
 void
-GLSLShader::DeleteShaderProgram() {
+GLSLShader::DeleteShaderProgram()
+{
     if (pgm_handle > 0) {
         glDeleteProgram(pgm_handle);
     }
 }
 
 GLboolean
-GLSLShader::CompileLinkValidate(std::vector<std::pair<GLenum, std::string>> vec) {
-    for (auto& elem : vec) {
-        if (GL_FALSE == CompileShaderFromFile(elem.first, elem.second.c_str())) {
+GLSLShader::CompileLinkValidate(std::vector<std::pair<GLenum, std::string>> vec) 
+{
+    for (auto& elem : vec)
+    {
+        if (GL_FALSE == CompileShaderFromFile(elem.first, elem.second.c_str()))
+        {
             return GL_FALSE;
         }
     }
@@ -52,7 +56,8 @@ GLSLShader::CompileLinkValidate(std::vector<std::pair<GLenum, std::string>> vec)
 
 GLboolean
 GLSLShader::CompileShaderFromFile(GLenum shader_type, const std::string& file_name) {
-    if (GL_FALSE == FileExists(file_name)) {
+    if (GL_FALSE == FileExists(file_name))
+    {
         log_string = "File not found";
         return GL_FALSE;
     }
@@ -67,7 +72,8 @@ GLSLShader::CompileShaderFromFile(GLenum shader_type, const std::string& file_na
     }
 
     std::ifstream shader_file(file_name, std::ifstream::in);
-    if (!shader_file) {
+    if (!shader_file)
+    {
         log_string = "Error opening file " + file_name;
         return GL_FALSE;
     }
@@ -89,7 +95,8 @@ GLSLShader::CompileShaderFromString(GLenum shader_type,
     }
 
     GLuint shader_handle = 0;
-    switch (shader_type) {
+    switch (shader_type) 
+    {
     case VERTEX_SHADER: shader_handle = glCreateShader(GL_VERTEX_SHADER); break;
     case FRAGMENT_SHADER: shader_handle = glCreateShader(GL_FRAGMENT_SHADER); break;
     case GEOMETRY_SHADER: shader_handle = glCreateShader(GL_GEOMETRY_SHADER); break;
@@ -124,7 +131,8 @@ GLSLShader::CompileShaderFromString(GLenum shader_type,
         }
         return GL_FALSE;
     }
-    else { // attach the shader to the program object
+    else 
+    { // attach the shader to the program object
         glAttachShader(pgm_handle, shader_handle);
         return GL_TRUE;
     }
