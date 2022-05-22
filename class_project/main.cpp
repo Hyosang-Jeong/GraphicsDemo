@@ -7,6 +7,7 @@
 #include"tests/Curve.h"
 #include"tests/geometry_test.h"
 #include"tests/tessellation.h"
+#include"tests/Post-Mortem.h"
 int main() 
 {
     Engine engine;
@@ -17,6 +18,7 @@ int main()
     CurveTest* curve_test = new CurveTest();
     Geometry_test* geometry_test = new Geometry_test();
     Tessellation_test* tessellation_test = new Tessellation_test();
+    PostMortem* postMortem = new PostMortem();
    engine.Add(triangle);
    engine.Add(toon_fog);
    engine.Add(value_noise);
@@ -24,6 +26,7 @@ int main()
    engine.Add(curve_test);
    engine.Add(geometry_test);
    engine.Add(tessellation_test);
+   engine.Add(postMortem);
 
    engine.init();
 

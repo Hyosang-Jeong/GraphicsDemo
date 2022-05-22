@@ -12,7 +12,8 @@ enum Demo
     GRADIENT_NOISE,
     CURVE,
     GEOMETRY,
-    TESSELLATION
+    TESSELLATION,
+    POSTMORTEM
 };
 
 Engine::Engine()
@@ -121,6 +122,12 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = TESSELLATION;
+        tests[current]->init();
+    }
+    if (ImGui::Button("Post Mortem"))
+    {
+        tests[current]->UnLoad();
+        current = POSTMORTEM;
         tests[current]->init();
     }
 }
