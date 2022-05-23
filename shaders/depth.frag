@@ -47,8 +47,9 @@ float ShadowCalculation(vec4 fragPosLightSpace)
         if(projCoords.z >1.0)
         {
             shadow = 0;
-
         }
+
+
         return shadow;
 }
 

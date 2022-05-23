@@ -13,8 +13,8 @@ enum Demo
     CURVE,
     GEOMETRY,
     TESSELLATION,
-    SHADOW,
-    POSTMORTEM
+    SHADOW
+   // POSTMORTEM
 };
 
 Engine::Engine()
@@ -131,10 +131,10 @@ void Engine::demo_switch()
         tests[current]->UnLoad();
         current = SHADOW;
     }
-    if (ImGui::Button("Post Mortem"))
-    {
-        tests[current]->UnLoad();
-        current = POSTMORTEM;
-        tests[current]->init();
-    }
+    //if (ImGui::Button("Post Mortem"))
+    //{
+    //    tests[current]->UnLoad();
+    //    current = POSTMORTEM;
+    //    tests[current]->init();
+    //}
 }

@@ -3,12 +3,17 @@
 @author  Hyosang Jung, Jaewoo.choi
 @date    05/19/2022
 
-Note : This file contains the declaration Toon_Fog class member function
+Note : This file contains the declaration Shadow_test class member function
 and this class inherited by Test, So it has all function what Test class have.
 
 *//*__________________________________________________________________________*/
 #pragma once
-
+enum DepthComponentSize
+{
+    Bit16=0,
+    Bit24,
+    Bit32
+};
 #include"Test.h"
 #include"../Mesh.h"
 #include"../Camera.h"
@@ -35,11 +40,16 @@ private:
 	Mesh sphere;
 	glm::mat4  projection;
 	glm::vec3 light;
-	
+	float borderColor[4];
 
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
 	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 	float near_plane = 0.1f, far_plane = 100.f;
 	float FOV;
+	float polygonFactor;
+	float polygonUnit;
+	bool drawBackFacesForRecordDepthPass = false;
+	int depthBitSize;
+	GLenum depth_component;
 };
