@@ -63,4 +63,5 @@ private:
 	bool drawBackFacesForRecordDepthPass = false;
 	int depthBitSize;
 	GLenum depth_component;
+
 };
