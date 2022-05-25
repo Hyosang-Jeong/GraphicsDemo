@@ -50,8 +50,8 @@ private:
 	GLSLShader Prog;
 	GLuint vpLoc;
 	std::vector<glm::vec3>vertices;
-	glm::vec3 rotate{ 0,0,0 };
-
+	glm::vec3 frustum_rotate;
+	glm::vec3 frustum_front;
 
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
