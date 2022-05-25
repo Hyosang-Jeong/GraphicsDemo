@@ -27,6 +27,7 @@ void Shadow_test::init()
     depth_component = GL_DEPTH_COMPONENT32;
     polygonFactor = 2.0f;
     polygonUnit = 4.0f;
+
     mesh = CreateCube(30, 30);
     sphere = CreateSphere(30, 30);
     plane = CreatePlane(30, 30);
@@ -49,6 +50,8 @@ void Shadow_test::init()
     glUseProgram(plane.renderProg.GetHandle());
     glUniform1f(glGetUniformLocation(plane.renderProg.GetHandle(), "near_plane"), near_plane);
     glUniform1f(glGetUniformLocation(mesh.renderProg.GetHandle(), "far_plane"), far_plane);
+    DepthMap_Setup();
+    Frustum_Setup();
     camera = { {0,0,3} };
     light = { 2.0f, 4.0f, 0.0f };
     FOV = 60.f;
@@ -60,8 +63,6 @@ void Shadow_test::init()
     glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_FILL);
     
-    DepthMap_Setup();
-    Frustum_Setup();
     projection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
     glFlush();
 }
@@ -91,9 +92,9 @@ void Shadow_test::Draw()
 
     glPolygonOffset(polygonFactor, polygonUnit);
 
+    Frustrum_Draw();
     Depth_Draw();
     Scene_Draw();
-
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -243,7 +244,7 @@ void Shadow_test::Scene_Draw()
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
     plane.draw(useNormal, camera.GetViewMatrix(), projection, light, camera.GetEye());
 
-    Frustrum_Draw();
+
 }
 void Shadow_test::Frustum_Setup()
 {
