@@ -153,7 +153,7 @@ void Shadow_test::DepthMap_Setup()
 void Shadow_test::Depth_Draw()
 {
 
-    glm::mat4 lightProjection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
+    glm::mat4 lightProjection = glm::perspective(glm::radians(FOV), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, near_plane, far_plane);
     glm::mat4 lightView = glm::lookAt(light,
                                                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                                                  glm::vec3(0.0f, 1.0f, 0.0f));
@@ -340,9 +340,6 @@ void Shadow_test::Frustrum_Draw()
     model = glm::rotate(model, rotate.z, { 0,0,1 });
 
     glm::mat4 lightProjection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
-    glm::mat4 lightView = glm::lookAt(light,
-        mesh.position - light,
-        glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 lightSpaceMatrix = lightProjection * camera.GetViewMatrix() * model;
 
 
