@@ -171,15 +171,12 @@ void Noise::generate_wood(float dt)
     }
 }
 
-
-
 void Noise::init()
 {
     generate_random_value();
     setup_opengl();
     setup_shdrpgm("value_noise");
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glDisable(GL_CULL_FACE);
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
@@ -233,10 +230,10 @@ void Noise::Draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Prog.Use();
 
+    glBindVertexArray(VAO);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     OnImGuiRender();
 

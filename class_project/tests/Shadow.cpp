@@ -57,6 +57,7 @@ void Shadow_test::init()
     glEnable(GL_POLYGON_OFFSET_FILL);
     
     DepthMap_Setup();
+    Frustum_Setup();
     projection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
     glFlush();
 }
@@ -82,6 +83,7 @@ void Shadow_test::Draw()
         glCullFace(GL_FRONT);
     else
         glCullFace(GL_BACK);
+
 
     glPolygonOffset(polygonFactor, polygonUnit);
 
@@ -113,12 +115,16 @@ void Shadow_test::OnImGuiRender()
     ImGui::SliderFloat("glPolygonOffset units", &polygonUnit, 0.f, 10000.f);
     ImGui::Checkbox("Draw Back Faces For Recordding Depth", &drawBackFacesForRecordDepthPass);
 
+
     if (ImGui::Button("Depth Component Bit Size : 16 bits"))
         depthBitSize = 0;
     if (ImGui::Button("Depth Component Bit Size : 24 bits"))
         depthBitSize = 1;
     if (ImGui::Button("Depth Component Bit Size : 32 bits"))
         depthBitSize = 2;
+
+    ImGui::SliderFloat3("Rotate", &rotate.x, -10.f, 10.f);
+
 }
 
 void Shadow_test::DepthMap_Setup()
@@ -157,21 +163,6 @@ void Shadow_test::Depth_Draw()
                                                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                                                  glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-
-    //simpleDepthShader.use();
-    //simpleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-    //glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-    //glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    //glClear(GL_DEPTH_BUFFER_BIT);
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, woodTexture);
-    //renderScene(simpleDepthShader);
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    //// reset viewport
-    //glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -224,7 +215,7 @@ void Shadow_test::Scene_Draw()
     glViewport(0, 0, GLHelper::width, GLHelper::height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glActiveTexture(GL_TEXTURE0);
+
     glBindTexture(GL_TEXTURE_2D, depthMap);
 
     mesh.renderProg.Use();
@@ -248,6 +239,120 @@ void Shadow_test::Scene_Draw()
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
     plane.draw(useNormal, camera.GetViewMatrix(), projection, light, camera.GetEye());
 
+    Frustrum_Draw();
+}
+void Shadow_test::Frustum_Setup()
+{
+    float near_w_vertice = (2 * near_plane * tan(glm::radians(FOV / 2.0f))) / 2.0f;
+
+    float near_h_vertice = near_w_vertice / ((float)SHADOW_WIDTH / (float)SHADOW_HEIGHT);
+
+    float far_w_vertice = (2 * far_plane * tan(glm::radians(FOV / 2.0f))) / 2.0f;
+
+    float far_h_vertice = far_w_vertice / ((float)SHADOW_WIDTH / (float)SHADOW_HEIGHT);
+
+    glm::vec3 verts[9];
+
+    verts[0] = { 0,0,0 };
+
+    verts[1] = glm::vec3(-near_w_vertice, -near_h_vertice, -near_plane);
+    verts[2] = glm::vec3(near_w_vertice, -near_h_vertice, -near_plane);
+    verts[3] = glm::vec3(near_w_vertice, near_h_vertice, -near_plane);
+    verts[4] = glm::vec3(-near_w_vertice, near_h_vertice, -near_plane);
+    verts[5] = glm::vec3(-far_w_vertice, -far_h_vertice, -far_plane);
+    verts[6] = glm::vec3(far_w_vertice, -far_h_vertice, -far_plane);
+    verts[7] = glm::vec3(far_w_vertice, far_h_vertice, -far_plane);
+    verts[8] = glm::vec3(-far_w_vertice, far_h_vertice, -far_plane);
+
+    vertices.push_back(verts[0]);
+    vertices.push_back(verts[1]);
+
+    vertices.push_back(verts[0]);
+    vertices.push_back(verts[2]);
+
+    vertices.push_back(verts[0]);
+    vertices.push_back(verts[3]);
+
+    vertices.push_back(verts[0]);
+    vertices.push_back(verts[4]);
+
+    vertices.push_back(verts[1]);
+    vertices.push_back(verts[2]);
+    vertices.push_back(verts[2]);
+    vertices.push_back(verts[3]);
+    vertices.push_back(verts[3]);
+    vertices.push_back(verts[4]);
+    vertices.push_back(verts[1]);
+    vertices.push_back(verts[4]);
+    vertices.push_back(verts[5]);
+    vertices.push_back(verts[6]);
+    vertices.push_back(verts[6]);
+    vertices.push_back(verts[7]);
+    vertices.push_back(verts[7]);
+    vertices.push_back(verts[8]);
+    vertices.push_back(verts[5]);
+    vertices.push_back(verts[8]);
+    vertices.push_back(verts[1]);
+    vertices.push_back(verts[5]);
+    vertices.push_back(verts[2]);
+    vertices.push_back(verts[6]);
+    vertices.push_back(verts[3]);
+    vertices.push_back(verts[7]);
+    vertices.push_back(verts[4]);
+    vertices.push_back(verts[8]);
+
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    std::string vert = "../shaders/";
+    std::string frag = "../shaders/";
+    vert = vert + "frustrum" + ".vert";
+    frag = frag + "frustrum" + ".frag";
+
+    std::vector<std::pair<GLenum, std::string>> shdr_files;
+    shdr_files.push_back(std::make_pair(GL_VERTEX_SHADER, vert));
+    shdr_files.push_back(std::make_pair(GL_FRAGMENT_SHADER, frag));
+
+    Prog.CompileLinkValidate(shdr_files);
+    if (GL_FALSE == Prog.IsLinked())
+    {
+        std::cout << "Unable to compile/link/validate shader programs" << "\n";
+        std::cout << Prog.GetLog() << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    vpLoc = glGetUniformLocation(Prog.GetHandle(), "MVP");
 
 }
+void Shadow_test::Frustrum_Draw()
+{
+    glm::mat4 model = {
+   1,0,0,0,
+   0,1,0,0,
+   0,0,1,0,
+   0,0,0,1
+    };
+    model = glm::translate(model, light);
+    model = glm::rotate(model, rotate.x, { 1,0,0 });
+    model = glm::rotate(model, rotate.y, { 0,1,0 });
+    model = glm::rotate(model, rotate.z, { 0,0,1 });
 
+    glm::mat4 lightProjection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
+    glm::mat4 lightView = glm::lookAt(light,
+        mesh.position - light,
+        glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 lightSpaceMatrix = lightProjection * camera.GetViewMatrix() * model;
+
+
+    Prog.Use();
+    glUniformMatrix4fv(vpLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_LINES, 0, 32);
+}
