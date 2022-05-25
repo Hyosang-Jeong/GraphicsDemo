@@ -55,6 +55,10 @@ void Shadow_test::init()
     camera = { {0,0,3} };
     light = { 2.0f, 4.0f, 0.0f };
     FOV = 60.f;
+    frustum_rotate = { 0,0,0 };
+    frustum_front = { 0,0,-1 };
+
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_FILL);
@@ -82,7 +86,7 @@ void Shadow_test::Draw()
     else if (depthBitSize == DepthComponentSize::Bit32)
         depth_component = GL_DEPTH_COMPONENT32;
 
-    glTexStorage2D(GL_TEXTURE_2D, 1, depth_component, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
@@ -130,7 +134,7 @@ void Shadow_test::OnImGuiRender()
     if (ImGui::Button("Depth Component Bit Size : 32 bits"))
         depthBitSize = 2;
 
-    ImGui::SliderFloat3("Rotate", &rotate.x, -10.f, 10.f);
+    ImGui::SliderFloat3("Rotate", &frustum_rotate.x, -10.f, 10.f);
 
 }
 
@@ -347,9 +351,33 @@ void Shadow_test::Frustrum_Draw()
    0,0,0,1
     };
     model = glm::translate(model, light);
-    model = glm::rotate(model, rotate.x, { 1,0,0 });
-    model = glm::rotate(model, rotate.y, { 0,1,0 });
-    model = glm::rotate(model, rotate.z, { 0,0,1 });
+
+
+    glm::vec3 light_norm = Normalize(-light);
+    glm::vec3 front = Normalize(frustum_front);
+
+
+    glm::vec2 light_point;
+    glm::vec2 frusum_point;
+    ////find z
+    //light_point = { light_norm.x,light_norm.y };
+    //frusum_point = { front.x,front.y };
+    //frustum_rotate.z = acos(glm::dot(light_point, frusum_point) / (glm::length(light_point) * glm::length(frusum_point)));
+
+    //find y
+    light_point = { light_norm.x,light_norm.z };
+    frusum_point = { front.x,front.z };
+    frustum_rotate.y = acos(glm::dot(light_point,frusum_point) / (glm::length(light_point)*glm::length(frusum_point)));
+
+    //find x
+    light_point = { light_norm.y,light_norm.z };
+    frusum_point = { front.y,front.z };
+    frustum_rotate.x = acos(glm::dot(light_point, frusum_point) / (glm::length(light_point) * glm::length(frusum_point)));
+
+
+    model = glm::rotate(model, frustum_rotate.x, { 1,0,0 });
+    model = glm::rotate(model, frustum_rotate.y, { 0,1,0 });
+    model = glm::rotate(model, frustum_rotate.z, { 0,0,1 });
 
     glm::mat4 lightProjection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
     glm::mat4 lightSpaceMatrix = lightProjection * camera.GetViewMatrix() * model;
