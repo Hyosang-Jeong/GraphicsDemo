@@ -32,7 +32,7 @@ void Shadow_test::init()
     plane = CreatePlane(30, 30);
 
     mesh.init("depth", { 0, 0, 0 }, { 0.5,0.5,0.5 });
-    sphere.init("depth", { 3.f, 0, 0 }, { 0.5,0.5,0.5 });
+    sphere.init("depth", { 2.0f, 4.0f, 0.0f }, { 0.5,0.5,0.5 });
     plane.init("depth", { 0,-0.5,0 }, { 100,100,100 }, { -HALF_PI,0,0 });
 
     mesh.setup_shdrpgm("debugDepthQuad");
@@ -50,7 +50,7 @@ void Shadow_test::init()
     glUniform1f(glGetUniformLocation(plane.renderProg.GetHandle(), "near_plane"), near_plane);
     glUniform1f(glGetUniformLocation(mesh.renderProg.GetHandle(), "far_plane"), far_plane);
     camera = { {0,0,3} };
-    light = { -2.0f, 4.0f, 0.0f };
+    light = { 2.0f, 4.0f, 0.0f };
     FOV = 60.f;
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -77,13 +77,17 @@ void Shadow_test::Draw()
     glTexStorage2D(GL_TEXTURE_2D, 1, depth_component, SHADOW_WIDTH, SHADOW_HEIGHT);
 
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    Depth_Draw();
-    Scene_Draw();
+
     if (drawBackFacesForRecordDepthPass)
         glCullFace(GL_FRONT);
     else
         glCullFace(GL_BACK);
+
     glPolygonOffset(polygonFactor, polygonUnit);
+
+    Depth_Draw();
+    Scene_Draw();
+
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -96,24 +100,25 @@ void Shadow_test::OnImGuiRender()
 {
 
     ImGui::SliderFloat3("Light position", &light.x, -10.f, 10.f);
+    sphere.position = light;
     ImGui::SliderFloat("FOV", &FOV, 30.f, 179.f);
     if (ImGui::Button("0.0 - Nearest depth"))
         borderColor[0] = 0.f;
     if (ImGui::Button("1.0 - Far depth"))
         borderColor[0] = 1.f;
+    ImGui::SliderFloat3("cube position", &mesh.position.x, -10.f, 10.f);
+    ImGui::SliderFloat("Near Plane", &near_plane, 0.1f, 1.f);
+    ImGui::SliderFloat("Far Plane", &far_plane, 100.f, 1000.f);
+    ImGui::SliderFloat("glPolygonOffset factor", &polygonFactor, 0.0f, 3.f);
+    ImGui::SliderFloat("glPolygonOffset units", &polygonUnit, 0.f, 10000.f);
+    ImGui::Checkbox("Draw Back Faces For Recordding Depth", &drawBackFacesForRecordDepthPass);
 
-    //ImGui::SliderFloat("Near Plane", &near_plane, 0.1f, 1.f);
-    //ImGui::SliderFloat("Far Plane", &far_plane, 100.f, 1000.f);
-    //ImGui::SliderFloat("glPolygonOffset factor", &polygonFactor, 0.0f, 3.f);
-    //ImGui::SliderFloat("glPolygonOffset units", &polygonUnit, 0.f, 10000.f);
-    //ImGui::Checkbox("Draw Back Faces For Recordding Depth", &drawBackFacesForRecordDepthPass);
-
-    //if (ImGui::Button("Depth Component Bit Size : 16 bits"))
-    //    depthBitSize = 0;
-    //if (ImGui::Button("Depth Component Bit Size : 24 bits"))
-    //    depthBitSize = 1;
-    //if (ImGui::Button("Depth Component Bit Size : 32 bits"))
-    //    depthBitSize = 2;
+    if (ImGui::Button("Depth Component Bit Size : 16 bits"))
+        depthBitSize = 0;
+    if (ImGui::Button("Depth Component Bit Size : 24 bits"))
+        depthBitSize = 1;
+    if (ImGui::Button("Depth Component Bit Size : 32 bits"))
+        depthBitSize = 2;
 }
 
 void Shadow_test::DepthMap_Setup()
@@ -232,13 +237,13 @@ void Shadow_test::Scene_Draw()
     sphere.renderProg.Use();
     modeLoc = glGetUniformLocation(sphere.renderProg.GetHandle(), "mode");
     shadowLoc = glGetUniformLocation(sphere.renderProg.GetHandle(), "shadowMatrix");
-    glUniform1i(modeLoc, 0);
+    glUniform1i(modeLoc, 1);
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-    sphere.draw({ 1,0,0 }, camera.GetViewMatrix(), projection, light, camera.GetEye());
+    sphere.draw( useNormal, camera.GetViewMatrix(), projection, light, camera.GetEye());
 
     plane.renderProg.Use();
-     modeLoc = glGetUniformLocation(plane.renderProg.GetHandle(), "mode");
-     shadowLoc = glGetUniformLocation(plane.renderProg.GetHandle(), "shadowMatrix");
+    modeLoc = glGetUniformLocation(plane.renderProg.GetHandle(), "mode");
+    shadowLoc = glGetUniformLocation(plane.renderProg.GetHandle(), "shadowMatrix");
     glUniform1i(modeLoc, 0);
     glUniformMatrix4fv(shadowLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
     plane.draw(useNormal, camera.GetViewMatrix(), projection, light, camera.GetEye());
