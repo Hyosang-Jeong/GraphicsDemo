@@ -130,6 +130,7 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = SHADOW;
+        tests[current]->init();
     }
     //if (ImGui::Button("Post Mortem"))
     //{

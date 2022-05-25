@@ -27,6 +27,8 @@ public:
 	void Draw() override;
 	void OnImGuiRender() override;
 	void DepthMap_Setup();
+	void Frustum_Setup();
+	void Frustrum_Draw();
 	void Depth_Draw();
 	void Scene_Draw();
 	const GLfloat bgColor[4] = { 0.0f, 0.6f, 0.0f, 1.0f };
@@ -41,6 +43,15 @@ private:
 	glm::mat4  projection;
 	glm::vec3 light;
 	float borderColor[4];
+
+	//for frustum
+	GLuint VAO;
+	GLuint VBO;
+	GLSLShader Prog;
+	GLuint vpLoc;
+	std::vector<glm::vec3>vertices;
+	glm::vec3 rotate{ 0,0,0 };
+
 
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
