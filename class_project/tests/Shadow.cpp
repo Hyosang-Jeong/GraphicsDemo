@@ -60,7 +60,7 @@ void Shadow_test::init()
     glEnable(GL_POLYGON_OFFSET_FILL);
     
     projection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
-    glFlush();
+    //glFlush();
 }
 
 void Shadow_test::Update(float deltaTime)
@@ -75,6 +75,12 @@ void Shadow_test::Draw()
 {
     glClearColor(0.5, 0.5, 0.5, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (depthBitSize == DepthComponentSize::Bit16)
+        depth_component = GL_DEPTH_COMPONENT16;
+    else if (depthBitSize == DepthComponentSize::Bit24)
+        depth_component = GL_DEPTH_COMPONENT24;
+    else if (depthBitSize == DepthComponentSize::Bit32)
+        depth_component = GL_DEPTH_COMPONENT32;
 
     glTexStorage2D(GL_TEXTURE_2D, 1, depth_component, SHADOW_WIDTH, SHADOW_HEIGHT);
 
@@ -88,9 +94,9 @@ void Shadow_test::Draw()
 
     glPolygonOffset(polygonFactor, polygonUnit);
 
-    Frustrum_Draw();
     Depth_Draw();
     Scene_Draw();
+    Frustrum_Draw();
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
