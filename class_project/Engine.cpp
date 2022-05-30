@@ -13,8 +13,8 @@ enum Demo
     CURVE,
     GEOMETRY,
     TESSELLATION,
-    SHADOW
-   // POSTMORTEM
+    SHADOW,
+    POSTMORTEM
 };
 
 Engine::Engine()
@@ -31,7 +31,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
-    current = SHADOW;
+    current = POSTMORTEM;
 }
 
 Engine::~Engine()
@@ -132,10 +132,10 @@ void Engine::demo_switch()
         current = SHADOW;
         tests[current]->init();
     }
-    //if (ImGui::Button("Post Mortem"))
-    //{
-    //    tests[current]->UnLoad();
-    //    current = POSTMORTEM;
-    //    tests[current]->init();
-    //}
+    if (ImGui::Button("Post Mortem"))
+    {
+        tests[current]->UnLoad();
+        current = POSTMORTEM;
+        tests[current]->init();
+    }
 }
