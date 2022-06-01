@@ -20,7 +20,7 @@ and this class inherited by Test, So it has all function what Test class have.
 class Tessellation_test : public Test
 {
 public:
-    Tessellation_test();
+    Tessellation_test() = default;
     ~Tessellation_test();
     void init() override;
     void Update(float deltaTime)  override;
@@ -35,20 +35,20 @@ public:
     Vec4 useNormal = Vec4(1, 1, 1, -1.0f);
     GLSLShader explode;
 private:
-    glm::mat4  view;
-    glm::mat4  projection;
-    glm::vec3 eye;
-    glm::vec3 light;
+    glm::mat4  view{ 0 };
+    glm::mat4  projection{ 0 };
+    glm::vec3 eye{ 0 };
+    glm::vec3 light{ 0 };
     float timer{ 0 };
-    int stack;
-    int slice;
+    int stack{ 10 };
+    int slice{ 10 };
 
-    GLint inner_loc;
-    GLint outer_loc;
-    GLint shrink_loc;
+    GLint inner_loc{ 0 };
+    GLint outer_loc{ 0 };
+    GLint shrink_loc{ 0 };
     float inner{ 1 };
     float outer{1 };
-    float shrink{ 0.9 };
+    float shrink{ 0.9f };
     float factor{ 1 };
     bool animated{ false };
 };

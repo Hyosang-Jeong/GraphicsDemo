@@ -101,13 +101,13 @@ Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices, float dt)
     mesh.stack_slice[0] = stacks;
     mesh.stack_slice[1] = slices;
 
-    for (int stack = 0; stack <= stacks; ++stack)
+    for (int stack_ = 0; stack_ <= stacks; ++stack_)
     {
-        float row = (float)stack / stacks;
+        float row = (float)stack_ / stacks;
 
-        for (int slice = 0; slice <= slices; ++slice)
+        for (int slice_ = 0; slice_ <= slices; ++slice_)
         {
-            float col = (float)slice / slices;
+            float col = (float)slice_ / slices;
 
             Vertex v;
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
@@ -137,18 +137,18 @@ Mesh Gradient_Noise::create_gradient_sphere(int stacks, int slices, float dt)
     Mesh mesh;
     mesh.stack_slice[0] = stacks;
     mesh.stack_slice[1] = slices;
-    for (int stack = 0; stack <= stacks; ++stack)
+    for (int stack_ = 0; stack_ <= stacks; ++stack_)
     {
-        float row = (float)stack / stacks;
-        float beta = PI * (row - 0.5);
+        float row = (float)stack_ / stacks;
+        float beta = PI * (row - 0.5f);
 
         for (int slice = 0; slice <= slices; ++slice)
         {
             float col = (float)slice / slices;
-            float alpha = col * PI * 2.0;
+            float alpha = col * PI * 2.0f;
             Vertex v;
             v.uv.x = col;
-            v.uv.y = row * (-1.0);
+            v.uv.y = row * (-1.0f);
 
             v.pos.x = 0.5f * sin(alpha) * cos(beta);
             v.pos.y = 0.5f * sin(beta);
@@ -179,9 +179,9 @@ void Gradient_Noise::update_plane(float dt)
     plane.vertexBuffer.clear();
     plane.numVertices = 0;
 
-    for (int stack = 0; stack <= this->stack; ++stack)
+    for (int stack_ = 0; stack_ <= this->stack; ++stack_)
     {
-        float row = (float)stack / this->stack;
+        float row = (float)stack_ / this->stack;
 
         for (int slice = 0; slice <= this->slice; ++slice)
         {
@@ -192,7 +192,7 @@ void Gradient_Noise::update_plane(float dt)
 
             glm::vec3 derivs;
 
-            float val = evalute(glm::vec3(slice , 0, stack +dt) * frequency, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(slice , 0, stack_ +dt) * frequency, derivs);  //     /3  because  r  g  b
             v.pos.y = (val+1)/2.f;
 
 
@@ -216,18 +216,18 @@ void Gradient_Noise::update_sun(float dt)
     sun.vertexBuffer.clear();
     sun.numVertices = 0;
 
-    for (int stack = 0; stack <= sun.stack_slice[0]; ++stack)
+    for (int stack_ = 0; stack_ <= sun.stack_slice[0]; ++stack_)
     {
-        float row = (float)stack / sun.stack_slice[0];
-        float beta = PI * (row - 0.5);
+        float row = (float)stack_ / sun.stack_slice[0];
+        float beta = PI * (row - 0.5f);
 
         for (int slice = 0; slice <= sun.stack_slice[1]; ++slice)
         {
             float col = (float)slice / sun.stack_slice[1];
-            float alpha = col * PI * 2.0;
+            float alpha = col * PI * 2.0f;
             Vertex v;
             v.uv.x = col;
-            v.uv.y = row * (-1.0);
+            v.uv.y = row * (-1.0f);
 
             v.pos.x = 0.5f * sin(alpha) * cos(beta);
             v.pos.y = 0.5f * sin(beta);
@@ -319,7 +319,7 @@ void Gradient_Noise::Update(float dt)
 
 void Gradient_Noise::Draw()
 {
-    glClearColor(0.68, 0.87, 0.89, 1);
+    glClearColor(0.68f, 0.87f, 0.89f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 model = {

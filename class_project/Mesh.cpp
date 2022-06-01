@@ -104,15 +104,15 @@ Mesh CreateSphere(int stacks, int slices)
     for (int stack = 0; stack <= stacks; ++stack)
     {
         float row = (float)stack / stacks;
-        float beta = PI * (row - 0.5);
+        float beta = PI * (row - 0.5f);
 
         for (int slice = 0; slice <= slices; ++slice)
         {
             float col = (float)slice / slices;
-            float alpha = col * PI * 2.0;
+            float alpha = col * PI * 2.0f;
             Vertex v;
             v.uv.x = col;
-            v.uv.y = row * (-1.0);
+            v.uv.y = row * (-1.0f);
 
             v.pos.x = 0.5f * sin(alpha) * cos(beta);
             v.pos.y = 0.5f * sin(beta);
@@ -148,27 +148,27 @@ Mesh CreateCylinder(int stacks, int slices)
         for (int j = 0; j <= slices; j++)
         {
             float col = static_cast<float>(j) / slices;
-            float alpha = col * 2.0 * PI;
+            float alpha = col * 2.0f * PI;
             float sinAlpha = sin(alpha);
             float cosAlpha = cos(alpha);
 
             vertex.uv.x = row;
             vertex.uv.y = col;
 
-            vertex.pos.x = 0.5 * sinAlpha;
-            vertex.pos.y = row - 0.5;
-            vertex.pos.z = 0.5 * cosAlpha;
+            vertex.pos.x = 0.5f * sinAlpha;
+            vertex.pos.y = row - 0.5f;
+            vertex.pos.z = 0.5f * cosAlpha;
 
-            vertex.nrm.x = vertex.pos.x / 0.5;
+            vertex.nrm.x = vertex.pos.x / 0.5f;
             vertex.nrm.y = 0;
-            vertex.nrm.z = vertex.pos.z / 0.5;
+            vertex.nrm.z = vertex.pos.z / 0.5f;
 
             addVertex(mesh, vertex);
         }
     }
     BuildIndexBuffer(stacks, slices, mesh);
 
-    int vertex_size = mesh.vertexBuffer.size();
+    int vertex_size = static_cast<int>(mesh.vertexBuffer.size());
 
     /// For the caps
 
@@ -176,17 +176,17 @@ Mesh CreateCylinder(int stacks, int slices)
     {
         if (i == 0)
         {
-            vertex.pos = Vec3(0.0, 0.5, 0.0);
-            vertex.nrm.x = vertex.pos.x / 0.5;
-            vertex.nrm.y = vertex.pos.y / 0.5;
-            vertex.nrm.z = vertex.pos.z / 0.5;
+            vertex.pos = Vec3(0.0, 0.5f, 0.0);
+            vertex.nrm.x = vertex.pos.x / 0.5f;
+            vertex.nrm.y = vertex.pos.y / 0.5f;
+            vertex.nrm.z = vertex.pos.z / 0.5f;
         }
         else if (i == 1)
         {
-            vertex.pos = Vec3(0.0, -0.5, 0.0);
-            vertex.nrm.x = vertex.pos.x / 0.5;
-            vertex.nrm.y = vertex.pos.y / 0.5;
-            vertex.nrm.z = vertex.pos.z / 0.5;
+            vertex.pos = Vec3(0.0, -0.5f, 0.0);
+            vertex.nrm.x = vertex.pos.x / 0.5f;
+            vertex.nrm.y = vertex.pos.y / 0.5f;
+            vertex.nrm.z = vertex.pos.z / 0.5f;
         }
 
         addVertex(mesh, vertex);
@@ -196,7 +196,7 @@ Mesh CreateCylinder(int stacks, int slices)
         for (int j = 0; j <= slices; j++)
         {
             float col = static_cast<float>(j) / slices;
-            float alpha = col * 2.0 * PI;
+            float alpha = col * 2.0f * PI;
             float sinAlpha = sin(alpha);
             float cosAlpha = cos(alpha);
 
@@ -205,19 +205,19 @@ Mesh CreateCylinder(int stacks, int slices)
 
             if (i == 0)
             {
-                vertex.pos = Vec3(0.5 * sinAlpha, 0.5, 0.5 * cosAlpha);
+                vertex.pos = Vec3(0.5 * sinAlpha, 0.5f, 0.5f * cosAlpha);
 
-                vertex.nrm.x = vertex.pos.x / 0.5;
-                vertex.nrm.y = vertex.pos.y / 0.5;
-                vertex.nrm.z = vertex.pos.z / 0.5;
+                vertex.nrm.x = vertex.pos.x / 0.5f;
+                vertex.nrm.y = vertex.pos.y / 0.5f;
+                vertex.nrm.z = vertex.pos.z / 0.5f;
             }
             else if (i == 1)
             {
-                vertex.pos = Vec3(0.5 * sinAlpha, -0.5, 0.5 * cosAlpha);
+                vertex.pos = Vec3(0.5f * sinAlpha, -0.5f, 0.5f * cosAlpha);
 
-                vertex.nrm.x = vertex.pos.x / 0.5;
-                vertex.nrm.y = vertex.pos.y / 0.5;
-                vertex.nrm.z = vertex.pos.z / 0.5;
+                vertex.nrm.x = vertex.pos.x / 0.5f;
+                vertex.nrm.y = vertex.pos.y / 0.5f;
+                vertex.nrm.z = vertex.pos.z / 0.5f;
             }
 
             addVertex(mesh, vertex);
@@ -260,7 +260,7 @@ Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
         {
             float col = (float)slice / slices;
 
-            float beta = col * PI * 2.0;
+            float beta = col * PI * 2.0f;
 
             Vertex center;
             center.pos = Vec3(0, 0, 0);
@@ -269,13 +269,13 @@ Mesh CreateTorus(int stacks, int slices, float startAngle, float endAngle)
             v.uv.x = col;
             v.uv.y = row;
 
-            v.pos.x = -(0.35 + (0.15 * cos(beta))) * sinAlpha;
-            v.pos.y = -0.15 * sin(beta);
-            v.pos.z = -(0.35 + (0.15 * cos(beta))) * cosAlpha;
+            v.pos.x = -(0.35f + (0.15f * cos(beta))) * sinAlpha;
+            v.pos.y = -0.15f * sin(beta);
+            v.pos.z = -(0.35f + (0.15f * cos(beta))) * cosAlpha;
 
             v.nrm = v.pos - center.pos;
 
-            v.nrm /= 0.15;
+            v.nrm /= 0.15f;
             addVertex(mesh, v);
         }
 
@@ -297,32 +297,32 @@ Mesh CreateCone(int stacks, int slices)
     float alpha = 0;
     for (int stack = 0; stack <= stacks; ++stack)
     {
-        float row = ((float)stack / stacks) - 0.5; // [0.0, 1.0]
-        float z_val = 0.5;
+        float row = ((float)stack / stacks) - 0.5f; // [0.0, 1.0]
+        float z_val = 0.5f;
         for (int slice = 0; slice <= slices; ++slice)
         {
             col = (float)slice / slices;
-            alpha = col * PI * 2.0;
+            alpha = col * PI * 2.0f;
 
             // side
             v.uv.x = row;
             v.uv.y = col;
 
-            v.pos.x = 0.5 * (0.5 - row) * sin(alpha);
+            v.pos.x = 0.5f * (0.5f - row) * sin(alpha);
             v.pos.y = row;
-            v.pos.z = 0.5 * (0.5 - row) * cos(alpha);
+            v.pos.z = 0.5f * (0.5f - row) * cos(alpha);
 
 
-            v.nrm.x = v.pos.x / 0.5;
+            v.nrm.x = v.pos.x / 0.5f;
             v.nrm.y = 0.0;
-            v.nrm.z = v.pos.z / 0.5;
+            v.nrm.z = v.pos.z / 0.5f;
 
             addVertex(mesh, v);
         }
     }
     BuildIndexBuffer(stacks, slices, mesh);
 
-    int vertex_size = mesh.vertexBuffer.size();
+    int vertex_size = static_cast<int>(mesh.vertexBuffer.size());
 
     /// For the caps
 
@@ -330,10 +330,10 @@ Mesh CreateCone(int stacks, int slices)
     {
         if (i == 0)
         {
-            v.pos = Vec3(0.0, -0.5, 0.0);
-            v.nrm.x = v.pos.x / 0.5;
-            v.nrm.y = v.pos.y / 0.5;
-            v.nrm.z = v.pos.z / 0.5;
+            v.pos = Vec3(0.0, -0.5f, 0.0);
+            v.nrm.x = v.pos.x / 0.5f;
+            v.nrm.y = v.pos.y / 0.5f;
+            v.nrm.z = v.pos.z / 0.5f;
         }
 
         addVertex(mesh, v);
@@ -343,18 +343,18 @@ Mesh CreateCone(int stacks, int slices)
         for (int j = 0; j <= slices; j++)
         {
             float col = static_cast<float>(j) / slices;
-            float alpha = col * 2.0 * PI;
+            float alpha = col * 2.0f * PI;
             float sinAlpha = sin(alpha);
             float cosAlpha = cos(alpha);
 
             v.uv.x = row;
             v.uv.y = col;
 
-            v.pos = Vec3(0.5 * sinAlpha, -0.5, 0.5 * cosAlpha);
+            v.pos = Vec3(0.5 * sinAlpha, -0.5f, 0.5f * cosAlpha);
 
-            v.nrm.x = v.pos.x / 0.5;
-            v.nrm.y = v.pos.y / 0.5;
-            v.nrm.z = v.pos.z / 0.5;
+            v.nrm.x = v.pos.x / 0.5f;
+            v.nrm.y = v.pos.y / 0.5f;
+            v.nrm.z = v.pos.z / 0.5f;
             
 
             addVertex(mesh, v);

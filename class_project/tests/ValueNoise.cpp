@@ -68,7 +68,7 @@ void Noise::generate_fractal(float dt)
 
             float amplitude = 0.35f;
 
-            for (unsigned k = 0; k < numLayers; k++)
+            for (int k = 0; k < numLayers; k++)
             {
                 data[i][j] += static_cast<unsigned char>(evalute(val) * amplitude * 255.f);
                 val *= frequencyMult;
@@ -100,7 +100,7 @@ void Noise::generate_marble(float dt)
 
             float amplitude = 0.35f;
             float noiseValue = 0;
-            for (unsigned k = 0; k < numLayers; k++)
+            for (int k = 0; k < numLayers; k++)
             {
                 noiseValue += evalute(val) * amplitude;
                 val *= frequencyMult;
@@ -125,7 +125,7 @@ void Noise::generate_turbulence(float dt)
 
             float amplitude = 0.35f;
 
-            for (unsigned k = 0; k < numLayers; k++)
+            for (int k = 0; k < numLayers; k++)
             {
                 data[i][j] += static_cast<unsigned char>(std::fabs(2 * evalute(val) - 1) * amplitude * 255.f);
                 val *= frequencyMult;
@@ -264,8 +264,8 @@ void Noise::OnImGuiRender()
     if (ImGui::Button("Fractal") == true)
     {
         currstate = fractal;
-        frequencyMult = 1.8;
-        amplitudeMult = 0.35;
+        frequencyMult = 1.8f;
+        amplitudeMult = 0.35f;
         numLayers = 5;
         max = 1.f;
         generate_fractal(0);
@@ -279,8 +279,8 @@ void Noise::OnImGuiRender()
     if (ImGui::Button("Turblence") == true)
     {
         currstate = Turbulence;
-        frequencyMult = 1.8;
-        amplitudeMult = 0.35;
+        frequencyMult = 1.8f;
+        amplitudeMult = 0.35f;
         numLayers = 5;
         max = 1.f;
         generate_turbulence(0);

@@ -14,9 +14,6 @@ Note : This file is for 8th demo that shows sphere and cube. You can modify Ligh
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
-Shadow_test::Shadow_test()
-{
-}
 
 Shadow_test::~Shadow_test()
 {
@@ -24,7 +21,6 @@ Shadow_test::~Shadow_test()
 
 void Shadow_test::init()
 {
-    depth_component = GL_DEPTH_COMPONENT32;
     polygonFactor = 2.0f;
     polygonUnit = 4.0f;
 
@@ -156,7 +152,7 @@ void Shadow_test::OnImGuiRender()
             if (ImGui::Selectable(items[n], is_selected))
             {
                 current_item = items[n];
-                SHADOW_WIDTH = 128 * pow(2, n);
+                SHADOW_WIDTH = 128 * static_cast<int>(pow(2, n));
                 SHADOW_HEIGHT = SHADOW_WIDTH;
                 glBindTexture(GL_TEXTURE_2D, depthMap);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);

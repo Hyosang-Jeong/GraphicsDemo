@@ -13,14 +13,14 @@ public:
 	glm::mat4& GetViewMatrix();
 	glm::vec3 GetEye();
 
-	glm::mat4  view;
-	glm::vec3 eye; //camera position
-	glm::vec3 cameraTarget; //view target
-	glm::vec3 cameraDirection; //view direction
-	glm::vec3 cameraUp;
-	glm::vec3 cameraRight;
+	glm::mat4  view{ 0 };
+	glm::vec3 eye{ 0 }; //camera position
+	glm::vec3 cameraTarget{ 0 }; //view target
+	glm::vec3 cameraDirection{ 0 }; //view direction
+	glm::vec3 cameraUp{ 0 };
+	glm::vec3 cameraRight{ 0 };
 	glm::vec2 direction{ 0 };
-	float pitch;
-	float yaw;
-	glm::vec3 angle;
+	float pitch{ 0 };
+	float yaw{ 0 };
+	glm::vec3 angle{ 0 };
 };

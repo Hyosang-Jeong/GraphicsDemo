@@ -54,7 +54,7 @@ private:
     GLint shrink_loc;
     float inner{ 1 };
     float outer{ 1 };
-    float shrink{ 0.9 };
+    float shrink{ 0.9f };
     float factor{ 1 };
     bool animated{ false };
 

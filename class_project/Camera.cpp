@@ -19,27 +19,27 @@ void Camera::Update(float dt)
 {
 	float speed = 10.f;
 
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_UP) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_UP))
 	{
 		eye += speed * dt * cameraDirection;
 	}
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_DOWN) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_DOWN) )
 	{
 		eye -= speed * dt * cameraDirection;
 	}
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_W) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_W))
 	{
 		eye += speed * dt * cameraUp;
 	}
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_S) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_S))
 	{
 		eye -= speed * dt * cameraUp;
 	}
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_A) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_A))
 	{
 		eye -= glm::normalize(glm::cross(cameraDirection, cameraUp)) * speed * dt;
 	}
-	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_D) == true)
+	if (glfwGetKey(GLHelper::ptr_window, GLFW_KEY_D))
 	{
 		eye += glm::normalize(glm::cross(cameraDirection, cameraUp)) * speed * dt;
 	}
@@ -64,14 +64,14 @@ glm::vec3 Camera::mouse_update(float dt)
 	{
 		if (mouse_start==false)
 		{
-			start_pos.x = mouse_pos_x;
-			start_pos.y = mouse_pos_y;
+			start_pos.x = static_cast<float>(mouse_pos_x);
+			start_pos.y = static_cast<float>(mouse_pos_y);
 			mouse_start = true;
 		}
-		float xoffset = mouse_pos_x - start_pos.x;
-		float yoffset = start_pos.y - mouse_pos_y;
-		start_pos.x = mouse_pos_x;
-		start_pos.y = mouse_pos_y;
+		float xoffset = static_cast<float>(mouse_pos_x - start_pos.x);
+		float yoffset = static_cast<float>(start_pos.y - mouse_pos_y);
+		start_pos.x = static_cast<float>(mouse_pos_x);
+		start_pos.y = static_cast<float>(mouse_pos_y);
 
 		yaw += xoffset*0.07f;
 		pitch += yoffset*0.07f;

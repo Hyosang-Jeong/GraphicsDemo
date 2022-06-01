@@ -312,10 +312,10 @@ Height in pixels of new window size
 This function is called when the window is resized - it receives the new size
 of the window in pixels.
 */
-void GLHelper::fbsize_cb(GLFWwindow* ptr_win, int width, int height) {
+void GLHelper::fbsize_cb(GLFWwindow* ptr_win, int Width, int height) {
     std::cout << "fbsize_cb getting called!!!" << std::endl;
     // use the entire framebuffer as drawing region
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, Width, height);
     // later, if working in 3D, we'll have to set the projection matrix here ...
 }
 

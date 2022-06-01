@@ -65,7 +65,8 @@ typedef std::vector<int> IndexBufferType;
 /*  Mesh format */
 struct Mesh
 {
-    Mesh() : numVertices(0), numTris(0), numIndices(0), position{ 0 }, scale{ 1 }, rotation{ 0 } { }
+    Mesh() : numVertices(0), numTris(0), numIndices(0), position{ 0 }, scale{ 1 }, rotation{ 0 }, VBO{ 0 }, VAO{ 0 }
+    { }
 
     /*  Storing the actual vertex/index data */
     VertexBufferType vertexBuffer;
@@ -78,14 +79,14 @@ struct Mesh
     GLuint VAO;
     GLuint VBO;
     GLuint IBO;
-    GLSLShader renderProg;
+    GLSLShader renderProg{ GLSLShader() };
 
-    GLint modelLoc;
-    GLint viewLoc;
-    GLint   projectionLoc;
-    GLint   LightLoc;
-    GLint colorLoc;
-    GLint  ViewPosLoc;
+    GLint modelLoc =0 ;
+    GLint viewLoc=0;
+    GLint   projectionLoc=0;
+    GLint   LightLoc=0;
+    GLint colorLoc=0;
+    GLint  ViewPosLoc=0;
 
     glm::vec3 position{ 0,0,0 };
     glm::vec3 scale = { 1,1,1 };
@@ -124,7 +125,7 @@ struct Mesh
 
 
 
-    int stack_slice[2];
+    int stack_slice[2] = { 0 };
     bool update_flag = true;
 };
 

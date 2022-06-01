@@ -119,6 +119,7 @@ private:
 	    case 14: return -y + z; // (0,-1,1) 
 	    case 15: return -y - z; // (0,-1,-1) 
 	    }
+		return 0;
 	}
 
 

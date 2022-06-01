@@ -32,10 +32,10 @@ PostMortem::~PostMortem()
 void PostMortem::init()
 {
     animated = false;
-    inner = { 1 };
-    outer = { 1 };
-    shrink = { 0.9 };
-    factor = { 1 };
+    inner = { 1.f };
+    outer = { 1.f };
+    shrink = { 0.9f };
+    factor = { 1.f };
     meshes.clear();
     meshes.push_back(CreateSphere(stack, slice));
     meshes.push_back(CreateSphere(stack, slice));

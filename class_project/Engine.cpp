@@ -14,7 +14,7 @@ enum Demo
     GEOMETRY,
     TESSELLATION,
     SHADOW,
-    POINTSHADOW
+    POINTSHADOW,
     POSTMORTEM
 };
 
@@ -63,7 +63,7 @@ void Engine::Update()
 {
 	glfwPollEvents();
 	double delta_time = GLHelper::update_time(1.0);
-	tests[current]->Update(delta_time);
+	tests[current]->Update(static_cast<float>(delta_time));
 }
 
 void Engine::Draw()

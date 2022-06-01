@@ -23,8 +23,7 @@ struct Point
 class CurveTest : public Test
 {
 public:
-	CurveTest();
-	~CurveTest();
+	CurveTest()  = default;
 	void init() override;
 	void Update(float deltaTime)  override;
 	void Draw() override;
@@ -46,19 +45,19 @@ public:
 	void calculate(std::vector<glm::vec2> vertice);
 
 private:
-	GLuint VAO;
-	GLuint VBO;
+	GLuint VAO{ 0 };
+	GLuint VBO{ 0 };
 	GLSLShader Prog;
 
-	GLuint Derive_VAO;
-	GLuint Derive_VBO;
+	GLuint Derive_VAO{ 0 };
+	GLuint Derive_VBO{ 0 };
 
 	std::vector<glm::vec2> vertices;
 	std::vector<Point> start_point;
 	std::vector<Point> end_point;
 
-	int num_vertices;
-	bool is_hermite;
-	float t_min;
-	float t_max;
+	int num_vertices{ 0 };
+	bool is_hermite{ true };
+	float t_min{ 0 };
+	float t_max{ 0 };
 };

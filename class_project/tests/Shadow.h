@@ -20,7 +20,7 @@ enum DepthComponentSize
 class Shadow_test : public Test
 {
 public:
-	Shadow_test();
+	Shadow_test() = default;
 	~Shadow_test();
 	void init() override;
 	void Update(float deltaTime)  override;
@@ -45,38 +45,37 @@ private:
 
 	std::vector<Mesh> meshes;
 
-	glm::mat4  projection;
-	glm::vec3 light;
+	glm::mat4  projection{ 0 };
+	glm::vec3 light{ 0 };
 	float borderColor[4];
-	bool is_camera_view;
+	bool is_camera_view{ false };
 	//for light
 
-	glm::mat4 lightProjection;
-	glm::mat4 lightView;
-	glm::mat4 lightSpaceMatrix;
-	float light_Fov;
-	float light_near;
-	float light_far;
+	glm::mat4 lightProjection{ 0 };
+	glm::mat4 lightView{ 0 };
+	glm::mat4 lightSpaceMatrix{ 0 };
+	float light_Fov{ 0 };
+	float light_near{ 0 };
+	float light_far{ 0 };
 	//for frustum
-	GLuint VAO;
-	GLuint VBO;
+	GLuint VAO{ 0 };
+	GLuint VBO{ 0 };
 	GLSLShader Prog;
-	GLuint vpLoc;
+	GLuint vpLoc{ 0 };
 	std::vector<glm::vec3>vertices;
 	glm::vec3 frustum_rotate;
 	glm::vec3 frustum_front;
 
-	unsigned int depthMapFBO;
-	unsigned int depthMap;
+	unsigned int depthMapFBO{ 0 };
+	unsigned int depthMap{ 0 };
 	 int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 	float near_plane = 0.1f, far_plane = 100.f;
-	float FOV;
-	float polygonFactor;
-	float polygonUnit;
+	float FOV{ 0 };
+	float polygonFactor{ 0 };
+	float polygonUnit{ 0 };
 	bool drawBackFacesForRecordDepthPass = false;
-	bool shadow_behind;
-	bool animated;
-	int depthBitSize;
-	GLenum depth_component;
+	bool shadow_behind{ 0 };
+	bool animated{ 0 };
+	int depthBitSize{ 0 };
 
 };

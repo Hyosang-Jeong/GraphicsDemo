@@ -59,8 +59,8 @@ private:
     state currstate = value_noise;
 
     float frequency = 0.1f;
-    float frequencyMult = 1.8;
-    float amplitudeMult = 0.35;
+    float frequencyMult = 1.8f;
+    float amplitudeMult = 0.35f;
     int numLayers = 5;
 
     float max = 1.f;

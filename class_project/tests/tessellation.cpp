@@ -18,11 +18,6 @@ Note : This file is for 7th demo that shows sphere using tessellation and geomet
 
 using namespace glm;
 
-Tessellation_test::Tessellation_test()
-{
-    stack = 10;
-    slice = 10;
-}
 
 Tessellation_test::~Tessellation_test()
 {
@@ -34,7 +29,7 @@ void Tessellation_test::init()
     animated = false;
     inner={ 1 };
     outer={ 1 };
-    shrink={ 0.9 };
+    shrink={ 0.9f };
     factor={ 1 };
     meshes.clear();
     meshes.push_back(CreateSphere(stack, slice));
