@@ -79,7 +79,7 @@ void Toon_Fog::Update(float deltaTime)
     glm::vec4 tmp(light.x, light.y, light.z, 1);
     light = rot * tmp;
     sun.set_position({ light });
-    angle += deltaTime;
+    //angle += deltaTime;
 }
 
 void Toon_Fog::Draw()
@@ -90,7 +90,7 @@ void Toon_Fog::Draw()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
+    OnImGuiRender();
 
 
     glm::vec4 sun_color = { 1,0.83,0,1 };
@@ -102,6 +102,7 @@ void Toon_Fog::Draw()
 
 void Toon_Fog::OnImGuiRender()
 {
+    ImGui::SliderFloat("Angle", &angle, 0.0f, 10.f);
 }
 
 void Toon_Fog::onOffSwitch()

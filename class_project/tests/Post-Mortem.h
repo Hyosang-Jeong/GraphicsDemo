@@ -14,7 +14,7 @@ and this class inherited by Test, So it has all function what Test class have.
 #include"Test.h"
 #include <GL/glew.h> 
 #include"../Mesh.h"
-#include"../glslshader.h"
+#include"../Camera.h"
 
 
 class PostMortem : public Test
@@ -29,6 +29,7 @@ public:
     void OnImGuiRender() override;
 
     std::vector<Mesh> meshes;
+
     void DrawMeshes(Mesh& meshes);
     void InitMesh(Mesh& meshes);
     void SetUpMeshes(Mesh& meshes);
@@ -38,6 +39,7 @@ public:
     const GLfloat one = 1.0f;
     Vec4 useNormal = Vec4(1, 1, 1, -1.0f);
     GLSLShader explode;
+    Camera cam;
 private:
     glm::mat4  view;
     glm::mat4  projection;

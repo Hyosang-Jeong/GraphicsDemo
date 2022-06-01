@@ -64,7 +64,7 @@ void PostMortem::init()
     0,0,0,1
     };
 
-    eye = { 0.0f, 0.0f, -3.0f };
+    cam = { { 0.0f, 0.0f, 3.0f } };
 
     light = { 0.0f, 0.0f, 3.0f };
 
@@ -77,6 +77,7 @@ void PostMortem::init()
 
 void PostMortem::Update(float deltaTime)
 {
+    cam.Update(deltaTime);
     timer += deltaTime * 0.5f;
     if (animated == false)
     {
@@ -150,10 +151,10 @@ void PostMortem::DrawMeshes(Mesh& meshes)
 
     glUniform4fv(meshes.colorLoc, 1, ValuePtr(useNormal));
     glUniformMatrix4fv(meshes.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(meshes.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(meshes.viewLoc, 1, GL_FALSE, glm::value_ptr(cam.GetViewMatrix()));
     glUniformMatrix4fv(meshes.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(meshes.LightLoc, 1, ValuePtr(light));
-    glUniform3fv(meshes.ViewPosLoc, 1, ValuePtr(-eye));
+    glUniform3fv(meshes.ViewPosLoc, 1, ValuePtr(cam.GetEye()));
     glUniform1f(inner_loc, inner);
     glUniform1f(outer_loc, outer);
     glUniform1f(shrink_loc, shrink);

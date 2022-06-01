@@ -25,19 +25,19 @@ TriangleTest::~TriangleTest()
 
 void TriangleTest::init()
 {
-	meshes.push_back(CreatePlane(6, 6));
-	meshes.push_back(CreateCube(2, 2));
-	meshes.push_back(CreateSphere(8, 8));
-	meshes.push_back(CreateTorus(16, 32, 0, TWO_PI));
-	meshes.push_back(CreateCylinder(1, 8));
-	meshes.push_back(CreateCone(16, 8));
+    meshes.push_back(CreatePlane(6, 6));
+    meshes.push_back(CreateCube(2, 2));
+    meshes.push_back(CreateSphere(8, 8));
+    meshes.push_back(CreateTorus(16, 32, 0, TWO_PI));
+    meshes.push_back(CreateCylinder(1, 8));
+    meshes.push_back(CreateCone(16, 8));
 
-	meshes[PLANE].init("triangle",{ -1.5,1,-2 }, { 1,1,1 }, { 0,0,0 });
-	meshes[CUBE].init("triangle", { 0,1,-2 }, { 1,1,1 }, { 0,0,0 });
-	meshes[SPHERE].init("triangle", { +1.5,1,-2 }, { 1,1,1 }, { 0,0,0 });
-	meshes[TORUS].init("triangle", { -1.5,-1,-2 }, { 1,1,1 }, { 0,0,0 });
-	meshes[CYLINDER].init("triangle", { 0,-1,-2 }, { 1,1,1 }, { 0,0,0 });
-	meshes[CONE].init("triangle", { +1.5,-1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[PLANE].init("triangle", { -1.5,1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CUBE].init("triangle", { 0,1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[SPHERE].init("triangle", { +1.5,1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[TORUS].init("triangle", { -1.5,-1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CYLINDER].init("triangle", { 0,-1,-2 }, { 1,1,1 }, { 0,0,0 });
+    meshes[CONE].init("triangle", { +1.5,-1,-2 }, { 1,1,1 }, { 0,0,0 });
     view = {
     1,0,0,0,
     0,1,0,0,

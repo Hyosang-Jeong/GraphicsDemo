@@ -15,7 +15,7 @@ enum Demo
     TESSELLATION,
     SHADOW,
     POINTSHADOW
-   // POSTMORTEM
+    POSTMORTEM
 };
 
 Engine::Engine()
@@ -133,16 +133,19 @@ void Engine::demo_switch()
         current = SHADOW;
         tests[current]->init();
     }
+
     if (ImGui::Button("Point Shadow Demo"))
     {
         tests[current]->UnLoad();
         current = POINTSHADOW;
         tests[current]->init();
     }
-    //if (ImGui::Button("Post Mortem"))
-    //{
-    //    tests[current]->UnLoad();
-    //    current = POSTMORTEM;
-    //    tests[current]->init();
-    //}
+
+    if (ImGui::Button("Post Mortem"))
+    {
+        tests[current]->UnLoad();
+        current = POSTMORTEM;
+        tests[current]->init();
+    }
+
 }
