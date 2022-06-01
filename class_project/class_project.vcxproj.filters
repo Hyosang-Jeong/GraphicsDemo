@@ -63,6 +63,9 @@
     <ClCompile Include="tests\Post-Mortem.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\PointShadow.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glhelper.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests\Post-Mortem.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\PointShadow.h">
       <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>

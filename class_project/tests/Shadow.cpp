@@ -69,6 +69,7 @@ void Shadow_test::init()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_FILL);
+
     projection = glm::perspective(glm::radians(FOV), (float)GLHelper::width / (float)GLHelper::height, near_plane, far_plane);
 
 }

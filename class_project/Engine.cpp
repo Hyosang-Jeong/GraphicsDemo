@@ -13,7 +13,8 @@ enum Demo
     CURVE,
     GEOMETRY,
     TESSELLATION,
-    SHADOW
+    SHADOW,
+    POINTSHADOW
    // POSTMORTEM
 };
 
@@ -31,7 +32,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
-    current = SHADOW;
+    current = POINTSHADOW;
 }
 
 Engine::~Engine()
@@ -130,6 +131,12 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = SHADOW;
+        tests[current]->init();
+    }
+    if (ImGui::Button("Point Shadow Demo"))
+    {
+        tests[current]->UnLoad();
+        current = POINTSHADOW;
         tests[current]->init();
     }
     //if (ImGui::Button("Post Mortem"))

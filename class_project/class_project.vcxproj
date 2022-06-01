@@ -176,6 +176,7 @@
     <ClCompile Include="tests\Curve.cpp" />
     <ClCompile Include="tests\geometry_test.cpp" />
     <ClCompile Include="tests\GradientNoise.cpp" />
+    <ClCompile Include="tests\PointShadow.cpp" />
     <ClCompile Include="tests\Shadow.cpp" />
     <ClCompile Include="tests\Post-Mortem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -198,6 +199,7 @@
     <ClInclude Include="tests\Curve.h" />
     <ClInclude Include="tests\geometry_test.h" />
     <ClInclude Include="tests\GradientNoise.h" />
+    <ClInclude Include="tests\PointShadow.h" />
     <ClInclude Include="tests\Shadow.h" />
     <ClInclude Include="tests\Post-Mortem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

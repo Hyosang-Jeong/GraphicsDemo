@@ -8,6 +8,7 @@
 #include"tests/geometry_test.h"
 #include"tests/tessellation.h"
 #include"tests/Shadow.h"
+#include"tests/PointShadow.h"
 //#include"tests/Post-Mortem.h"
 int main() 
 {
@@ -20,6 +21,7 @@ int main()
     Geometry_test* geometry_test = new Geometry_test();
     Tessellation_test* tessellation_test = new Tessellation_test();
     Shadow_test* shadow_test = new Shadow_test();
+    PointShadow* pointshadow_test = new PointShadow();
     //PostMortem* postMortem = new PostMortem();
    engine.Add(triangle);
    engine.Add(toon_fog);
@@ -29,6 +31,7 @@ int main()
    engine.Add(geometry_test);
    engine.Add(tessellation_test);
    engine.Add(shadow_test);
+   engine.Add(pointshadow_test);
    //engine.Add(postMortem);
 
    engine.init();
