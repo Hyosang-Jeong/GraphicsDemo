@@ -25,6 +25,7 @@ PointShadow::~PointShadow()
 
 void PointShadow::init()
 {
+    meshes.clear();
     light_near = 0.1f;
     light_far = 100.f;
     lightProjection = glm::perspective(glm::radians(90.0f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, light_near, light_far);
@@ -40,7 +41,7 @@ void PointShadow::init()
     Setup_shdrpgm();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_POLYGON_OFFSET_FILL);
-    glEnable(GL_POLYGON_OFFSET_FILL);
+
 }
 
 void PointShadow::Update(float deltaTime)
@@ -116,7 +117,6 @@ void PointShadow::OnImGuiRender()
     {
         meshes.erase(meshes.end() - 1);
         Mesh mesh;
-        //2
     //5
         mesh = CreateCube(30, 30);
         mesh.init("triangle", { 4, -1.5, -33 }, { 1.5f,0.5f,0.5f });
@@ -146,36 +146,34 @@ void PointShadow::OnImGuiRender()
         meshes.push_back(mesh);
     }
 
-    
-    //sphere.position = light;
-    //ImGui::SliderFloat("Light FOV", &light_Fov, 30.f, 179.f);
-    //ImGui::SliderFloat("Light Near Plane", &light_near, 0.1f, 100.f);
-    //ImGui::SliderFloat("Light Far Plane", &light_far, 10.f, 100.f);
-    //if (ImGui::Button("0.0 - Nearest depth"))
-    //    borderColor[0] = 0.f;
-    //if (ImGui::Button("1.0 - Far depth"))
-    //    borderColor[0] = 1.f;
+    const char* items[] = { "128", "256", "512", "1024", "2048", "4096", "8192" };
+    static const char* current_item = items[4];
 
-    //ImGui::SliderFloat("glPolygonOffset factor", &polygonFactor, 0.0f, 3.f);
-    //ImGui::SliderFloat("glPolygonOffset units", &polygonUnit, 0.f, 10000.f);
-    //if (ImGui::Button("Do shadow behind"))
-    //{
-    //    shadow_behind = !shadow_behind;
-    //}
-    //if (ImGui::Button("Animated"))
-    //{
-    //    animated = !animated;
-    //}
+    if (ImGui::BeginCombo("Dimension", current_item)) // The second parameter is the label previewed before opening the combo.
+    {
+        for (int n = 0; n < 7; n++)
+        {
+            bool is_selected = (current_item == items[n]);
+            if (ImGui::Selectable(items[n], is_selected))
+            {
+                current_item = items[n];
+                SHADOW_WIDTH = 128 * static_cast<int>(pow(2, n));
+                SHADOW_HEIGHT = SHADOW_WIDTH;
+                glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
 
-
-    //if (ImGui::Button("Camera View"))
-    //{
-    //    is_camera_view = true;
-    //}
-    //if (ImGui::Button("Light View"))
-    //{
-    //    is_camera_view = false;
-    //}
+                for (unsigned int i = 0; i < 6; ++i)
+                {
+                    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
+                        SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+                }
+            }
+            if (is_selected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
 }
 
 void PointShadow::DepthMap_Setup()
@@ -187,7 +185,6 @@ void PointShadow::DepthMap_Setup()
     {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
     }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -237,9 +234,6 @@ void PointShadow::MakeMeshes()
     mesh = CreateTorus(30, 30,0,2*PI);
     mesh.init("triangle", { 5, -8, -35 }, { 2.f,2.f,2.f });
     meshes.push_back(mesh);
-
-
-    
 
     mesh = CreateSphere(30, 30);
     mesh.init("triangle", { light }, { 0.5f,0.5f,0.5f });

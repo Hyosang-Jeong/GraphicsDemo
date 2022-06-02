@@ -15,7 +15,7 @@ Note : This file is for Second demo that shows
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
-Toon_Fog::Toon_Fog()
+Toon_Fog::Toon_Fog() :light(1.f, 0, 0)
 {
     view = {
         1,0,0,0,
@@ -43,8 +43,8 @@ void Toon_Fog::init()
    sun = CreateSphere(30, 30);
     light = { 1,0,0 };
     sphere.init("toon_fog",{ 0, 0, 0 }, {0.5,0.5,0.5});
+    sun.init("toon_fog", light, { 0.5,0.5,0.5 });
 
-    sun.init("toon_fog",light, { 0.5,0.5,0.5 });
     view = {
     1,0,0,0,
     0,1,0,0,
@@ -58,6 +58,10 @@ void Toon_Fog::init()
     0,0,0,1
     };
     angle = 0;
+    FogMax = 5.f;
+    FogMin = 2.f;
+    sun.renderProg.SetUniform("FogMax", FogMax);
+    sun.renderProg.SetUniform("FogMin", FogMin);
     eye = { 0.0f, 0.0f, -3.0f };
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), (float)GLHelper::width / (float)GLHelper::height, 0.1f, 100.0f);
@@ -103,6 +107,17 @@ void Toon_Fog::Draw()
 void Toon_Fog::OnImGuiRender()
 {
     ImGui::SliderFloat("Angle", &angle, 0.0f, 10.f);
+
+    if (ImGui::SliderFloat("FogMax", &FogMax, 5.0f, 10.f))
+    {
+        sun.renderProg.SetUniform("FogMax", FogMax);
+    }
+    if (ImGui::SliderFloat("FogMin", &FogMin, 0.0f, 5.f))
+    {
+        sun.renderProg.SetUniform("FogMin", FogMin);
+    }
+
+
 }
 
 void Toon_Fog::onOffSwitch()

@@ -249,7 +249,7 @@ new cursor y-coordinate, relative to the top edge of the client area
 This functions receives the cursor position, measured in screen coordinates but
 relative to the top-left corner of the window client area.
 */
-void GLHelper::mousepos_cb(GLFWwindow* pwin, double xpos, double ypos) {
+void GLHelper::mousepos_cb(GLFWwindow* , double , double ) {
 }
 
 /*  _________________________________________________________________________*/
