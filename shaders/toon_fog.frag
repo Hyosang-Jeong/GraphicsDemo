@@ -7,6 +7,9 @@ uniform sampler2D tex;
 uniform vec3 lightPos;
 uniform vec3 u_ambient = vec3(1, 1,1);
 uniform vec3 viewPos;
+uniform float FogMax;
+uniform float FogMin;
+
 
 in vec2 UV;
 in vec3 FragPos; 
@@ -29,8 +32,6 @@ vec3 specular = specularStrength * spec * lightColor;
 
 void main(void)
 {
-    const float FogMax = 5.0;
-    const float FogMin = 2.0;
     vec3 fogcolor = vec3(0,0,0);
     float dist = abs(viewPos.z - FragPos.z);
     float fogFactor = (FogMax- dist) /(FogMax -FogMin );
@@ -58,6 +59,7 @@ void main(void)
                diff= 0.3 ;
          
              outColor= diff * outColor ;
+
              if(color.x ==1 && color.y == 0.83 && color.z ==0)
              { 
                 outColor = vec4(1,0.83,0,1);

@@ -35,6 +35,8 @@ private:
 	glm::vec3 eye;
 	glm::vec3 light;
 	float angle = 0;
+	float FogMax = 5.f;
+	float FogMin = 2.f;
 	bool meshSwitch[NUM_MESHES] = { true,true,true,true,true,true };
 	bool is_switch_pressed(const char* buttonName, bool& buttonType);
 	void onOffSwitch();

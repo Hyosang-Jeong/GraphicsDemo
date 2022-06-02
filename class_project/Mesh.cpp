@@ -298,7 +298,7 @@ Mesh CreateCone(int stacks, int slices)
     for (int stack = 0; stack <= stacks; ++stack)
     {
         float row = ((float)stack / stacks) - 0.5f; // [0.0, 1.0]
-        float z_val = 0.5f;
+
         for (int slice = 0; slice <= slices; ++slice)
         {
             col = (float)slice / slices;

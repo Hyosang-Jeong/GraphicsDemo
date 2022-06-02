@@ -23,8 +23,6 @@ void main(void)
 
     UV = uv;
 
-   // vec4 normal =  projection * view * model *vec4( nrm,1.0);
-   // vec4 normal =  model *vec4( nrm,1.0);
     NRM = mat3(transpose(inverse(model))) * nrm;
 }
 
