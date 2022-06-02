@@ -15,7 +15,7 @@ public:
 	virtual ~Test() {};
 
 	virtual void init() {}
-	virtual void Update(float deltaTime) {}
+	virtual void Update(float ) {}
 	virtual void Draw() {}
 	virtual void OnImGuiRender() {};
 	virtual void UnLoad() {}

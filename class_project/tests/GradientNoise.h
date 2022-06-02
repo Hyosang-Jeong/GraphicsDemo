@@ -93,7 +93,7 @@ private:
 	/* inline */
 	uint8_t hash(const int& x, const int& y, const int& z) const
 	{
-	    return permutationTable[permutationTable[permutationTable[x] + y] + z];
+	    return static_cast<uint8_t>(permutationTable[permutationTable[permutationTable[x] + y] + z]);
 	}
 
 

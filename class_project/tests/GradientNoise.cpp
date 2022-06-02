@@ -95,7 +95,7 @@ void Gradient_Noise::generate_gradient(float dt)
     }
 }
 
-Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices, float dt)
+Mesh Gradient_Noise::create_gradient_plane(int stacks, int slices, float )
 {
     Mesh mesh;
     mesh.stack_slice[0] = stacks;
@@ -142,9 +142,9 @@ Mesh Gradient_Noise::create_gradient_sphere(int stacks, int slices, float dt)
         float row = (float)stack_ / stacks;
         float beta = PI * (row - 0.5f);
 
-        for (int slice = 0; slice <= slices; ++slice)
+        for (int slice_ = 0; slice_ <= slices; ++slice_)
         {
-            float col = (float)slice / slices;
+            float col = (float)slice_ / slices;
             float alpha = col * PI * 2.0f;
             Vertex v;
             v.uv.x = col;
@@ -183,16 +183,16 @@ void Gradient_Noise::update_plane(float dt)
     {
         float row = (float)stack_ / this->stack;
 
-        for (int slice = 0; slice <= this->slice; ++slice)
+        for (int slice_ = 0; slice_ <= this->slice; ++slice_)
         {
-            float col = (float)slice / this->slice;
+            float col = (float)slice_ / this->slice;
 
             Vertex v;
             v.pos = glm::vec3(col - 0.5f, 0, row - 0.5f);
 
             glm::vec3 derivs;
 
-            float val = evalute(glm::vec3(slice , 0, stack_ +dt) * frequency, derivs);  //     /3  because  r  g  b
+            float val = evalute(glm::vec3(slice_ , 0, stack_ +dt) * frequency, derivs);  //     /3  because  r  g  b
             v.pos.y = (val+1)/2.f;
 
 
@@ -221,9 +221,9 @@ void Gradient_Noise::update_sun(float dt)
         float row = (float)stack_ / sun.stack_slice[0];
         float beta = PI * (row - 0.5f);
 
-        for (int slice = 0; slice <= sun.stack_slice[1]; ++slice)
+        for (int slice_ = 0; slice_ <= sun.stack_slice[1]; ++slice_)
         {
-            float col = (float)slice / sun.stack_slice[1];
+            float col = (float)slice_ / sun.stack_slice[1];
             float alpha = col * PI * 2.0f;
             Vertex v;
             v.uv.x = col;
@@ -459,9 +459,9 @@ void Gradient_Noise::UnLoad()
 }
 
 
-float Gradient_Noise::lerp(float min, float max, float t)
+float Gradient_Noise::lerp(float min_, float max_, float t)
 {
-    return  (min * (1 - t)) + (max * t);
+    return  (min_ * (1 - t)) + (max_ * t);
 }
 
 float Gradient_Noise::smoothstep(const float& t)

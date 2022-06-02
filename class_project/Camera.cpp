@@ -46,7 +46,7 @@ void Camera::Update(float dt)
 
 	view = glm::lookAt(eye, eye + mouse_update(dt), cameraUp);
 }
-glm::vec3 Camera::mouse_update(float dt)
+glm::vec3 Camera::mouse_update(float)
 {
 	double mouse_pos_x=0;
 	double mouse_pos_y=0;

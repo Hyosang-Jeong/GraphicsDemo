@@ -27,7 +27,7 @@ Engine::Engine()
 	}
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
+
 	ImGui_ImplGlfw_InitForOpenGL(GLHelper::ptr_window, true);
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);

@@ -411,9 +411,9 @@ void Noise::setup_shdrpgm(std::string shader)
         std::exit(EXIT_FAILURE);
     }
 }
-float Noise::lerp(float min, float max, float t)
+float Noise::lerp(float min_, float max_, float t)
 {
-    return  (min * (1 - t)) + (max * t);
+    return  (min_ * (1 - t)) + (max_ * t);
 }
 float Noise::smoothstep(const float& t)
 {

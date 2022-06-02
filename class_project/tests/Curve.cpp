@@ -40,7 +40,7 @@ void CurveTest::init()
     setup_shader("curve");
 }
 
-void CurveTest::Update(float deltaTime)
+void CurveTest::Update(float )
 {
     update_vertice();
 }
