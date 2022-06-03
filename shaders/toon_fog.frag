@@ -9,7 +9,9 @@ uniform vec3 u_ambient = vec3(1, 1,1);
 uniform vec3 viewPos;
 uniform float FogMax;
 uniform float FogMin;
-
+uniform float layer_first;
+uniform float layer_second;
+uniform float layer_third;
 
 in vec2 UV;
 in vec3 FragPos; 
@@ -49,11 +51,11 @@ void main(void)
     }
     else
         {
-         if (diff > 0.75)
+         if (diff > layer_first)
                diff= 1;
-         else if (diff > 0.5)
+         else if (diff > layer_second)
                diff= 0.8;
-          else if (diff > 0.0)
+          else if (diff > layer_third)
                diff= 0.7 ;
         else
                diff= 0.3 ;

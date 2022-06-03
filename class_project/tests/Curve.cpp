@@ -283,7 +283,9 @@ void CurveTest::update_vertice()
     double mouse_pos_y;
 
     //upper left is 0,0
+    
     //bottom right is width, height
+
     glfwGetCursorPos(GLHelper::ptr_window, &mouse_pos_x, &mouse_pos_y);
 
     //conver to ndc coord

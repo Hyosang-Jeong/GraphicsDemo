@@ -37,7 +37,9 @@ private:
 	float angle = 0;
 	float FogMax = 5.f;
 	float FogMin = 2.f;
+	float layer[3] = { 0.f };
+
+
 	bool meshSwitch[NUM_MESHES] = { true,true,true,true,true,true };
-	bool is_switch_pressed(const char* buttonName, bool& buttonType);
-	void onOffSwitch();
+
 };

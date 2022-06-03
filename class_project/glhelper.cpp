@@ -291,8 +291,8 @@ Human-readable description of the code
 The error callback receives a human-readable description of the error and
 (when possible) its cause.
 */
-void GLHelper::error_cb(int error, char const* description) {
-    std::cerr << "GLFW error: " << description << std::endl;
+void GLHelper::error_cb(int , char const* ) {
+
 }
 
 /*  _________________________________________________________________________ */
