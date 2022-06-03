@@ -52,8 +52,8 @@ void CurveTest::Draw()
 
     Prog.Use();
     glLineWidth(3.f);
-    if (is_hermite == true)
-        draw_derives();
+    //if (is_hermite == true)
+    draw_derives();
     draw_curve();
 
     glLineWidth(1.f);
@@ -77,45 +77,45 @@ void CurveTest::OnImGuiRender()
     {
         is_hermite = true;
     }
-    if (ImGui::Button("Catmull Rom Curve") == true)
-    {
-        is_hermite = false;
-    }
-    if (is_hermite == false)
-    {
-        if (ImGui::SliderFloat("t_min", &t_min, -1.f, 0.f))
-        {
-            catmullRom_curve();
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
-
-
-            std::vector<Point> tmp;
-            for (int i = 0; i < start_point.size(); i++)
-            {
-                tmp.push_back(start_point[i]);
-                tmp.push_back(end_point[i]);
-            }
-            glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
-        }
-        if (ImGui::SliderFloat("t_max", &t_max, 1.f, 2.f))
-        {
-            catmullRom_curve();
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
-
-
-            std::vector<Point> tmp;
-            for (int i = 0; i < start_point.size(); i++)
-            {
-                tmp.push_back(start_point[i]);
-                tmp.push_back(end_point[i]);
-            }
-            glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
-        }
-    }
+    //if (ImGui::Button("Catmull Rom Curve") == true)
+    //{
+    //    is_hermite = false;
+    //}
+    //if (is_hermite == false)
+    //{
+    //    if (ImGui::SliderFloat("t_min", &t_min, -1.f, 0.f))
+    //    {
+    //        catmullRom_curve();
+    //        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    //
+    //
+    //        std::vector<Point> tmp;
+    //        for (int i = 0; i < start_point.size(); i++)
+    //        {
+    //            tmp.push_back(start_point[i]);
+    //            tmp.push_back(end_point[i]);
+    //        }
+    //        glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+    //        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+    //    }
+    //    if (ImGui::SliderFloat("t_max", &t_max, 1.f, 2.f))
+    //    {
+    //        catmullRom_curve();
+    //        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
+    //
+    //
+    //        std::vector<Point> tmp;
+    //        for (int i = 0; i < start_point.size(); i++)
+    //        {
+    //            tmp.push_back(start_point[i]);
+    //            tmp.push_back(end_point[i]);
+    //        }
+    //        glBindBuffer(GL_ARRAY_BUFFER, Derive_VBO);
+    //        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * tmp.size() * 2, &tmp[0].pos.x, GL_STATIC_DRAW);
+    //    }
+    //}
     if (ImGui::Button("Add Vertex") == true)
     {
         add_vertex();
@@ -130,8 +130,8 @@ void CurveTest::OnImGuiRender()
     {
         if (is_hermite == true)
             hermite_curve();
-        else
-            catmullRom_curve();
+        //else
+        //    catmullRom_curve();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size(), &vertices[0].x, GL_STATIC_DRAW);
 
@@ -256,20 +256,20 @@ void CurveTest::calculate(std::vector<glm::vec2> vertice)
 void CurveTest::draw_curve()
 {
     glBindVertexArray(VAO);
-    if (is_hermite == true)
-    {
+    //if (is_hermite == true)
+    //{
         glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points
         glPointSize(10.f);
         glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(vertices.size()));
-    }
-    else
-    {
-        glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points of catmull
-        glPointSize(10.f);
-        glDrawArrays(GL_POINTS, 0, 1);
-        glDrawArrays(GL_POINTS, static_cast<GLsizei>(vertices.size())-1, static_cast<GLsizei>(vertices.size()));
-        
-    }
+    //}
+    //else
+    //{
+    //    glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points of catmull
+    //    glPointSize(10.f);
+    //    glDrawArrays(GL_POINTS, 0, 1);
+    //    glDrawArrays(GL_POINTS, static_cast<GLsizei>(vertices.size())-1, static_cast<GLsizei>(vertices.size()));
+    //    
+    //}
 
     glVertexAttrib3f(1, 1.f, 1.0f, 1.f); // white color for line
     glDrawArrays(GL_LINE_STRIP, 0, static_cast<GLsizei>(vertices.size()));
@@ -336,8 +336,8 @@ void CurveTest::update_vertice()
     }
     if (is_hermite == true)
         hermite_curve();
-    else
-        catmullRom_curve();
+    //else
+    //    catmullRom_curve();
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
@@ -377,8 +377,8 @@ void CurveTest::add_vertex()
 
     if (is_hermite == true)
         hermite_curve();
-    else
-        catmullRom_curve();
+    //else
+    //    catmullRom_curve();
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
@@ -404,8 +404,8 @@ void CurveTest::clear_vertices()
     end_point.push_back({ { 0.5, 0 },{ 0.5, -0.5} });
     if (is_hermite == true)
         hermite_curve();
-    else
-        catmullRom_curve();
+    //else
+    //    catmullRom_curve();
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * vertices.size() * 3, &vertices[0].x, GL_STATIC_DRAW);
 
