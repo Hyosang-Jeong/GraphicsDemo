@@ -60,14 +60,8 @@ void Toon_Fog::init()
     angle = 0;
     FogMax = 5.f;
     FogMin = 2.f;
-    layer[0] = 0.7f;
-    layer[1] = 0.4f;
-    layer[2] = 0.2f;
     sun.renderProg.SetUniform("FogMax", FogMax);
     sun.renderProg.SetUniform("FogMin", FogMin);
-    sun.renderProg.SetUniform("layer_first", layer[0]);
-    sun.renderProg.SetUniform("layer_second", layer[1]);
-    sun.renderProg.SetUniform("layer_third", layer[2]);
     eye = { 0.0f, 0.0f, -3.0f };
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), (float)GLHelper::width / (float)GLHelper::height, 0.1f, 100.0f);
@@ -123,20 +117,13 @@ void Toon_Fog::OnImGuiRender()
         sun.renderProg.SetUniform("FogMin", FogMin);
     }
 
-    if (ImGui::SliderFloat("Toon first layer", &layer[0], 0.5f, 1.f))
-    {
-        sun.renderProg.SetUniform("layer_first", layer[0]);
-    }
-    if (ImGui::SliderFloat("Toon second layer", &layer[1], 0.0f, 0.7f))
-    {
-        sun.renderProg.SetUniform("layer_second", layer[1]);
-    }
-    if (ImGui::SliderFloat("Toon third layer", &layer[2], -0.1f, 0.2f))
-    {
-        sun.renderProg.SetUniform("layer_third", layer[2]);
-    }
+
 }
 
+void Toon_Fog::onOffSwitch()
+{
+
+}
 
 
 

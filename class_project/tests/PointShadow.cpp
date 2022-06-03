@@ -333,7 +333,7 @@ void PointShadow::RenderScene(GLSLShader shader, glm::mat4 transform)
 
     for (int i = 0; i < meshes.size(); i++)
     {
-        color = { 0.9f , 0.1f, 0.1f , 1.f };
+        color = { 0.1f * float(i) , 0.2f*float(i), 0.3f * float(i), 1.f };
         glUniform1i(reverseLoc, 0);
         if (i == 0)
         {
