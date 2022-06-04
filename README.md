@@ -60,6 +60,17 @@ You can run the project with Class Project.exe. When you run the project you can
 
 6. Geometry and Tessellation Shaders
 	- you can see two demo when you click Geometry Demo.
+	- Two demos are own creative demo.
+	- You can control stack and slice with ImGui
+	- You can see othe demo with sphere mode_1_2, Also it has Animated button, the model would be moved if you click it.
+7. Tesselation Demo
+	- You can see big Sphere when you click the Tessellation Demo button.
+	- You can control Shrink with ImGui
+	- You can control Depth with ImGui
+	- If you click the Animation, every shape would be moved with own progmatically calculation in shader.
+	- If you click Grass button, you can see the shape of grass.
+	- You can control TessLevelInner and Outer with ImGui
+	- If you click the Animation button, the grass would be moved
 9. Shadow Mapping
 	- From a Directional or Sun light
 
