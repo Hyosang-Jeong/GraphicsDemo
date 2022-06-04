@@ -71,8 +71,10 @@ You can run the project with Class Project.exe. When you run the project you can
 	- If you click Grass button, you can see the shape of grass.
 	- You can control TessLevelInner and Outer with ImGui
 	- If you click the Animation button, the grass would be moved
-9. Shadow Mapping
+8. Shadow Mapping
 	- From a Directional or Sun light
+	- You can control Light Position X,Y,Z
+	- 
 
 ### Tech Requirements
 
