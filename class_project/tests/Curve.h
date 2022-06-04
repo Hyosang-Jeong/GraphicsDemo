@@ -55,7 +55,6 @@ private:
 	std::vector<glm::vec2> vertices;
 	std::vector<Point> start_point;
 	std::vector<Point> end_point;
-
 	int num_vertices{ 0 };
 	bool is_hermite{ true };
 	float t_min{ 0 };
