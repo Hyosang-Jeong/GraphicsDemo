@@ -32,7 +32,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
-    current = POINTSHADOW;
+    current = TESSELLATION;
 }
 
 Engine::~Engine()

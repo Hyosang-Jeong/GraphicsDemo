@@ -11,8 +11,7 @@ void main(void)
     float w = gl_TessCoord.z;
 
     vec3 point_on_triangle = tcPosition[0]*u +tcPosition[1]*v +tcPosition[2]*w;
-    vec3 point_on_unit_sphere = normalize(point_on_triangle);
-    gl_Position = vec4(point_on_unit_sphere,1);
+    gl_Position = vec4(point_on_triangle,1.0);
 
 }
 

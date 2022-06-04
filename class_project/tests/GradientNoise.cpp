@@ -273,7 +273,7 @@ void Gradient_Noise::init()
     plane.init("gradient_noise");
     sun.init("gradient_noise");
 
-    currstate = Gradient_noise;
+    currstate = gradient_state::Gradient_noise;
     generate_gradient(0);
 
     eye = { 0.f,  0.f, -2.f };
@@ -298,17 +298,17 @@ void Gradient_Noise::Update(float dt)
 
         switch (currstate)
         {
-        case Gradient_noise:
+        case gradient_state::Gradient_noise:
         {
             generate_gradient(offset);
             break;
         }
-        case Gradient_plane:
+        case gradient_state::Gradient_plane:
         {
             update_plane(offset);
             break;
         }
-        case Sun:
+        case gradient_state::Sun:
         {
             update_sun(offset);
             break;
@@ -331,9 +331,9 @@ void Gradient_Noise::Draw()
 
     glm::vec4 color;
 
-    if (currstate == Gradient_noise || currstate == Gradient_plane)
+    if (currstate == gradient_state::Gradient_noise || currstate == gradient_state::Gradient_plane)
     {
-        if (currstate == Gradient_noise)
+        if (currstate == gradient_state::Gradient_noise)
             color = { -1,0,0,-1 };
         else
         {
@@ -388,17 +388,17 @@ void Gradient_Noise::OnImGuiRender()
     {
         switch (currstate)
         {
-        case Gradient_noise:
+        case gradient_state::Gradient_noise:
         {
             generate_gradient(0);
             break;
         }
-        case Gradient_plane:
+        case gradient_state::Gradient_plane:
         {
             update_plane(0);
             break;
         }
-        case Sun:
+        case gradient_state::Sun:
         {
             update_sun(0);
             break;
@@ -419,7 +419,7 @@ void Gradient_Noise::OnImGuiRender()
         view = glm::translate(view, eye);
         plane = CreatePlane(stack, slice);
         plane.init("gradient_noise");
-        currstate = Gradient_noise;
+        currstate = gradient_state::Gradient_noise;
         generate_gradient(0);
     }
     else if (ImGui::Button("Gradient plane") == true)
@@ -435,7 +435,7 @@ void Gradient_Noise::OnImGuiRender()
         view = glm::rotate(view, QUARTER_PI, glm::vec3(0.0f, 1.0f, 0.0f));
         view = glm::translate(view, eye);
         update_plane(0);
-        currstate = Gradient_plane;
+        currstate = gradient_state::Gradient_plane;
     }
     else if (ImGui::Button("Gradient Sun") == true)
     {
@@ -448,7 +448,7 @@ void Gradient_Noise::OnImGuiRender()
         eye = { 0.f,  0.f, -2.f };
         view = glm::translate(view, eye);
         // sun.init("gradient_noise");
-        currstate = Sun;
+        currstate = gradient_state::Sun;
         update_sun(0);
     }
 }

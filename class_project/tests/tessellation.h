@@ -25,6 +25,8 @@ public:
     void init() override;
     void Update(float deltaTime)  override;
     void Draw() override;
+    void Draw_sphere();
+    void Draw_grass();
     void UnLoad() override;
     void OnImGuiRender() override;
 
@@ -40,8 +42,8 @@ private:
     glm::vec3 eye{ 0 };
     glm::vec3 light{ 0 };
     float timer{ 0 };
-    int stack{ 10 };
-    int slice{ 10 };
+    int stack{ 30 };
+    int slice{ 30 };
 
     GLint inner_loc{ 0 };
     GLint outer_loc{ 0 };
@@ -49,6 +51,7 @@ private:
     float inner{ 1 };
     float outer{1 };
     float shrink{ 0.9f };
-    float factor{ 1 };
+    float depth{ 0.f };
     bool animated{ false };
+    bool draw_sphere{ true };
 };

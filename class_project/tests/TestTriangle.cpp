@@ -14,7 +14,7 @@ Note : This file is for First demo that shows
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
-TriangleTest::TriangleTest()
+TriangleTest::TriangleTest() :view{ 0 }, projection{ 0 }, light{ 0 }, eye{ 0 }
 {
 
 }
@@ -57,7 +57,7 @@ void TriangleTest::init()
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 }
 
-void TriangleTest::Update(float deltaTime)
+void TriangleTest::Update(float )
 {
 
 }

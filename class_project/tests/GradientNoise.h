@@ -15,7 +15,7 @@ Also, there is a enum state for what is now demo showing.
 #include"../glslshader.h"
 #include"../Mesh.h"
 
-enum gradient_state
+enum class gradient_state
 {
 	Gradient_noise,
 	Gradient_plane,
@@ -83,7 +83,7 @@ private:
 	Mesh sun;
 
 
-	gradient_state currstate = Gradient_noise;
+	gradient_state currstate = gradient_state::Gradient_noise;
 
 
 	static const unsigned tableSize = 256;

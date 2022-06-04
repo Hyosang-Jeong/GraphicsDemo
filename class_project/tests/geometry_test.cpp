@@ -18,7 +18,7 @@ Note : This file is for Sixth demo that shows 2 demo
 
 using namespace glm;
 
-Geometry_test::Geometry_test()
+Geometry_test::Geometry_test() :view{ 0 }, projection{ 0 }, light{ 0 }, eye{ 0 },sphere_mode{false}
 {
     stack = 16;
     slice = 16;
@@ -41,7 +41,7 @@ void Geometry_test::init()
     meshes[0].scale = { 1,1,1 };
     meshes[0].rotation = { 0,0,0 };
 
-    meshes[1].position = { 0,0,0 };
+    meshes[1].position = { 0,0,-2 };
     meshes[1].scale = { 1,1,1 };
     meshes[1].rotation = { 0,0,0 };
 
