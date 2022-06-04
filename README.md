@@ -73,30 +73,22 @@ You can run the project with Class Project.exe. When you run the project you can
 	- If you click the Animation button, the grass would be moved
 8. Shadow Mapping
 	- From a Directional or Sun light
+	- You can move the view with w,s,a,d,up,down key, also you can drag window for changing views
 	- You can control Light Position X,Y,Z
-	- 
-
-### Tech Requirements
-
-You may use third party libraries to support your application(s). Things like glm, glfw, sdl2, Qt, stb, Dear ImGUI, etc... are all fine to use.
-
-However all **CS250 topics must be implemented by the students**.
-
-If you are unsure about whether or not you should use some third party library then ask the instructor.
-
-
-## Submission
-
-You will be submitting your work on GitHub with the provided class assignment repository. You will also create a copy of your project as a 7z file on the course site. 
-
-The name of the 7z file must follow this naming convention: `[class_name]_[login]_project.7z`
-
-For example, if a student had the login name fun.frank then the appropriate filename would be `cs250_fun.frank_project.7z`. Note: The .7z file names are case-sensitive and must be in all lowercase, exactly as described above.
-
-In addition to the project development files, add pre-built binary files so that we can quickly and easily see your work running.
-
-Note that we will be grading from the GitHub repo and we are using the 7z copy as a way to backup your work.
-
+	- You can control Field of View with Light FOV ImGui
+	- You can control Near and Far plane Distant with Imgui
+	- you can see with Nearest depth or Far depth with Imgui Button.
+	- You can control glPolygonOffset factor and units.
+	- You can see behind the shadow with Do shadow behind button
+	- If you click the Animated button the light position would be moved like a sun.
+	- You can change Dimension with Imgui
+	- You can change the view with Camera view and Light View button.
+9. Point Shadow Mapping
+	- From a Directional or Sun light
+	- You can move the view with w,s,a,d,up,down key, also you can drag window for changing views
+	- You can control Light Position X,Y,Z
+	- C,S,2,5,0 is model for testing point shadow, if you click them, you can see the model.
+	- You can control the Dimension.
 ## Rubric
 
 - [x] [**core**] All topics are implemented by students
