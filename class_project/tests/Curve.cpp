@@ -74,10 +74,16 @@ void CurveTest::OnImGuiRender()
     if (ImGui::Button("Hermite Curve") == true)
     {
         is_hermite = true;
+        clear_vertices();
+        t_min = 0;
+        t_max = 1;
     }
     if (ImGui::Button("Catmull Rom Curve") == true)
     {
         is_hermite = false;
+        clear_vertices();
+        t_min = 0;
+        t_max = 1;
     }
     if (is_hermite == false)
     {
