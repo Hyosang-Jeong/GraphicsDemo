@@ -47,7 +47,7 @@ private:
 
 	glm::mat4  projection{ 0 };
 	glm::vec3 light{ 0 };
-	float borderColor[4];
+	float borderColor[4] = { 0 };
 	bool is_camera_view{ false };
 	//for light
 
@@ -63,8 +63,8 @@ private:
 	GLSLShader Prog;
 	GLuint vpLoc{ 0 };
 	std::vector<glm::vec3>vertices;
-	glm::vec3 frustum_rotate;
-	glm::vec3 frustum_front;
+	glm::vec3 frustum_rotate{ 0 };
+	glm::vec3 frustum_front{ 0 };
 
 	unsigned int depthMapFBO{ 0 };
 	unsigned int depthMap{ 0 };

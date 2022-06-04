@@ -16,8 +16,7 @@ and this class inherited by Test, So it has all function what Test class have.
 class PointShadow : public Test
 {
 public:
-	PointShadow();
-	~PointShadow();
+	PointShadow() = default;
 	void init() override;
 	void Update(float deltaTime)  override;
 	void Draw() override;
@@ -38,23 +37,23 @@ public:
 
 private:
 	Camera camera;
-	glm::mat4 projection;
+	glm::mat4 projection{ 0 };
 	std::vector<Mesh> meshes;
 	GLSLShader depth_shader;
 	GLSLShader scene_shader;
 	//for light
 	std::vector<glm::mat4> shadowTransforms;
-	glm::mat4 lightProjection;
+	glm::mat4 lightProjection{ 0 };
 
-	glm::vec3 light;
-	float light_Fov;
-	float light_near;
-	float light_far;
-	float polygonFactor;
-	float polygonUnit;
+	glm::vec3 light{ 0 };
+	float light_Fov{ 0 };
+	float light_near{ 0 };
+	float light_far{ 0 };
+	float polygonFactor{ 0 };
+	float polygonUnit{ 0 };
 	unsigned int SHADOW_WIDTH = 1024;
 	unsigned int SHADOW_HEIGHT = 1024;
-	unsigned int depthMapFBO;
-	unsigned int depthCubemap;
+	unsigned int depthMapFBO{ 0 };
+	unsigned int depthCubemap{ 0 };
 
 };

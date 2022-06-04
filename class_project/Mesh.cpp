@@ -342,13 +342,13 @@ Mesh CreateCone(int stacks, int slices)
 
         for (int j = 0; j <= slices; j++)
         {
-            float col = static_cast<float>(j) / slices;
-            float alpha = col * 2.0f * PI;
-            float sinAlpha = sin(alpha);
-            float cosAlpha = cos(alpha);
+            float col_ = static_cast<float>(j) / slices;
+            float alpha_ = col_ * 2.0f * PI;
+            float sinAlpha = sin(alpha_);
+            float cosAlpha = cos(alpha_);
 
             v.uv.x = row;
-            v.uv.y = col;
+            v.uv.y = col_;
 
             v.pos = Vec3(0.5 * sinAlpha, -0.5f, 0.5f * cosAlpha);
 
@@ -540,20 +540,20 @@ void Mesh::SendVertexData()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     /*  Copy vertex attributes to GPU */
     glBufferData(GL_ARRAY_BUFFER,
-        numVertices * vertexSize, &vertexBuffer[0],
+        static_cast<GLsizeiptr>(numVertices) * static_cast<GLsizeiptr>(vertexSize), &vertexBuffer[0],
         GL_DYNAMIC_DRAW);
 
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     /*  Copy vertex indices to GPU */
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-        numIndices * indexSize, &indexBuffer[0],
+        static_cast<GLsizeiptr >(numIndices) * static_cast<GLsizeiptr>(indexSize), &indexBuffer[0],
         GL_DYNAMIC_DRAW);
 
     /*  Send vertex attributes to shaders */
     for (int i = 0; i < numAttribs; ++i)
     {
         glEnableVertexAttribArray(vLayout[i].location);
-        glVertexAttribPointer(vLayout[i].location, vLayout[i].size, vLayout[i].type, vLayout[i].normalized, vertexSize, (void*)vLayout[i].offset);
+        glVertexAttribPointer(vLayout[i].location, vLayout[i].size, vLayout[i].type, vLayout[i].normalized, vertexSize, (void*)(uintptr_t)vLayout[i].offset);
     }
 }

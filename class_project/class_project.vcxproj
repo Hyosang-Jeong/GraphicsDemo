@@ -103,6 +103,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
@@ -125,6 +126,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
@@ -143,6 +145,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
@@ -165,6 +168,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y/d "$(SolutionDir)lib\bin\*.dll" "$(TargetDir)"</Command>
@@ -182,12 +186,6 @@
     <ClCompile Include="tests\GradientNoise.cpp" />
     <ClCompile Include="tests\PointShadow.cpp" />
     <ClCompile Include="tests\Shadow.cpp" />
-    <ClCompile Include="tests\Post-Mortem.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="tests\tessellation.cpp" />
     <ClCompile Include="tests\TestTriangle.cpp" />
     <ClCompile Include="tests\Toon_Fog.cpp" />
@@ -205,12 +203,6 @@
     <ClInclude Include="tests\GradientNoise.h" />
     <ClInclude Include="tests\PointShadow.h" />
     <ClInclude Include="tests\Shadow.h" />
-    <ClInclude Include="tests\Post-Mortem.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="tests\tessellation.h" />
     <ClInclude Include="tests\Test.h" />
     <ClInclude Include="tests\TestTriangle.h" />

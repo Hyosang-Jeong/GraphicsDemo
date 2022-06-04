@@ -38,7 +38,7 @@ void CurveTest::init()
     setup_shader("curve");
 }
 
-void CurveTest::Update(float deltaTime)
+void CurveTest::Update(float )
 {
     update_vertice();
 }
@@ -256,10 +256,10 @@ void CurveTest::draw_curve()
     glBindVertexArray(VAO);
     glVertexAttrib3f(1, 1.f, 0.0f, 0.f); // red color for points
     glPointSize(10.f);
-    glDrawArrays(GL_POINTS, 0, vertices.size());
+    glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(vertices.size()));
 
     glVertexAttrib3f(1, 1.f, 1.0f, 1.f); // white color for line
-    glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+    glDrawArrays(GL_LINE_STRIP, 0, static_cast<GLsizei>(vertices.size()));
 
 }
 
@@ -268,12 +268,12 @@ void CurveTest::draw_derives()
     glBindVertexArray(Derive_VAO);
     glVertexAttrib3f(1, 1.f, 1.0f, 0.f); // for points
     glPointSize(10.f);
-    glDrawArrays(GL_POINTS, 0, start_point.size() * 4);
+    glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(start_point.size() * 4));
     glVertexAttrib3f(1, 0.f, 1.0f, 0.f); //for line
     if(is_hermite)
-        glDrawArrays(GL_LINES, 0, start_point.size() * 4);
+        glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(start_point.size() * 4));
     else
-        glDrawArrays(GL_POINTS, 0, start_point.size() * 4);
+        glDrawArrays(GL_POINTS, 0, static_cast<GLsizei>(start_point.size() * 4));
 }
 
 void CurveTest::update_vertice()
@@ -300,26 +300,26 @@ void CurveTest::update_vertice()
             vec2  end_derive = end_point[i].tangent;
             if (in_mouse(mouse_pos_x, mouse_pos_y, start_pos) == true)
             {
-                start_point[i].pos.x = mouse_pos_x;
-                start_point[i].pos.y = mouse_pos_y;
+                start_point[i].pos.x = static_cast<float>(mouse_pos_x);
+                start_point[i].pos.y = static_cast<float>(mouse_pos_y);
             }
 
             else if (in_mouse(mouse_pos_x, mouse_pos_y, start_derive) == true)
             {
-                start_point[i].tangent.x = mouse_pos_x;
-                start_point[i].tangent.y = mouse_pos_y;
+                start_point[i].tangent.x = static_cast<float>(mouse_pos_x);
+                start_point[i].tangent.y = static_cast<float>(mouse_pos_y);
             }
 
             else  if (in_mouse(mouse_pos_x, mouse_pos_y, end_pos) == true)
             {
-                end_point[i].pos.x = mouse_pos_x;
-                end_point[i].pos.y = mouse_pos_y;
+                end_point[i].pos.x = static_cast<float>(mouse_pos_x);
+                end_point[i].pos.y = static_cast<float>(mouse_pos_y);
             }
 
             else if (in_mouse(mouse_pos_x, mouse_pos_y, end_derive) == true)
             {
-                end_point[i].tangent.x = mouse_pos_x;
-                end_point[i].tangent.y = mouse_pos_y;
+                end_point[i].tangent.x = static_cast<float>(mouse_pos_x);
+                end_point[i].tangent.y = static_cast<float>(mouse_pos_y);
             }
         }
     }
@@ -345,8 +345,8 @@ void CurveTest::update_vertice()
 bool CurveTest::in_mouse(double mouse_pos_x, double mouse_pos_y, glm::vec2 pos)
 {
     float offset = 0.07f;
-    if (mouse_pos_x >= pos.x - offset && mouse_pos_x <= pos.x + offset
-        && mouse_pos_y >= pos.y - offset && mouse_pos_y <= pos.y + offset)
+    if (mouse_pos_x >= static_cast<double>(pos.x) - static_cast<double>(offset) && mouse_pos_x <= static_cast<double>(pos.x) + static_cast<double>(offset)
+        && mouse_pos_y >= static_cast<double>(pos.y) - static_cast<double>(offset) && mouse_pos_y <= static_cast<double>(pos.y) + static_cast<double>(offset))
     {
         return true;
     }

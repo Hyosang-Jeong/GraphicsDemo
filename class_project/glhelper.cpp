@@ -153,7 +153,7 @@ were held down
 This function is called when keyboard buttons are pressed.
 When the ESC key is pressed, the close flag of the window is set.
 */
-void GLHelper::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod) {
+void GLHelper::key_cb(GLFWwindow* pwin, int key, int , int action, int ) {
     if (GLFW_PRESS == action) 
     {
 #ifdef _DEBUG
@@ -201,7 +201,7 @@ were held down
 
 This function is called when mouse buttons are pressed.
 */
-void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod) {
+void GLHelper::mousebutton_cb(GLFWwindow* , int button, int action, int ) {
     switch (button) 
     {
     case GLFW_MOUSE_BUTTON_LEFT:
@@ -270,7 +270,7 @@ This function is called when the user scrolls, whether with a mouse wheel or
 touchpad gesture. Although the function receives 2D scroll offsets, a simple
 mouse scroll wheel, being vertical, provides offsets only along the Y-axis.
 */
-void GLHelper::mousescroll_cb(GLFWwindow* pwin, double xoffset, double yoffset) {
+void GLHelper::mousescroll_cb(GLFWwindow* , double xoffset, double yoffset) {
 #ifdef _DEBUG
     std::cout << "Mouse scroll wheel offset: ("
         << xoffset << ", " << yoffset << ")" << std::endl;
@@ -312,10 +312,10 @@ Height in pixels of new window size
 This function is called when the window is resized - it receives the new size
 of the window in pixels.
 */
-void GLHelper::fbsize_cb(GLFWwindow* ptr_win, int Width, int height) {
+void GLHelper::fbsize_cb(GLFWwindow* , int Width, int Height) {
     std::cout << "fbsize_cb getting called!!!" << std::endl;
     // use the entire framebuffer as drawing region
-    glViewport(0, 0, Width, height);
+    glViewport(0, 0, Width, Height);
     // later, if working in 3D, we'll have to set the projection matrix here ...
 }
 

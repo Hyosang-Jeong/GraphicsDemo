@@ -64,7 +64,7 @@ void TriangleTest::Update(float )
 
 void TriangleTest::Draw()
 {
-    glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+    glClearColor(1.f, 1.f, 1.f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPointSize(10.f);
     // feed inputs to dear imgui, start new frame

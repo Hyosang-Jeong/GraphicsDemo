@@ -15,7 +15,6 @@ enum Demo
     TESSELLATION,
     SHADOW,
     POINTSHADOW,
-    POSTMORTEM
 };
 
 Engine::Engine()
@@ -32,7 +31,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
-    current = TESSELLATION;
+    current = TRIANGLE;
 }
 
 Engine::~Engine()
@@ -138,13 +137,6 @@ void Engine::demo_switch()
     {
         tests[current]->UnLoad();
         current = POINTSHADOW;
-        tests[current]->init();
-    }
-
-    if (ImGui::Button("Post Mortem"))
-    {
-        tests[current]->UnLoad();
-        current = POSTMORTEM;
         tests[current]->init();
     }
 

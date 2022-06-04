@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include"glhelper.h"
-#include"math.h"
+#include "glm/gtc/matrix_transform.hpp"
 Camera::Camera( glm::vec3 eye):eye(eye),pitch(0),yaw(-90.0f),angle(0)
 {
   cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);

@@ -73,7 +73,7 @@ void Toon_Fog::init()
     projection = glm::perspective(glm::radians(45.0f), (float)GLHelper::width / (float)GLHelper::height, 0.1f, 100.0f);
 }
 
-void Toon_Fog::Update(float deltaTime)
+void Toon_Fog::Update(float )
 {
 
     float x =  sin(angle);
@@ -89,7 +89,7 @@ void Toon_Fog::Update(float deltaTime)
     glm::vec4 tmp(light.x, light.y, light.z, 1);
     light = rot * tmp;
     sun.set_position({ light });
-    //angle += deltaTime;
+
 }
 
 void Toon_Fog::Draw()

@@ -15,13 +15,7 @@ Note : This file is for 8th demo that shows sphere and cube. You can modify Ligh
 #include <imgui_impl_glfw.h>
 
 using namespace glm;
-PointShadow::PointShadow()
-{
-}
 
-PointShadow::~PointShadow()
-{
-}
 
 void PointShadow::init()
 {
@@ -311,13 +305,12 @@ void PointShadow::Scene_Draw()
     RenderScene(scene_shader, shadowTransforms[0]);
 }
 
-void PointShadow::RenderScene(GLSLShader shader, glm::mat4 transform)
+void PointShadow::RenderScene(GLSLShader shader, glm::mat4 )
 {
 
     GLint modelLoc =                       glGetUniformLocation(shader.GetHandle(), "model");
     GLint projectionLoc =                glGetUniformLocation(shader.GetHandle(), "projection");
     GLint viewLoc =                          glGetUniformLocation(shader.GetHandle(), "view");
-    GLint ShadowTransformLoc =  glGetUniformLocation(shader.GetHandle(), "shadowMatrices");
     GLint ColorLoc =                         glGetUniformLocation(shader.GetHandle(), "color");
     GLint viewPosLoc =                    glGetUniformLocation(shader.GetHandle(), "viewPos");
     GLint LightPosLoc =                    glGetUniformLocation(shader.GetHandle(), "lightPos");

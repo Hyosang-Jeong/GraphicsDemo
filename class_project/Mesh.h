@@ -26,9 +26,9 @@ struct Vertex
 
     Vertex() { }
 
-    glm::vec3 pos, nrm;
-    glm::vec2 uv;
-    glm::vec3 color;
+    glm::vec3 pos{ 0 }, nrm{ 0 };
+    glm::vec2 uv{ 0 };
+    glm::vec3 color{ 0 };
 };
 
 const int vertexSize = sizeof(Vertex);

@@ -7,7 +7,7 @@ Note :This file is for virtual class
 
 *//*__________________________________________________________________________*/
 #pragma once
-#include"../math.h"
+
 class Test
 {
 public:

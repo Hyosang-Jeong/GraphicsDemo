@@ -107,7 +107,7 @@ void Noise::generate_marble(float dt)
                 amplitude *= amplitudeMult;
             }
 
-            data[i][j] = static_cast<unsigned char>(((sin(((j / 3) + dt + noiseValue * 50) * 2 * PI / 100.f) + 1) / 2.f) * 255.f);
+            data[i][j] = static_cast<unsigned char>(((sin(((j / 3) + dt + noiseValue * 50) * 2 * 3.14f / 100.f) + 1) / 2.f) * 255.f);
 
         }
     }
@@ -421,7 +421,7 @@ float Noise::smoothstep(const float& t)
 }
 float Noise::cosinestep(const float& t)
 {
-    return (1.f - cos(t * PI)) * 0.5f;
+    return (1.f - cos(t * 3.14f)) * 0.5f;
 }
 float Noise::quinticstep(const float& t)
 {
