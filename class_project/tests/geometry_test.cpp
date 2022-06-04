@@ -31,8 +31,6 @@ Geometry_test::~Geometry_test()
 
 void Geometry_test::init()
 {
-    animated = true;
-    sphere_mode = true;
 	meshes.push_back(CreateSphere(stack, slice));
     meshes.push_back(CreateSphere(stack, slice));
     meshes.push_back(CreateSphere(stack, slice));
