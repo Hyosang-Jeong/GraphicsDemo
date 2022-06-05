@@ -11,7 +11,11 @@
 * Shadow Demo
 * Point Shadow Demo
 
-You can run the project with Class Project.exe. When you run the project you can See ImGui Frame on left top. This is for changing the demo what you see.
+You can run the project with Class Project.exe in the pre-built folder.
+Or, you can open Class_project.sln in class_project folder and build(Ctrl+shift+B) and run the project(F5). 
+When you run the project you can See ImGui Frame for switching demo. 
+
+These are explanation of all demo and how to interact with them.
 1. Procedural Geometric Modeling
 	- Plane, Cube, Sphere, Torus, Cylinder, and Cone
 	- If you click "Procedure Modeling" button you can see six model.

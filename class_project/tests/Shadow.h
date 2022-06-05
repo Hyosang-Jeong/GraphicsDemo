@@ -12,12 +12,6 @@ and this class inherited by Test, So it has all function what Test class have.
 
 *//*__________________________________________________________________________*/
 #pragma once
-enum DepthComponentSize
-{
-    Bit16=0,
-    Bit24,
-    Bit32
-};
 #include"Test.h"
 #include"../Mesh.h"
 #include"../Camera.h"

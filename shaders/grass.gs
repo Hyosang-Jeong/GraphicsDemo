@@ -92,7 +92,7 @@ void main()
     mat4 random_rotate_x = rotate_x(random_x);
 
     //wind
-    mat4 wind = rotate_z(sin(time*2.f) );
+    mat4 wind = rotate_z(sin(Center.x + time*2.f) );
 
     for(int i=0; i<3; i++)
     {
