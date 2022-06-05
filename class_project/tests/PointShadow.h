@@ -3,11 +3,11 @@
 //Course name: CS250
 //Term & Year : 2022&Spring
 /*!
-@file    Shadow.h
+@file    PointShadow.h
 @author  Hyosang Jung, Jaewoo.choi
-@date    05/19/2022
+@date    05/26/2022
 
-Note : This file contains the declaration Shadow_test class member function
+Note : This file contains the declaration PointShadow class member function
 and this class inherited by Test, So it has all function what Test class have.
 
 *//*__________________________________________________________________________*/

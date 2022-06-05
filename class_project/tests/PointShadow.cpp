@@ -3,13 +3,11 @@
 //Course name: CS250
 //Term & Year : 2022&Spring
 /*!
-@file    Shadow.cpp
+@file    PointShadow.h
 @author  Hyosang Jung, Jaewoo.choi
-@date    05/19/2022
+@date    05/26/2022
 
-Note : This file is for 8th demo that shows sphere and cube. You can modify Light position
-       Field of view and nearest depth and far depth. You can also change camera view
-       with mouse dragging and Keyboard button w,a,s,d and arrow buttons.
+Note : This file is for Point shadow demo.
 
 *//*__________________________________________________________________________*/
 #include "PointShadow.h"
