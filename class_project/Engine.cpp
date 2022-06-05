@@ -108,7 +108,7 @@ void Engine::demo_switch()
         current = GRADIENT_NOISE;
         tests[current]->init();
     }
-    if (ImGui::Button("Hermite Curve"))
+    if (ImGui::Button("Hermite & CatmullRom Curve"))
     {
         tests[current]->UnLoad();
         current = CURVE;

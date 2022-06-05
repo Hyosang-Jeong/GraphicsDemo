@@ -67,6 +67,7 @@ You can run the project with Class Project.exe. When you run the project you can
 	- You can see big Sphere when you click the Tessellation Demo button.
 	- You can control Shrink with ImGui
 	- You can control Depth with ImGui
+	- TessLevel is depending on the depth
 	- If you click the Animation, every shape would be moved with own progmatically calculation in shader.
 	- If you click Grass button, you can see the shape of grass.
 	- You can control TessLevelInner and Outer with ImGui
