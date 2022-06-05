@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 /*!
 @file    ValueNoise.cpp
 @author  Hyosang Jung, Jaewoo.choi
@@ -164,7 +168,7 @@ void Noise::generate_wood(float dt)
         for (int j = 0; j < width * 3; j++) //  *3  because  r  g  b
         {
             float val = evalute(glm::vec2((j / 3) + dt, i) * frequency);  //     /3  because  r  g  b
-            if (currstate == wood)
+            if (currstate == state::wood)
                 val *= 10.f;
             data[i][j] = static_cast<unsigned char>(val * 255.f);
         }
@@ -195,27 +199,27 @@ void Noise::Update(float dt)
 
         switch (currstate)
         {
-        case value_noise:
+        case state::value_noise:
         {
             generate_value_noise(offset);
             break;
         }
-        case wood:
+        case state::wood:
         {
             generate_wood(offset);
             break;
         }
-        case marble:
+        case state::marble:
         {
             generate_marble(offset);
             break;
         }
-        case fractal:
+        case state::fractal:
         {
             generate_fractal(offset);
             break;
         }
-        case Turbulence:
+        case state::Turbulence:
         {
             generate_turbulence(offset);
             break;
@@ -248,14 +252,14 @@ void Noise::OnImGuiRender()
 
     if (ImGui::Button("Value Noise") == true)
     {
-        currstate = value_noise;
+        currstate = state::value_noise;
         max = 1.f;
         frequency = 0.01f;
         generate_value_noise(0);
     }
     if (ImGui::Button("Wood") == true)
     {
-        currstate = wood;
+        currstate = state::wood;
         frequency = 0.005f;
         max = 0.2f;
         generate_wood(0);
@@ -263,7 +267,7 @@ void Noise::OnImGuiRender()
 
     if (ImGui::Button("Fractal") == true)
     {
-        currstate = fractal;
+        currstate = state::fractal;
         frequencyMult = 1.8f;
         amplitudeMult = 0.35f;
         numLayers = 5;
@@ -273,12 +277,12 @@ void Noise::OnImGuiRender()
 
     if (ImGui::Button("Marble") == true)
     {
-        currstate = marble;
+        currstate = state::marble;
         generate_marble(0);
     }
     if (ImGui::Button("Turblence") == true)
     {
-        currstate = Turbulence;
+        currstate = state::Turbulence;
         frequencyMult = 1.8f;
         amplitudeMult = 0.35f;
         numLayers = 5;
@@ -292,27 +296,27 @@ void Noise::OnImGuiRender()
     {
         switch (currstate)
         {
-        case value_noise:
+        case state::value_noise:
         {
             generate_value_noise(0);
             break;
         }
-        case wood:
+        case state::wood:
         {
             generate_wood(0);
             break;
         }
-        case marble:
+        case state::marble:
         {
             generate_marble(0);
             break;
         }
-        case fractal:
+        case state::fractal:
         {
             generate_fractal(0);
             break;
         }
-        case Turbulence:
+        case state::Turbulence:
         {
             generate_turbulence(0);
             break;
@@ -320,23 +324,23 @@ void Noise::OnImGuiRender()
         }
     }
 
-    if (currstate >= fractal)
+    if (currstate >= state::fractal)
     {
         if (ImGui::SliderFloat("frequenyMult", &frequencyMult, 0.f, 10.f))
         {
             switch (currstate)
             {
-            case fractal:
+            case state::fractal:
             {
                 generate_fractal(0);
                 break;
             }
-            case marble:
+            case state::marble:
             {
                 generate_marble(0);
                 break;
             }
-            case Turbulence:
+            case state::Turbulence:
             {
                 generate_turbulence(0);
                 break;
@@ -347,17 +351,17 @@ void Noise::OnImGuiRender()
         {
             switch (currstate)
             {
-            case fractal:
+            case state::fractal:
             {
                 generate_fractal(0);
                 break;
             }
-            case marble:
+            case state::marble:
             {
                 generate_marble(0);
                 break;
             }
-            case Turbulence:
+            case state::Turbulence:
             {
                 generate_turbulence(0);
                 break;
@@ -368,17 +372,17 @@ void Noise::OnImGuiRender()
         {
             switch (currstate)
             {
-            case fractal:
+            case state::fractal:
             {
                 generate_fractal(0);
                 break;
             }
-            case marble:
+            case state::marble:
             {
                 generate_marble(0);
                 break;
             }
-            case Turbulence:
+            case state::Turbulence:
             {
                 generate_turbulence(0);
                 break;

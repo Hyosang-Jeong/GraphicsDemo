@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 
 /*!
 @file    tessellation.cpp
@@ -193,9 +197,9 @@ void Tessellation_test::Draw_sphere()
     model = glm::scale(model, { meshes[0].scale.x, meshes[0].scale.y, meshes[0].scale.z });
 
     glUniform4fv(meshes[0].colorLoc, 1, ValuePtr(useNormal));
-    glUniformMatrix4fv(meshes[0].modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(meshes[0].viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(meshes[0].projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(meshes[0].modelLoc, 1, GL_FALSE, &model[0].x);
+    glUniformMatrix4fv(meshes[0].viewLoc, 1, GL_FALSE, &view[0].x);
+    glUniformMatrix4fv(meshes[0].projectionLoc, 1, GL_FALSE, &projection[0].x);
     glUniform3fv(meshes[0].LightLoc, 1, ValuePtr(light));
     glUniform3fv(meshes[0].ViewPosLoc, 1, ValuePtr(-eye));
     glUniform1f(shrink_loc, shrink);

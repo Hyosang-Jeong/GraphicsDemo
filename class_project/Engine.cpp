@@ -1,10 +1,14 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 #include "Engine.h"
 #include "glhelper.h"
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 
-enum Demo
+enum class Demo
 {
     TRIANGLE,
     TOON_FOG,
@@ -31,7 +35,7 @@ Engine::Engine()
 	const char* glsl_version = "#version 450";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
-    current = TRIANGLE;
+    current = static_cast<int>(Demo::TRIANGLE);
 }
 
 Engine::~Engine()
@@ -85,58 +89,58 @@ void Engine::demo_switch()
     if (ImGui::Button("Procedure Modeling"))
     {
         tests[current]->UnLoad();
-        current = TRIANGLE;
+        current = static_cast<int>(Demo::TRIANGLE);
         tests[current]->init();
     }
 
     if (ImGui::Button("Toon Fog"))
     {
         tests[current]->UnLoad();
-        current = TOON_FOG;
+        current = static_cast<int>(Demo::TOON_FOG);
         tests[current]->init();
     }
 
     if (ImGui::Button("Value Noise"))
     {
         tests[current]->UnLoad();
-        current = VALUE_NOISE;
+        current = static_cast<int>(Demo::VALUE_NOISE);
         tests[current]->init();
     }
     if (ImGui::Button("Gradient Noise"))
     {
         tests[current]->UnLoad();
-        current = GRADIENT_NOISE;
+        current = static_cast<int>(Demo::GRADIENT_NOISE);
         tests[current]->init();
     }
     if (ImGui::Button("Hermite & CatmullRom Curve"))
     {
         tests[current]->UnLoad();
-        current = CURVE;
+        current = static_cast<int>(Demo::CURVE);
         tests[current]->init();
     }
     if (ImGui::Button("Geometry Demo"))
     {
         tests[current]->UnLoad();
-        current = GEOMETRY;
+        current = static_cast<int>(Demo::GEOMETRY);
         tests[current]->init();
     }
     if (ImGui::Button("Tessellation Demo"))
     {
         tests[current]->UnLoad();
-        current = TESSELLATION;
+        current = static_cast<int>(Demo::TESSELLATION);
         tests[current]->init();
     }
     if (ImGui::Button("Shadow Demo"))
     {
         tests[current]->UnLoad();
-        current = SHADOW;
+        current = static_cast<int>(Demo::SHADOW);
         tests[current]->init();
     }
 
     if (ImGui::Button("Point Shadow Demo"))
     {
         tests[current]->UnLoad();
-        current = POINTSHADOW;
+        current = static_cast<int>(Demo::POINTSHADOW);
         tests[current]->init();
     }
 

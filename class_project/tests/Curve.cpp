@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 /*!
 @file    Curve.cpp
 @author  Hyosang Jung, Jaewoo.choi

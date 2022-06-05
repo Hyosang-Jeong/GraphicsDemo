@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 /*!
 @file    ValueNoise.h
 @author  Hyosang Jung, Jaewoo.choi
@@ -13,7 +17,7 @@ Also, there is a enum state for what is now demo showing.
 #include"Test.h"
 #include <GL/glew.h> 
 #include"../glslshader.h"
-enum state
+enum class state
 {
     value_noise,
     wood,
@@ -56,7 +60,7 @@ private:
     static constexpr unsigned int width = 256;
     static constexpr unsigned int height = 256;
     static constexpr unsigned int size = 100;
-    state currstate = value_noise;
+    state currstate = state::value_noise;
 
     float frequency = 0.1f;
     float frequencyMult = 1.8f;

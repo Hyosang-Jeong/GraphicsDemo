@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 #include"Engine.h"
 #include"tests/TestTriangle.h"
 #include"tests/Toon_Fog.h"

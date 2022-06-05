@@ -1,3 +1,7 @@
+//Name: Hyosang Jung, Jaewoo Choi
+//Assignment name: Class project
+//Course name: CS250
+//Term & Year : 2022&Spring
 /*!
 @file    GradientNoise.cpp
 @author  Hyosang Jung, Jaewoo.choi
@@ -208,7 +212,7 @@ void Gradient_Noise::update_plane(float dt)
         }
     }
     glBindBuffer(GL_ARRAY_BUFFER, plane.VBO);
-    glBufferData(GL_ARRAY_BUFFER, plane.numVertices * vertexSize, &plane.vertexBuffer[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(plane.numVertices) * static_cast<GLsizeiptr>(vertexSize), &plane.vertexBuffer[0], GL_DYNAMIC_DRAW);
 }
 
 void Gradient_Noise::update_sun(float dt)
@@ -248,7 +252,7 @@ void Gradient_Noise::update_sun(float dt)
         }
     }
     glBindBuffer(GL_ARRAY_BUFFER, sun.VBO);
-    glBufferData(GL_ARRAY_BUFFER, sun.numVertices * vertexSize, &sun.vertexBuffer[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sun.numVertices) * static_cast<GLsizeiptr>(vertexSize), &sun.vertexBuffer[0], GL_DYNAMIC_DRAW);
 }
 
 
@@ -342,9 +346,9 @@ void Gradient_Noise::Draw()
          }
 
         glUniform4fv(plane.colorLoc, 1, ValuePtr(color));
-        glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(plane.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(plane.modelLoc, 1, GL_FALSE  ,      &model[0].x          );
+        glUniformMatrix4fv(plane.viewLoc, 1, GL_FALSE,           &view[0].x                 );
+        glUniformMatrix4fv(plane.projectionLoc, 1, GL_FALSE, &projection[0].x)      ;
         glUniform3fv(plane.LightLoc, 1, ValuePtr(light));
         glUniform3fv(plane.ViewPosLoc, 1, ValuePtr(-eye));
         glBindVertexArray(plane.VAO);
@@ -362,9 +366,9 @@ void Gradient_Noise::Draw()
         color = { -1,0,0,0 };
 
         glUniform4fv(sun.colorLoc, 1, ValuePtr(color));
-        glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(sun.modelLoc, 1, GL_FALSE, &model[0].x);
+        glUniformMatrix4fv(sun.viewLoc, 1, GL_FALSE, &view[0].x);
+        glUniformMatrix4fv(sun.projectionLoc, 1, GL_FALSE, &projection[0].x);
         glUniform3fv(sun.LightLoc, 1, ValuePtr(light));
         glUniform3fv(sun.ViewPosLoc, 1, ValuePtr(-eye));
         glBindVertexArray(sun.VAO);
