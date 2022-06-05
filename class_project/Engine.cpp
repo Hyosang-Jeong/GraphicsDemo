@@ -49,6 +49,7 @@ Engine::~Engine()
     for (auto& i : tests)
     {
         delete i;
+        i = nullptr;
     }
 }
 

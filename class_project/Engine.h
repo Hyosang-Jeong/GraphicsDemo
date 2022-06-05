@@ -9,6 +9,7 @@ public:
 	void Add(Test* demo);
 	void init();
 	void Update();
+
 	void Draw();
 	bool ShouldClose();
 	void demo_switch();

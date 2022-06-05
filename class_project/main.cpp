@@ -44,5 +44,6 @@ int main()
         engine.Draw();
     }
 
+    _CrtDumpMemoryLeaks();
 }
 

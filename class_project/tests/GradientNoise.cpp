@@ -285,7 +285,7 @@ void Gradient_Noise::init()
     view = glm::translate(view, eye);
     projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
 
-
+    glDisable(GL_CULL_FACE);
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 }
