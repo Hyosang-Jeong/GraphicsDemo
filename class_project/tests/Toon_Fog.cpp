@@ -43,8 +43,8 @@ Toon_Fog::~Toon_Fog()
 void Toon_Fog::init()
 {
 
-   sphere = CreateSphere(30, 30);
-   sun = CreateSphere(30, 30);
+    sphere = CreateSphere(30, 30);
+    sun = CreateSphere(30, 30);
     light = { 1,0,0 };
     sphere.init("toon_fog",{ 0, 0, 0 }, {0.5,0.5,0.5});
     sun.init("toon_fog", light, { 0.5,0.5,0.5 });
@@ -61,7 +61,7 @@ void Toon_Fog::init()
     0,0,1,0,
     0,0,0,1
     };
-    angle = 0;
+    angle = 0.5f;
     FogMax = 5.f;
     FogMin = 2.f;
     layer[0] = 0.7f;
