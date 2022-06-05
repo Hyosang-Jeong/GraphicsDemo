@@ -1,17 +1,6 @@
 # cs250-class-project-synergy
-* cs250-class-project-synergy created by GitHub Classroom
-* Procedure Modeling
 
-* Toon/Cell & Fog shading
-* Value Noise
-* Gradient Noise
-* Hermite Curve & Catmull Curve
-* Geometry demo
-* Tessellation Demo
-* Shadow Demo
-* Point Shadow Demo
-
-You can run the project with Class Project.exe in the pre-built folder.
+You can run the project with Class Project.exe in the pre-built folder - exe folder.
 Or, you can open Class_project.sln in class_project folder and build(Ctrl+shift+B) and run the project(F5). 
 When you run the project you can See ImGui Frame for switching demo. 
 
@@ -94,35 +83,4 @@ These are explanation of all demo and how to interact with them.
 	- You can control Light Position X,Y,Z
 	- C,S,2,5,0 is model for testing point shadow, if you click them, you can see the model.
 	- You can control the Dimension.
-## Rubric
-
-- [x] [**core**] All topics are implemented by students
-- [x] [**core**] Demo has a scene that demonstrates **Procedural Geometric Modeling** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Toon / Cell Shading** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Fog** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Value noise** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Gradient noise / Perlin noise** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Hermite Curves / Catmull-Rom Splines** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Geometry and Tessellation Shaders** with tweakable parameters
-- [x] [**core**] Demo has a scene that demonstrates **Shadow Mapping** with tweakable parameters
-- [x] [**core**] Demo is implemented with OpenGL or an equivalent that allows graphics hardware acceleration 
-- [x] Demo has an intuitive way to select a topic to view
-- [x] Created a **Helpful** `ReadMe.md` file that explains how to build the project(s), run the project(s), and how to interact with the project(s).
-- [x] An equal distribution of work can easily be seen by viewing the commit history
-- [ ] All commit comments and/or pull request merges include a check-in buddy from someone else on the team
-- [x] All source files compile without warnings and without errors.
-- [x] Correct files submitted. No unnecessary files submitted.
-- [x] A 7z archive of the project is created and submitted on the course site
-- [x] 7z archive includes pre-built binaries that can be run right away
-- [x] All source files have a proper header comment with your name, assignment name/number, course name, term.
-- [x] Followed the appropriate Code Quality Guidelines and Code Style Guidelines.
-
-
-### To earn extra credit
-
-#### Add a new topic
-
-We add the new topic that we have not study in class. We add the 'point shadow'. We have a demo for that topic.
-
-
 
