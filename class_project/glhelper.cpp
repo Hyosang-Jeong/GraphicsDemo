@@ -274,7 +274,7 @@ This function is called when the user scrolls, whether with a mouse wheel or
 touchpad gesture. Although the function receives 2D scroll offsets, a simple
 mouse scroll wheel, being vertical, provides offsets only along the Y-axis.
 */
-void GLHelper::mousescroll_cb(GLFWwindow* , double xoffset, double yoffset) {
+void GLHelper::mousescroll_cb(GLFWwindow* , [[maybe_unused]]double xoffset, [[maybe_unused]] double yoffset) {
 #ifdef _DEBUG
     std::cout << "Mouse scroll wheel offset: ("
         << xoffset << ", " << yoffset << ")" << std::endl;
