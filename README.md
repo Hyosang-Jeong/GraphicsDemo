@@ -1,5 +1,6 @@
 # cs250-class-project-synergy
 
+
 You can run the project with Class Project.exe in the pre-built folder - exe folder.
 Or, you can open Class_project.sln in class_project folder and build(Ctrl+shift+B) and run the project(F5). 
 When you run the project you can See ImGui Frame for switching demo. 
